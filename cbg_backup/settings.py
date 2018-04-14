@@ -37,8 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'request',
     'djcelery',
+    'request',
+    'proxy',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,12 +77,14 @@ WSGI_APPLICATION = 'cbg_backup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = {'default': {   'ENGINE'    :   'django.db.backends.mysql',
+                            'NAME'      :   'sql_test',
+                            'USER'      :   'wordpress',
+                            'PASSWORD'  :   'Xj3.14164',
+                            'HOST'      :   '127.0.0.1',
+                            'PORT'      :   '3306',
+                        },
+             }
 
 
 # Internationalization
@@ -106,7 +109,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-#  配置dcelery
-import djcelery
-djcelery.setup_loader()
-BROKER_URL = 'redis://:Xj3.14164@122.152.195.174:6379/1'
+# # 配置dcelery
+# import djcelery
+# djcelery.setup_loader()
+# BROKER_URL = 'redis://:Xj3.14164@122.152.195.174:6379/1'

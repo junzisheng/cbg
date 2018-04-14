@@ -27,8 +27,10 @@ def try_except(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except:
+        except Exception as e:
+            print(e)
             logger.error('请求ip池接口报错>>>>{0}'.format(traceback.format_exc()))
+            return False
     return wrapper
 
 # class Exception(Exception):
@@ -51,30 +53,61 @@ class SystemBusy(Exception):
     pass
 
 
+class Server(object):
+    """和远程服务器通信的类"""
+    def __init__(self):
+        self.ip_api_select = config.PROXY_GET_API
+        self.ip_api_delete = config.PROXY_DELETE_API
+
+    def get_proxy_list(self, container):
+        """
+        从proxy分发处获取有效代理列表
+        """
+        while 1:
+            response = requests.get(self.ip_api_select)
+            proxy_list = json.loads(response.text)
+            # 组装代理
+            if not proxy_list:
+                log('没有获取到代理！！！！')
+                time.sleep(10)
+                continue
+            for proxy in proxy_list:
+                container.append({
+                    'http': 'http://{0}:{1}'.format(proxy['ip'], proxy['port']),
+                    'https': 'https://{0}:{1}'.format(proxy['ip'],proxy['port']),
+                    'id': proxy['_id'],
+                })
+            log('获取了%s个代理' % len(proxy_list))
+            break
+
+    @try_except
+    def delet_proxy(self, id_list):
+        id_list = [id_list] if type(id_list) != list else id_list
+        requests.post(self.ip_api_delete, data={'id_list': id_list})
+
 
 class Crawl(object):
-    def __init__(self, url, user_id, order_id, user_push_message_type, crawl_interval):
+    def __init__(self, url, order_id , user_id, user_push_message_type, crawl_interval):
         # 用户设置相关
-        # self.base_url = 'http://xyq.cbg.163.com/cgi-bin/xyq_overall_search.py?act=overall_search_role&page={0}'
-        self.base_url = 'http://xyq.cbg.163.com/cgi-bin/xyq_overall_search.py?act=overall_search_role&school=1&xiangrui_list=%E4%B9%9D%E5%B9%BD%E7%81%B5%E8%99%8E&shang_hai=1700&page={0}'
-        # self.base_url = url
-        #self.base_url = 'http://www.guwenjiang.com/cbg/role'
+        self.base_url = url + '&page={0}'
+        self.server = Server()
+        # self.base_url = 'http://xyq.cbg.163.com/cgi-bin/xyq_overall_search.py?act=overall_search_role&fang_yu=90&level_min=69&level_max=69&school=1&shang_hai=150&page={0}'
         self.user_id = user_id  # 用户的id
-        self.order_id = order_id  # 订单id
+        self.order_id = order_id
         self.user_push_message_type = user_push_message_type  # 爬取到数据后给用户推送的方式
         self.push_2_users = []  # 用户设置的推送给其他人
         self.crawl_host = self.splithost(self.base_url)  # 爬取url的域名
         self.vaild_status = 0  # 正确的状态码
-        self.max_restart_times = 30
+        self.max_restart_times = config.MAX_RESTART_TIMES
         # 每几条推送一次    (app or phone)
         self.crawl_interval = crawl_interval  # 爬取一轮的间隔时间
         self.crawled_eid_list = []  # 已经爬取的信息  以后爬到则不在给用户推送信息
         self.crawl_data_set = set()
         # 代理池相关
         # self.ip_api_select = '127.0.0.1:8888/?types=0&count=1000'
-        self.ip_api_select = 'http://127.0.0.1:8888/?count=40'
-        self.ip_api_delete = 'http://127.0.0.1:8888/delete?ip={0}'
-        self.limit_proxy_count = 10  # 代理池小于20个时继续请求新的ip
+        self.ip_api_select = config.PROXY_GET_API
+        self.ip_api_delete = config.PROXY_DELETE_API
+        self.limit_proxy_count = config.MIN_PROXY_LIST_COUNT
         # self.ip_api_delete = '127.0.0.1:8888/delete?ip={0}'
         # 爬取相关
         self.next_page = 1
@@ -93,9 +126,10 @@ class Crawl(object):
         # self.cursor = None  # Mysql游标
         self.redis = None  # redis句柄
         self.session = None
-        self.init()  # 初始化这个项目
         self.sql_tool = None
         # 价格变动多少进行提醒 todo
+
+        self.set_dict = dict()  # 去重
 
         # 调试数据
         self.fail_times = 0
@@ -124,10 +158,13 @@ class Crawl(object):
         初始化
         """
         self.redis = redis.StrictRedis(host='localhost', password='Xj3.14164', port=6379, db=2)
-        self.get_proxy_list()
+        # self.get_proxy_list()
+        self.server.get_proxy_list(self.proxy_list)
         self.get_crawled_eid_list()  # 获取已经爬取过
         self.sql_tool = SqlHelper()
         self.sql_tool.init_db()
+        log('爬取的url为%s' % self.base_url)
+        time.sleep(5)
 
     def __del__(self):
         pass
@@ -173,8 +210,7 @@ class Crawl(object):
             try:
                 # 没有可用的IP代理池时从远程重新获取新的IP代理
                 if len(self.proxy_list) <= self.limit_proxy_count:  # 当维护的代理池小于20个时， 则需要拉取新的代理
-                    self.get_proxy_list()
-                    # todo 如果没有获取到proxy 就等待一段时间  或者向远程服务器推爬取Ip任务
+                    self.server.get_proxy_list(self.proxy_list)
                 proxy = random.choice(self.proxy_list) if restart_times < self.max_restart_times/2 or not self.localhost_ban else {}  # 当重试达到最大次数一半的时候使用本地ip进行爬取
                 self.self_ip += 1 if proxy == {} else 0
                 #proxy = {}
@@ -221,18 +257,24 @@ class Crawl(object):
         """
         从proxy分发处获取有效代理列表
         """
-        response = requests.get(self.ip_api_select)
-        proxy_list = json.loads(response.text)
-        # 组装代理
-        for ip, port, score in proxy_list:
-            self.proxy_list.append({
-                'http': 'http://{0}:{1}'.format(ip, port),
-                'https': 'https://{0}:{1}'.format(ip, port),
-                'ip': ip,
-            })
-        # if not self.localhost_ban and {} not in self.proxy_list:
-        #     self.proxy_list.append({})  # 允许使用本地ip去访问
-        log('获取了%s个代理' % len(self.proxy_list))
+        while 1:
+            response = requests.get(self.ip_api_select)
+            proxy_list = json.loads(response.text)
+            # 组装代理
+            if not proxy_list:
+                log('没有获取到代理！！！！')
+                time.sleep(10)
+                continue
+            for proxy in proxy_list:
+                self.proxy_list.append({
+                    'http': 'http://{0}:{1}'.format(proxy['ip'], proxy['port']),
+                    'https': 'https://{0}:{1}'.format(proxy['ip'],proxy['port']),
+                    'id': proxy['_id'],
+                })
+            # if not self.localhost_ban and {} not in self.proxy_list:
+            #     self.proxy_list.append({})  # 允许使用本地ip去访问
+            log('获取了%s个代理' % len(self.proxy_list))
+            break
 
     @try_except
     def handle_with_dity_ip(self, proxy):
@@ -243,7 +285,8 @@ class Crawl(object):
         if proxy == {}:
             self.localhost_ban = True
         else:
-            requests.get(self.ip_api_delete.format(proxy['ip']))
+            self.server.delet_proxy([proxy['id']])
+            # requests.post(self.ip_api_delete, data={'id_list': proxy['id']})
 
     @try_except
     def handle_with_hang_ip(self, proxy):
@@ -254,7 +297,8 @@ class Crawl(object):
         if proxy == {}:
             self.localhost_ban = True
         else:
-            self.proxy_list.remove(proxy)
+            if proxy in self.proxy_list:
+                self.proxy_list.remove(proxy)
 
     def parse(self, response, crawl_url):
         """
@@ -291,9 +335,20 @@ class Crawl(object):
             ]
         }
         """
-        # self.cur_page = pager['cur_page']
-        # self.end_page = pager['num_end']
         log(len(equip_list), '数据量')
+        self.analysis(equip_list)
+        self.next_page = 1 if not equip_list or pager['cur_page'] == pager['num_end'] else self.next_page +1
+        #log(equip_list, 'equip_list>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        # self.sql_tool.session_commit()
+        # todo 消息提醒
+        return data
+
+    def analysis(self, equip_list):
+        """分析数据"""
+        # for k in self.set_dict: #for test
+        #     self.set_dict[k] = '1'
+        valid_update_list = []
+        valid_insert_list = []
         for equip in equip_list:
             server_name = equip['server_name']
             serverid = equip['serverid']
@@ -304,26 +359,31 @@ class Crawl(object):
             collect_num = equip['collect_num']
             eid = equip['eid']
             create_time = equip['create_time']
-            self.sql_tool.merge(CrawlData, {
-                'server_name': server_name,
-                'serverid': serverid,
-                'area_name': area_name,
-                'time_left': time_left,
-                'price': price,
-                'nickname': nickname,
-                'collect_num': collect_num,
-                'eid': eid,
-                'create_time': create_time,
-                'dest_url': 'http:xyq.cbg.163.com/equip?s={0}&eid={1}'.format(serverid, eid),
-                'crawl_time': datetime.datetime.now()
-            })
-            #log(server_name, serverid, area_name, time_left, price, nickname, collect_num, eid, create_time, 'http:xyq.cbg.163.com/equip?s={0}&eid={1}'.format(serverid, eid))
-        self.next_page = 1 if not equip_list or pager['cur_page'] == pager['num_end'] else self.next_page +1
-        log(equip_list, 'equip_list>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        # self.sql_tool.session_commit()
-
-        # todo 数据入库 与消息提醒
-        return data
+            data_dict = {
+                            'server_name': server_name,
+                            'serverid': serverid,
+                            'area_name': area_name,
+                            'time_left': time_left,
+                            'price': price,
+                            'nickname': nickname,
+                            'collect_num': collect_num,
+                            'eid': eid,
+                            'create_time': create_time,
+                            'dest_url': 'http://xyq.cbg.163.com/equip?s={0}&eid={1}'.format(serverid, eid),
+                            'crawl_time': datetime.datetime.now(),
+                            'order_id': self.order_id,
+                        }
+            # 更新价格
+            if eid in self.set_dict and self.set_dict[eid] != price:
+                valid_update_list.append(data_dict)
+            # 插入数据
+            if eid not in self.set_dict:
+                valid_insert_list.append(data_dict)
+                self.set_dict[eid] = price
+        if valid_insert_list:
+            self.sql_tool.batch_insert(CrawlData, valid_insert_list)
+        if valid_update_list:
+            self.sql_tool.batch_update(CrawlData, valid_update_list, 'price')
 
     @staticmethod
     def splithost(url):

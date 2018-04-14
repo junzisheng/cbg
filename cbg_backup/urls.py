@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cbg/', include('request.urls')),
+    url(r'^proxy/', include('proxy.urls'))
 ]

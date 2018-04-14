@@ -1,15 +1,16 @@
 #encoding=utf-8
-from celery import Celery
+from __future__ import absolute_import
+from request.celery_init import app
 import sys
 import os
 crawl_dir = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(crawl_dir, 'crawl'))
 import crawl_class
 import time
-celery = Celery('tasks', broker='redis://:Xj3.14164@122.152.195.174:6379/1')
+# celery = Celery('tasks', broker='redis://:Xj3.14164@122.152.195.174:6379/1')
 
-@celery.task
-def crawl_task(task_data):
+@app.task
+def crawl_task(url, order_id):
     """
     完成爬取的工作
     """
@@ -41,7 +42,7 @@ def crawl_task(task_data):
         记录爬取了几轮
         共获取了多少数据  效率多少  有多少无效ip  有多少挂满ip  有多少封禁ip  多少有效ip
     """
-    c = crawl_class.Crawl(task_data, 2, 3, 4, 5)
+    c = crawl_class.Crawl(url, order_id, 3, 4, 5)
     start = time.time()
     print('start>>>>>%s' % start)
     try:

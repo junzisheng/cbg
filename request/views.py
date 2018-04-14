@@ -5,6 +5,7 @@ from config import config
 from urllib import parse
 import json
 from .tasks import crawl_task
+from .models import CrawlOrders
 
 
 
@@ -25,7 +26,8 @@ def role_crawl_rul(request):
     url_arg = parse.urlencode(args)
     _role_crawl_url += 'act=%s&' % config.ROLE_ACT
     _role_crawl_url += url_arg
+    note = request.POST.get('note')
+    o = CrawlOrders.objects.create()
     # 发布新的爬取url
-    config.REDIS_1.publish('role_url', _role_crawl_url)
-    crawl_task.delay(_role_crawl_url)
+    crawl_task.delay(_role_crawl_url, o.id)
     return HttpResponse('<a href="%s">%s</a>' % (_role_crawl_url, _role_crawl_url))

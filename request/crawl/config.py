@@ -35,3 +35,8 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10"
 ]
 DB_CONNECT_STRING  = 'mysql+pymysql://wordpress:Xj3.14164@127.0.0.1/test?charset=utf8'
+MAX_RESTART_TIMES = 30  # ÅÀÈ¡Ò»Ò³µÄ×î´óÊ§°Ü´ÎÊý
+
+PROXY_GET_API = 'http://127.0.0.1:80/proxy/select?count=40'
+PROXY_DELETE_API = 'http://127.0.0.1:80/proxy/delete'
+MIN_PROXY_LIST_COUNT = 10 # ´úÀí³ØÐ¡ÓÚ¶àÉÙÇëÇó´úÀí

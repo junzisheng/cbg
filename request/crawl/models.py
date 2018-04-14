@@ -1,6 +1,7 @@
 #encoding=utf-8
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base  # 描述表结构
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, VARCHAR, Integer, ForeignKey, SmallInteger, DateTime, VARCHAR
 from sqlalchemy.orm import relationship
 
@@ -92,7 +93,8 @@ class CrawlData(BaseModel):
     # crawl_task_id = Column(Integer)  # 爬取任务的id
     # eid = Column(VARCHAR(128), nullable=False)  # 爬取的元数据对象的唯一标识
     # 下面看情况进行扩展
-    # id = Column(Integer, primary_key=True, autoincrement=True, default=1)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    order_id = Column(Integer)
     server_name = Column(VARCHAR(32))
     serverid = Column(VARCHAR(32))
     area_name = Column(VARCHAR(32))
@@ -100,7 +102,7 @@ class CrawlData(BaseModel):
     price = Column(VARCHAR(16))
     nickname = Column(VARCHAR(32))
     collect_num = Column(SmallInteger)
-    eid = Column(VARCHAR(64), primary_key=True)
+    eid = Column(VARCHAR(64))
     create_time = Column(VARCHAR(32))
     dest_url = Column(VARCHAR(512))
     crawl_time = Column(DateTime)
@@ -111,7 +113,16 @@ class CrawlData(BaseModel):
 
 
 if __name__ == '__main__':
-    BaseModel.metadata.create_all(engine)  # 创建表
+    # BaseModel.metadata.create_all(engine)  # 创建表
+    DB_Session = sessionmaker(engine)
+    session = DB_Session()
+    s = session.query(CrawlData).filter(CrawlData.order_id == 100, CrawlData.eid == 2)
+    a = session.query(CrawlData).filter(CrawlData.order_id == 1, CrawlData.eid == 3)
+    s.update({'serverid': '123'})
+    a.update({'serverid': 'ssss'})
+    session.commit()
+
+
 
     # Base.metadata.drop_all(engine)  # 删除表
 

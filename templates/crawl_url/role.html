@@ -121,50 +121,7 @@ if (window.self != window.top){
 
     </div><!-- ./hot-questions -->
     <div class="hide" id="sprite-hot-question-template">
-      <!--
-      <% if (!this.banner.src && this.list.length <= 0) { %>
-        <div style="padding: 5px;">出现了点小问题，在正努力修复中</div>
-      <% } else { %>
 
-        <% var banner = this.banner; %>
-        <% if (banner && banner.src) { %>
-          <% var imageText = "<img src=\""+ banner.src +"\" class=\"banner-image\" />"; %>
-          <%
-            if (banner.text) {
-              imageText = "<a class=\"banner\" href=\"javascript:ask(&quot;"+ banner.text + "&quot;)\">" + imageText + "</a>";
-            } else if (banner.href) {
-              imageText = "<a class=\"banner\" href=\""+ banner.href + "\" target=\"_blank\">" + imageText + "</a>";
-            } else {
-              imageText = "<span class=\"banner\">" + imageText + "</span>";
-            }
-          %>
-          <%= imageText %>
-        <% } %>
-        <% if (this.list) { %>
-        <div class="hot-content" style="padding: 10px 0;">
-          <% for (var i = 0, max = this.list.length; i < max; i++) { %>
-            <% var group = this.list[i]; %>
-            <dl class="quikList">
-              <dt><%= group.title %></dt>
-              <dd class="clearfix">
-                <% var questions = group.questions; %>
-                <% for (var j = 0, jmax = questions.length; j < jmax; j++) { %>
-                  <%
-                    var text = questions[j];
-                    if (text.length > 10) {
-                      text = text.substring(0, 10) + "..."
-                    }
-                  %>
-                  <a href="javascript:;"><%= text %></a>
-                <% } %>
-              </dd>
-            </dl>
-          <% } %>
-        </div>
-        <% } %>
-
-      <% } %>
-      -->
     </div>
   </div>
 
@@ -199,26 +156,6 @@ if (window.self != window.top){
 <div class="blank"><!-- ie 7 --></div>
 <div class="areaTop"></div>
 <div id="login_info_template" style="display:none;">
-<!--
-	<% if (this.LoginInfo.login) {
-		var info = this.LoginInfo;
-	%>
-	<div class="userInfo cWhite aWhite">
-		<p>
-    	<%= info.area_name %> -&gt; <%= info.server_name %><span class="separator"></span>
-			<span class="cYellow"><%= info.nickname %></span>
-			<a href="http://xyq.cbg.163.com/cgi-bin/login.py?act=show_role_select_page&select_roleid=<%= info.roleid %>">[切换角色]</a>
-		</p>
-		<p>
-			<a href="http://xyq.cbg.163.com/cgi-bin/userinfo.py?act=cbg_wallet"><span class="title">钱包余额：</span><span class="balance" id="wallet_balance">&nbsp;元</span></a><span class="walletTips js-popoverHook" data-popover-class="tipsBlack popArrowUp"></span><span class="separator"></span><a id="btn_get_money" href="javascript:;" tid="web_other_1_9">提现</a><span class="separator"></span><a id="btn_buy_ecard" tid="web_other_1_3" href="javascript:;">购买点卡</a>
-		</p>
-		<img class="avatar" src="http://res.xyq.cbg.163.com/images/role_icon/small/<%= info.user_icon %>.gif" alt="头像" />
-	</div>
-	<p class="navLinks aWhite">
-		<a href="http://xyq.cbg.163.com/cgi-bin/message.py?act=msg_route" id="user_msg_num_panel"><%= gen_msg_num_html(info.user_msg_num) %></a><span class="separator"></span><a href="http://xyq.cbg.163.com/help/index.html" target="_blank">帮助</a><span class="separator"></span><a href="http://xyq.gm.163.com/" target="_blank">客服</a><span class="separator"></span><a id="logout_link" href="javascript:logout('http://xyq.cbg.163.com/cgi-bin/logout.py?act=logout')" class="white_a">退出</a><span class="separator"></span><a href="http://xyq.cbg.163.com/app/?from=cbgtoplink" class="mobileLink" target="_blank" tid="web_other_1_1">藏宝阁APP <span class="download_app"></span></a>
-	</p>
-	<% } %>
--->
 </div>
 <div class="header area hasLayout clearfix">
 	<h1 class="logo"><a href="http://xyq.cbg.163.com" title="梦幻西游藏宝阁首页">梦幻西游藏宝阁</a></h1>
@@ -237,14 +174,6 @@ if (window.self != window.top){
 <div class="soldDetail" id="TipsBox"></div>
 
 <div id="common_tips_template">
-<!--
-	<img class="bigPic" width="120" height="120" alt="大图" src="<%= this.icon_url %>" />
-	<div class="parame" style="font-size:14px;">
-		<p class="cYellow"><%= this.name %></p>
-		<p><%= this.type_desc %></p>
-		<p><%= this.desc %></p>
-	</div>
--->
 </div>
 
 <div id="role_tips_template">
@@ -441,14 +370,6 @@ if (window.self != window.top){
 --></div>
 
 <div id="role_tips_old_template">
-  <!--
-    <img class="bigPic" width="120" height="150" alt="大图" src="<%= this.icon_url %>" />
-    <div class="parame" style="font-size:14px;">
-      <p class="cYellow"><%= this.name %></p>
-      <p><%= this.type_desc %></p>
-      <p><%= this.desc %></p>
-    </div>
-  -->
 </div>
 
 <script id="pet_tips_template" type="text/html">
@@ -1010,10 +931,12 @@ window.addEvent('domready', function() {
 });
 </script>
 
-<div style="display:none">
+<div style="display:block">
 	<form method="post" name="query_form" action="/cbg/role_crawl_url" target="_blank">
 		<input type="hidden" name="act" value="show_role_search_result" />
 		<input type="hidden" name="args" id="query_args" />
+		<label for="">请输入搜索的备注</label>
+		<input type="text" name="note">
 	</form>
 </div>
 
@@ -2261,6 +2184,180 @@ window.neteaseTracker && neteaseTracker();
 			document.forms.query_form.action = 'http://localhost/cbg/role_crawl_url';
 		return false;
 	}
+	function submit_query_form() {
+        var args_config = [["level_min", "角色最低等级"], ["level_max", "角色最高等级"], ["shang_hai", "伤害"], ["ming_zhong", "命中"], ["ling_li", "灵力"], ["fang_yu", "防御"], ["hp", "气血"], ["speed", "速度"], ["fa_shang", "法伤"], ["fa_fang", "法防"], ["qian_neng_guo", "潜能果"], ["expt_gongji", "攻击修炼"], ["expt_fangyu", "防御修炼"], ["expt_fashu", "法术修炼"], ["expt_kangfa", "抗法修炼"], ["max_expt_gongji", "攻击上限"], ["max_expt_fangyu", "防御上限"], ["max_expt_fashu", "法术上限"], ["max_expt_kangfa", "抗法上限"], ["expt_lieshu", "猎术修炼"], ["expt_total", "修炼总和"], ["bb_expt_gongji", "攻击控制"], ["bb_expt_fangyu", "防御控制"], ["bb_expt_fashu", "法术控制"], ["bb_expt_kangfa", "抗法控制"], ["bb_expt_total", "宠修总和"], ["skill_qiang_shen", "强身"], ["skill_shensu", "神速"], ["skill_qiang_zhuang", "强健"], ["skill_ming_xiang", "冥想"], ["skill_dazao", "打造技巧"], ["skill_pengren", "烹饪技巧"], ["skill_caifeng", "裁缝技巧"], ["skill_zhongyao", "中药医疗"], ["skill_qiaojiang", "巧匠之术"], ["skill_lingshi", "灵石技巧"], ["skill_lianjin", "炼金术"], ["skill_jianshen", "健身术"], ["skill_yangsheng", "养生之道"], ["skill_anqi", "暗器技巧"], ["skill_taoli", "逃离技巧"], ["skill_zhuibu", "追捕技巧"], ["skill_ronglian", "熔炼技巧"], ["skill_danyuan", "丹元济会"], ["skill_miaoshou", "妙手空空"], ["skill_baoshi", "宝石工艺"], ["skill_qimen", "奇门遁甲"], ["skill_gudong", "古董评估"], ["skill_xianling", "仙灵店铺"], ["skill_tiaoxi", "调息"], ["skill_dazuo", "打坐"], ["skill_jianzhu", "建筑之术"], ["skill_bianhua", "变化之术"], ["skill_cuiling", "淬灵之术"], ["skill_huoyan", "火眼金睛"], ["max_weapon_shang_hai", "携带武器总伤"], ["max_weapon_damage", "携带武器伤害"], ["max_weapon_init_damage", "携带武器初伤（含命中）"], ["max_weapon_init_damage_raw", "携带武器初伤（不含命中）"], ["max_necklace_ling_li", "携带项链灵力"], ["max_necklace_init_wakan", "携带项链初灵"], ["pet_skill_num", "技能数量"], ["pet_advance_skill_num", "高级技能数量"], ["xian_yu", "仙玉"], ["cash", "现金"], ["upexp", "当前经验"], ["badness", "善恶"], ["school_offer", "门贡"], ["org_offer", "帮贡"], ["cheng_jiu", "成就"], ["body_caiguo", "染色折合彩效果数"], ["all_caiguo", "所有染色折算彩果数"], ["box_caiguo", "保存染色方案数"], ["clothes_num", "锦衣数量"], ["school_skill_num", "师门技能数"], ["equip_level_min", "装备最低等级"], ["equip_level_max", "装备最高等级"], ["taozhuang_num", "套装数量"], ["taozhuang_type", "套装类型"], ["has_community", "社区"], ["fangwu_level", "房屋"], ["tingyuan_level", "庭院"], ["muchang_level", "牧场"], ["switchto_serverid", "转服至"], ["school_skill_level", "师门技能等级"], ['sum_exp_min', '角色总经验'], ['sum_exp_max', '角色总经验'], ['lin_shi_fu', '临时符技能'], ['qian_yuan_dan', '乾元丹个数'], ['smith_skill', '打造熟练度'], ['sew_skill', '裁缝熟练度'], ['skill_drive_pet', '驭兽术'], ['lingshi_min_level', '灵饰最低等级'], ['lingshi_max_level', '灵饰最高等级'], ['lingshi_min_duanzao_level', '灵饰最低锻造'], ['lingshi_max_duanzao_level', '灵饰最高锻造'], ['lingshi_attr_2', '灵饰伤害'], ['lingshi_attr_3', '灵饰速度'], ['lingshi_attr_8', '灵饰封印'], ['lingshi_attr_11', '灵饰治疗'], ['lingshi_attr_7', '灵饰法爆'], ['lingshi_attr_4', '灵饰法伤'], ['lingshi_attr_9', '灵饰法伤结果'], ['lingshi_attr_1', '灵饰固伤'], ['lingshi_attr_6', '灵饰物爆'], ['lingshi_attr_12', '灵饰气血'], ['lingshi_attr_13', '灵饰防御'], ['lingshi_attr_14', '灵饰法防'], ['lingshi_attr_17', '灵饰抗封'], ['lingshi_attr_18', '灵饰格挡'], ['lingshi_attr_16', '灵饰抗法爆'], ['lingshi_attr_15', '灵饰抗物爆'], ['growup_pet_num', '成品召唤兽数量'], ['energy', '精力'], ['pride', '人气'], ['xiangrui_num', '祥瑞数量'], ['learn_cash', '储备金'], ['pet_extend_num', '召唤兽栏扩展个数'], ['baggage_extend_num', '行囊扩展个数'], ['sheng_yu_ling_you', '剩余灵佑次数'], ['rider_exgrow_full_num', '满成长坐骑数（后天成长1.0）'], ['sword_score', '剑会积分'], ['hero_score', '比武积分']];
+        var input_check = check_int_args(args_config);
+        if (!input_check["result"]) {
+            alert(input_check["msg"]);
+            return;
+        }
+        var args = input_check["args"];
+        if (args["level_min"] != undefined && args["level_max"] != undefined) {
+            if (args["level_max"] < args["level_min"]) {
+                alert("搜索等级范围填写错误");
+                return false;
+            }
+        }
+        if (args["level_min"] != undefined && args["level_max"] == undefined) {
+            args["level_max"] = 200;
+        }
+        if ($("txt_price_min").value.trim().length > 0) {
+            var price_min_value = parseFloat($("txt_price_min").value);
+            if (!price_min_value || price_min_value <= 0) {
+                alert("您输入的最低价格有错误");
+                return false;
+            }
+            args["price_min"] = parseInt(price_min_value * 100);
+        }
+        if ($("txt_price_max").value.trim().length > 0) {
+            var price_max_value = parseFloat($("txt_price_max").value);
+            if (!price_max_value || price_max_value <= 0) {
+                alert("您输入的最高价格有错误");
+                return false;
+            }
+            args["price_max"] = parseInt(price_max_value * 100);
+        }
+        if (args["price_min"] != undefined && args["price_max"] != undefined) {
+            if (args["price_max"] < args["price_min"]) {
+                alert("搜索价格范围填写错误");
+                return false;
+            }
+        }
+        if (args["lingshi_min_level"] != undefined && args["lingshi_max_level"] != undefined) {
+            if (args["lingshi_max_level"] < args["lingshi_min_level"]) {
+                alert("灵饰等级最小值不能大于最大值");
+                return false;
+            }
+        }
+        if (args["lingshi_min_duanzao_level"] != undefined && args["lingshi_max_duanzao_level"] != undefined) {
+            if (args["lingshi_max_duanzao_level"] < args["lingshi_min_duanzao_level"]) {
+                alert("锻造等级最小值不能大于最大值");
+                return false;
+            }
+        }
+        if (args['sum_exp_min'] && args['sum_exp_max'] && args['sum_exp_min'] > args['sum_exp_max']) {
+            alert('角色总经验最小值不能大于最大值');
+            return false;
+        }
+        var school = get_item_selected($$("#school_list li"));
+        if (school.length > 0) {
+            args["school"] = school;
+        }
+        var school_change_list = get_item_selected($$("#school_change_list li"));
+        if (school_change_list.length > 0) {
+            args["school_change_list"] = school_change_list;
+        }
+        var race = get_item_selected($$("#race_list li"));
+        if (race.length > 0) {
+            args["race"] = race;
+        }
+        var teji_list = get_item_selected($$("#equip_teji li"));
+        var texiao_list = get_item_selected($$("#equip_texiao li"));
+        if (teji_list.length + texiao_list.length > 0) {
+            if ($("equip_level_min").value.length == 0 && $("equip_level_max").value.length == 0) {
+                alert("请选择【身上装备】装备等级");
+                return false;
+            }
+            if (teji_list.length)
+                args["teji_list"] = teji_list;
+            if (texiao_list.length)
+                args["texiao_list"] = texiao_list;
+        }
+        if ($("special_equip_one").checked) {
+            var specialEquipMaxLevel = Number($("special_equip_max_level").value);
+            if ((specialEquipMaxLevel !== "" && !/^[1-9]\d*$/g.test(specialEquipMaxLevel)) || specialEquipMaxLevel > 999) {
+                alert("【专用装备等级】必须为1-999的整数");
+                return false;
+            }
+            args["special_equip_max_level"] = specialEquipMaxLevel == "" ? "1" : specialEquipMaxLevel;
+        }
+        var pet_type_list = get_item_selected($$("#pet_box li"));
+        if (pet_type_list.length > 0) {
+            args["pet_type_list"] = pet_type_list;
+        }
+        var xiangrui_list = get_item_selected($$("#xiangrui_box li"));
+        if (xiangrui_list.length > 0) {
+            args["xiangrui_list"] = xiangrui_list;
+        }
+        var server_type = get_item_selected($$("#server_type li"));
+        if (server_type.length > 0) {
+            args["server_type"] = server_type;
+        }
+        var is_married = $("is_married").value;
+        if (is_married.length > 0) {
+            args["is_married"] = is_married;
+        }
+        var is_tongpao = $("is_tongpao").value;
+        if (is_tongpao.length > 0) {
+            args["is_tongpao"] = is_tongpao;
+        }
+        var attr_point_strategy = $('attr_point_strategy').value;
+        if (attr_point_strategy) {
+            args['attr_point_strategy'] = attr_point_strategy;
+        }
+        var jiyuan_and_addpoint_value = parseInt($('jiyuan_and_addpoint').value);
+        if (jiyuan_and_addpoint_value) {
+            var selected = $$('#jiyuan_and_addpoint_panel .on');
+            if (selected.length > 0) {
+                var key;
+                if (selected.length == 2)
+                    key = 'jiyuan_and_addpoint';
+                else
+                    key = selected[0].getAttribute('data_value');
+                args[key] = jiyuan_and_addpoint_value;
+            }
+        }
+        if ($('is_niceid_new').value)
+            args['is_niceid_new'] = $('is_niceid_new').value;
+        var limit_clothes = get_item_selected($$("#limit_clothes_panel li"));
+        if (limit_clothes.length > 0) {
+            args["limit_clothes"] = limit_clothes;
+        }
+        if (Object.getLength(args) == 0) {
+            alert("您选择的查询条件过少，请选择更多查询条件");
+            return false;
+        }
+        $$('input[name=zhuang_zhi]').each(function(el) {
+            if ($(el).checked) {
+                args['zhuang_zhi'] = $(el).value;
+            }
+        });
+        if ($("teji_match_all").checked && args['teji_list']) {
+            args["teji_match_all"] = 1;
+        }
+        if ($("texiao_match_all").checked && args['texiao_list']) {
+            args["texiao_match_all"] = 1;
+        }
+        if ($("pet_match_all").checked && pet_type_list.length > 0) {
+            args["pet_match_all"] = 1;
+        }
+        if ($("xiangrui_match_all").checked && xiangrui_list.length > 0) {
+            args["xiangrui_match_all"] = 1;
+        }
+        if ($("lingshi_attr_match_all").checked) {
+            for (var i = 1; i < 19; i++) {
+                var lingshiAttrKey = "lingshi_attr_" + i;
+                if (args[lingshiAttrKey]) {
+                    args["lingshi_attr_match_all"] = 1;
+                    break;
+                }
+            }
+        }
+        if ($("duanzao_attr").value && $("duanzao_num").value) {
+            var duanzaoArr = $("duanzao_attr").value;
+            var duanzaoNum = $("duanzao_num").value;
+            args[duanzaoArr] = duanzaoNum;
+        }
+        $$('input[name=limit_clothes_logic]').each(function(el) {
+            if (el.checked && limit_clothes.length > 0) {
+                args['limit_clothes_logic'] = el.value;
+            }
+        });
+        $("query_args").value = JSON.encode(args);
+        save_args_in_cookie(args, "overall_role_search");
+        update_overall_search_saved_query();
+        document.query_form.submit();
+    }
 </script>
 
 </body>

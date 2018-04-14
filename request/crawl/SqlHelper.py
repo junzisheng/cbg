@@ -25,6 +25,8 @@ class SqlHelper(object):
             Model.__table__.insert(),
             data_list
         )
+        self.session_commit()
+        print('批量提交了%s条数据' % len(data_list))
 
     def insert_once(self, Model, data):
         # assert isinstance(Model, BaseModel)
@@ -35,6 +37,13 @@ class SqlHelper(object):
         model = Model(**data)
         self.session.merge(model)
         self.session.commit()
+
+    def batch_update(self, Model, m_list, k):
+        for m in m_list:
+            self.session.query(Model).filter(Model.order_id == m['order_id'], Model.eid == m['eid'])\
+                .update({k: m[k]})
+        self.session_commit()
+        print('批量更新了%s条' % len(m_list))
 
     def session_commit(self):
         self.session.commit()
@@ -47,4 +56,22 @@ class SqlHelper(object):
 
 if __name__ == '__main__':
     sql = SqlHelper()
-    sql.drop_db()
+    import datetime
+    import random
+    for i in range(100):
+        m = {
+            'server_name': '123',
+            'serverid': '123',
+            'area_name': '123',
+            'time_left': '222',
+            'price': '123',
+            'nickname': '123',
+            'collect_num': 123,
+            'eid': '%s' % random.randint(11, 200),
+            'create_time': '123123123',
+            'dest_url': '123123',
+            'crawl_time': datetime.datetime.now()
+        }
+        c = CrawlData(**m)
+        sql.session.merge(c)
+    sql.session.commit()
