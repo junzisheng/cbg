@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'djcelery',
     'request',
-    'proxy',
+    'api',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,3 +113,4 @@ STATICFILES_DIRS = (
 # import djcelery
 # djcelery.setup_loader()
 # BROKER_URL = 'redis://:Xj3.14164@122.152.195.174:6379/1'
+

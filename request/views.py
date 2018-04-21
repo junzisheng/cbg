@@ -1,16 +1,19 @@
 # encoding=utf-8
-from django.shortcuts import render
-from django.http import HttpResponse
-from config import config
-from urllib import parse
 import json
-from .tasks import crawl_task
-from .models import CrawlOrders
+from urllib import parse
 
+from django.http import HttpResponse
+from django.shortcuts import render
+import config
+from .models import CrawlOrders
+from .tasks import crawl_task
 
 
 def role_page(request):
     return render(request, 'crawl_url/role.html')
+
+def bb_page(request):
+    return render(request, 'crawl_url/bb.html')
 
 
 def role_crawl_rul(request):
@@ -26,8 +29,8 @@ def role_crawl_rul(request):
     url_arg = parse.urlencode(args)
     _role_crawl_url += 'act=%s&' % config.ROLE_ACT
     _role_crawl_url += url_arg
-    note = request.POST.get('note')
-    o = CrawlOrders.objects.create()
+    memo = request.POST.get('note')
+    o = CrawlOrders.objects.create(memo=memo)
     # 发布新的爬取url
-    crawl_task.delay(_role_crawl_url, o.id)
+    crawl_task.delay(_role_crawl_url, o.id, memo)
     return HttpResponse('<a href="%s">%s</a>' % (_role_crawl_url, _role_crawl_url))

@@ -18,7 +18,7 @@ class CrawlOrders(models.Model):
     pay_tradeno     =   models.CharField(max_length=64, blank=True)  # 第三方流水号
     user_ip         =   models.CharField(max_length=64, blank=True)
     user_agent      =   models.CharField(max_length=256, blank=True)
-    createtime      =   models.DateTimeField(null=True, blank=True)
+    createtime      =   models.DateTimeField(auto_created=True)
     status          =   models.CharField(max_length=16, blank=True)
     # quantity        =   models.IntegerField(null=True, blank=True)
     # supplier_id     =   models.BigIntegerField(null=True, blank=True)
@@ -38,3 +38,21 @@ class CrawlOrders(models.Model):
     # retreat_time    =   models.DateTimeField(null=True, blank=True)
     # order_channel   =   models.CharField(max_length=20L, default='namibox', blank=True)
     # is_goods        =   models.IntegerField(null=True, blank=True, default=0)
+
+
+class CrawlData(models.Model):
+    order_id = models.IntegerField()
+    server_name = models.CharField(max_length=32)
+    server_id = models.CharField(max_length=32)
+    area_name = models.CharField(max_length=32)
+    time_left = models.CharField(max_length=32)
+    price = models.CharField(max_length=16)
+    nickname = models.CharField(max_length=32)
+    collect_num = models.SmallIntegerField()
+    eid = models.CharField(max_length=64)
+    create_time = models.DateTimeField(auto_now_add=True)
+    dest_url = models.CharField(max_length=512)
+    crawl_time = models.DateTimeField(max_length=512)
+
+    class Meta:
+        db_table    = 'crawl_data'

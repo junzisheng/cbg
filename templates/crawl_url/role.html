@@ -8,15 +8,15 @@
 !function(t,n,r){function e(t){return t>Math.random()}function o(t,n){return t.indexOf(n)>=0}function a(t,n,r){t.attachEvent?t.attachEvent("on"+n,r):t.addEventListener(n,r,!1)}function i(t,n){var r=[];if(n){for(var e in n)n.hasOwnProperty(e)&&r.push(e+"="+N(n[e]));t+=(o(t,"?")?"&":"?")+r.join("&")}return t}function u(t,n,r){var e,o=new Image,a=!0,i=function(){clearTimeout(e),o.onload=o.onerror=l,n&&n(a);try{o=l,delete o}catch(t){}},u=function(){a=!1,i()};e=r&&setTimeout(u,r),o.onload=i,o.onerror=u,o.src=t}function c(t,n){t.product=w.domain.split(".")[0];var e=w.referrer;g||(g=function(t){var n=w.cookie.match("(^|;)\\s*"+t+"\\s*=\\s*([^;]+)");return n?n.pop():""}("fingerprint")),t.useragent=navigator.userAgent,e&&(t.from=e),g&&(t.fingerprint=g),u(i(r,t),n)}function f(){return E&&E.now?Math.round(E.now()):(new Date).getTime()}function s(t,n,r){var e=r?v:d,o=n-t;return o<0?(e=p,o=0):o>18e5&&(e=h,o=0),{status:e,duration:o}}function m(t,n){var r=b,e=n;if(y=!1,E){var o=E.timing||{};o.navigationStart&&(r=o.navigationStart),o.loadEventEnd&&(e=o.loadEventEnd),!t&&E.now&&(r=0,e=parseInt(E.now()))}var a=s(r,e,t),i={log:"page_load",status:a.status,time:a.duration};a.status!=v&&(i.time_start=r,i.time_end=e),c(i),setTimeout(function(){},100)}var g,l=null,v=1,d=-1,p=-2,h=-3,w=t.document,N=t.encodeURIComponent,E=t.performance;if(e(.01)){var _,b=f(),y=!0;a(t,"beforeunload",function(){y&&(clearTimeout(_),m(!1,f()))}),a(t,"load",function(){if(y){var t=f();_=setTimeout(function(){m(!0,t)},100)}})}e(.01)&&setTimeout(function(){var t=f();u(i(n+"/images/empty.gif",{v:t}),function(r){var e=s(t,f(),r);c({log:"cdn_ping",status:e.status,domain:n,time:e.duration})},3e4)},3e3),function(){var r=!1,e=!0,a={},i=function(t){var n=t.stack.replace(/\n/gi,"").split(/\bat\b/).slice(0,9).join("@").replace(/\?[^:]+/gi,""),r=t.toString();return o(n,r)||(n=r+"@"+n),n},u=function(t){f(function(t){try{if(t.stack){var n=t.stack.match("https?://[^)^\n]+"),r=(n=n?n[0]:"").match(":(\\d+):(\\d+)");r||(r=[0,0,0]);var e=i(t),o=n.replace(r[0],"");return t.fnName&&(o+=":"+t.fnName),{msg:t.message,info:e,rowNum:r[1],colNum:r[2],target:o}}return t.name&&t.message&&t.description?{target:t.fnName,msg:t.message,info:"name:"+t.name+",desc:"+t.description+",number:"+t.number}:t}catch(a){return{msg:"__parse_error__",info:(a.message||a.toString())+"-"+t.toString()}}}(t))},f=function(t){if(!function(t){if(!t)return!0;if(!e){var n=t.msg;if(o(n,"ReferenceError")||o(n,"\u672A\u5B9A\u4E49"))return!0}return r||function(t){var n=t.target+t.msg;return!!a[n]||(a[n]=!0,!1)}(t)}(t)){var n={log:"js_error",filename:t.target,msg:t.msg,info:t.info};t.rowNum&&(n.linenumber=t.rowNum+":"+t.colNum),c(n)}},s=t.onerror;t.onerror=function(n,r,e,o,a){var u=n;a&&a.stack&&(u=i(a)),function(t,n){return Object.prototype.toString.call(t)==="[object "+(n||"Object")+"]"}(u,"Event")&&(u+=u.type?"--"+u.type+"--"+(u.target?u.target.tagName+"::"+u.target.src:""):""),f({msg:n,info:u,target:r,rowNum:e,colNum:o}),s&&s.apply(t,arguments)},t.addEventListener?t.addEventListener("error",function(t,e){var a=t.target,i=(a.tagName||"").toUpperCase();if(o(["IMG","SCRIPT","LINK"],i)&&null===a.getAttribute("no-tracer")&&"prefetch"!==a.getAttribute("rel")){if(o(e="LINK"==i?a.href:a.src,"/1.gif?"))return;o(e,n)&&"SCRIPT"==i&&(r=!0),c({log:"js_error",filename:e,msg:"LOAD_FAILED"})}},!0):e=!1;var m,g={watch:function(n,r){return function(){try{return n.apply(this,r||arguments)}catch(o){if(o.fnName=/^function\s+[^\(]*/.exec(n.toString())[0],u(o),!m){var e=t.onerror;t.onerror=function(){},m=setTimeout(function(){t.onerror=e,m=null},50)}throw o}}},reportError:u,send:f};t.CBG_JS_REPORT=g}()}(window,"http://res.xyq.cbg.163.com","//xyq-tracer.cbg.163.com/1.gif");
 </script><link href="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/css/global.css" rel="stylesheet" type="text/css" media="all" />
 <link href="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/css/pages.css" rel="stylesheet" type="text/css" media="all" />
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/mootools-core-1.3.2.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/mootools-jsonp.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/autocomplete.js?v=20140520"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/util.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/server_list_data.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/test_server_list.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/drop_select_server.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/parse_role.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/recommd.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/mootools-core-1.3.2.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/mootools-jsonp.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/autocomplete.js?v=20140520"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/util.js"></script>
+<script src="/static/js/server_list_data.js"></script>
+<script src="/static/js/test_server_list.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/drop_select_server.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/parse_role.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/recommd.js"></script>
 <script type="text/javascript">
 var CBG_PAGE_ID = 'overall_search';
 var CgiRootUrl = 'http://xyq.cbg.163.com/cgi-bin';
@@ -54,9 +54,9 @@ if (window.self != window.top){
 <!--[if lt IE 8]>
   <link href="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/css/ie7.css" rel="stylesheet" />
   <script src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/ie7.js"></script>
-<![endif]--><script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/right_float_menu.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/sprite.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/js/sprite-hotq.js?rc7eb15459c587ab603b00"></script>
+<![endif]--><script src="/static/rc7eb15459c587ab603b00/js/right_float_menu.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/sprite.js"></script>
+<script src="/static/js/sprite-hotq.js?rc7eb15459c587ab603b00"></script>
 
 
 <div id="recent_list_templ">
@@ -604,10 +604,10 @@ if (window.self != window.top){
 <% } %>
 -->
 </script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/xyq_equip_desc_parser.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/pet.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/xyq_setting.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/role_info_setting.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/xyq_equip_desc_parser.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/pet.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/xyq_setting.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/role_info_setting.js"></script>
 
 <script>
 function get_window_height()
@@ -910,9 +910,9 @@ function set_img_icon(){
 
 </script>
 
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/role_info_setting.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/overall_search_com.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/overall_search_role.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/role_info_setting.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/overall_search_com.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/overall_search_role.js"></script>
 <script type="text/javascript">
 
 var OverallSearchType = 'role';
@@ -2168,8 +2168,8 @@ window.addEvent('domready', function() {
 <div class="areaBtm"></div>
 <div class="blank12"></div>
 
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/rc7eb15459c587ab603b00/js/trace.js"></script>
-<script type="text/javascript" src="http://res.xyq.cbg.163.com/cbg_tgxc/xyq_tgxc.js"></script>
+<script src="/static/rc7eb15459c587ab603b00/js/trace.js"></script>
+<script src="/static/cbg_tgxc/xyq_tgxc.js"></script>
 <script src="//analytics.163.com/ntes.js" type="text/javascript" no-tracer></script>
 <script type="text/javascript">
 var _ntes_nacc = "cbgxyq"; //站点ID。

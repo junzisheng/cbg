@@ -1,6 +1,9 @@
 #encoding=utf-8
 import types
 import datetime
+import json
+from django.http import HttpResponse
+
 try:
     from cbg_backup.unit import dtlib
 except:
@@ -36,11 +39,21 @@ def queryset_to_list_of_dict(queryset , support_json = False):
 
     return list_ret
 
+
+def response_json(retcode , description = '', **kwargs):
+    """快捷函数，返回JSON格式的HttpResponse，至少提供retcode和description两个参数，和附加命名参数"""
+    dict_ret = {'retcode': retcode}
+    if description:
+        dict_ret['description'] = description
+    dict_ret.update(kwargs)
+    return HttpResponse(json.dumps(dict_ret))
+
+
+
+
+
 from threading import Lock
 lock = Lock()
-
-
-
 
 
 class Proxy(object):

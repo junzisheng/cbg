@@ -1,9 +1,6 @@
 #encoding=utf-8
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import config
 from models import engine, BaseModel, CrawlData
+from sqlalchemy.orm import sessionmaker
 
 
 class SqlHelper(object):
@@ -26,7 +23,6 @@ class SqlHelper(object):
             data_list
         )
         self.session_commit()
-        print('批量提交了%s条数据' % len(data_list))
 
     def insert_once(self, Model, data):
         # assert isinstance(Model, BaseModel)
@@ -43,7 +39,6 @@ class SqlHelper(object):
             self.session.query(Model).filter(Model.order_id == m['order_id'], Model.eid == m['eid'])\
                 .update({k: m[k]})
         self.session_commit()
-        print('批量更新了%s条' % len(m_list))
 
     def session_commit(self):
         self.session.commit()

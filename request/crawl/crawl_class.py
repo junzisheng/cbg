@@ -1,24 +1,27 @@
 #encoding=utf-8
-import json
-import traceback
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.engine import create_engine
-import logging
-import logging.config
 import datetime
-import requests
-from requests.exceptions import *
-import redis
+import json
+import time
+import logging.config
 import random
-from urllib import parse
-import config
 import re
+import traceback
+
+import redis
+import requests
 from SqlHelper import SqlHelper
 from models import *
-import time
+from requests.exceptions import *
+try:
+    from request.crawl import config
+except:
+    import config
+
+
 logger = logging.getLogger("root")
 _hostprog = re.compile('https?://([^/?]*)(.*)', re.DOTALL)
 LOG = 1
+# todo 第一轮爬取免打扰
 
 
 log = print if LOG else logging.info
@@ -83,18 +86,19 @@ class Server(object):
     @try_except
     def delet_proxy(self, id_list):
         id_list = [id_list] if type(id_list) != list else id_list
+        log(id_list)
         requests.post(self.ip_api_delete, data={'id_list': id_list})
 
 
 class Crawl(object):
-    def __init__(self, url, order_id , user_id, user_push_message_type, crawl_interval):
+    def __init__(self, url, order_id, memo, user_id, crawl_interval):
         # 用户设置相关
         self.base_url = url + '&page={0}'
         self.server = Server()
         # self.base_url = 'http://xyq.cbg.163.com/cgi-bin/xyq_overall_search.py?act=overall_search_role&fang_yu=90&level_min=69&level_max=69&school=1&shang_hai=150&page={0}'
         self.user_id = user_id  # 用户的id
         self.order_id = order_id
-        self.user_push_message_type = user_push_message_type  # 爬取到数据后给用户推送的方式
+        self.memo = memo
         self.push_2_users = []  # 用户设置的推送给其他人
         self.crawl_host = self.splithost(self.base_url)  # 爬取url的域名
         self.vaild_status = 0  # 正确的状态码
@@ -104,7 +108,6 @@ class Crawl(object):
         self.crawled_eid_list = []  # 已经爬取的信息  以后爬到则不在给用户推送信息
         self.crawl_data_set = set()
         # 代理池相关
-        # self.ip_api_select = '127.0.0.1:8888/?types=0&count=1000'
         self.ip_api_select = config.PROXY_GET_API
         self.ip_api_delete = config.PROXY_DELETE_API
         self.limit_proxy_count = config.MIN_PROXY_LIST_COUNT
@@ -122,15 +125,13 @@ class Crawl(object):
         self.full_ip = 0  # 挂载满的ip
         self.invaild_ip_list = []  # 全局可能可用，但是这个任务不能使用的ip  todo 一段时间需要将其清空
         # 数据库相关
-        # self.conn = None  # MySql句柄
-        # self.cursor = None  # Mysql游标
         self.redis = None  # redis句柄
         self.session = None
         self.sql_tool = None
         # 价格变动多少进行提醒 todo
 
         self.set_dict = dict()  # 去重
-
+        self.redis_3 = redis.StrictRedis(**config.REDIS3_CONFIG)  # 用来推送新消息或者价格变动的消息
         # 调试数据
         self.fail_times = 0
         self.success_times = 0
@@ -157,14 +158,17 @@ class Crawl(object):
         """
         初始化
         """
-        self.redis = redis.StrictRedis(host='localhost', password='Xj3.14164', port=6379, db=2)
-        # self.get_proxy_list()
-        self.server.get_proxy_list(self.proxy_list)
-        self.get_crawled_eid_list()  # 获取已经爬取过
+        # self.server.get_proxy_list(self.proxy_list)
         self.sql_tool = SqlHelper()
         self.sql_tool.init_db()
-        log('爬取的url为%s' % self.base_url)
+        self.get_crawled_eid_list()  # 获取已经爬取过
+        self.log('爬取的url为%s' % self.base_url)
         time.sleep(5)
+
+    def log(self, *args):
+        log(args)
+        log(self.memo)
+
 
     def __del__(self):
         pass
@@ -178,16 +182,6 @@ class Crawl(object):
         """
         while 1:
             self.crawl(self.base_url.format(self.next_page), self.parse, self.next_page)
-        # log('结束了》》》》》》》》》》》》》》》》》》》》》')
-        # raise KeyboardInterrupt
-
-
-    # def first_page_crawl(self):
-    #     """
-    #     爬取第一页的数据，从而获取总页数，然后才能使用gevent 的joinall
-    #     """
-    #     url = self.base_url + '&page=1'
-    #     data = self.crawl(url)
 
     def crawl(self, url, parse_func, page):
         """
@@ -195,15 +189,13 @@ class Crawl(object):
         """
         restart_times = -1  # 重试次数
         while True:
-            log('当前爬取第%s页' % page)
+            self.log('当前爬取第%s页' % page)
             restart_times += 1
-            log('重试了第%s次%s' % (restart_times, url))
+            self.log('重试了第%s次%s' % (restart_times, url))
             
-            if restart_times > self.max_restart_times:
-                log('重试次数达到上限 已经停止【%s】的爬取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+            if restart_times >= self.max_restart_times:
                 self.fail_times += 1
-                logger.info('重试次数达到上限 已经停止【%s】的爬取>>>>>>%s' % (url, self))
-                logger.warning('重试次数达到上限 已经停止【%s】的爬取>>>>>>%s' % (url, self))
+                self.log('重试次数达到上限 已经停止第【%s】页的爬取' % self.next_page)
                 self.fail_info.append(url)
                 self.next_page += 1
                 break
@@ -213,29 +205,26 @@ class Crawl(object):
                     self.server.get_proxy_list(self.proxy_list)
                 proxy = random.choice(self.proxy_list) if restart_times < self.max_restart_times/2 or not self.localhost_ban else {}  # 当重试达到最大次数一半的时候使用本地ip进行爬取
                 self.self_ip += 1 if proxy == {} else 0
-                #proxy = {}
                 # nice代理 proxy = {'https': 'https://129.70.129.187:3128'}
                 header = self.get_header()
                 response = requests.get(url, proxies=proxy, headers=header, timeout=2)
-                #response = requests.get(url, proxies={}, headers=header, timeout=2)
-                # 返回json data
                 data = parse_func(response, url)
                 self.success_times += 1
-                log('成功 第%s次》》》》》》》》》》》》》》》》》》》》》》》》》' % restart_times)
+                self.log('成功 第%s次' % restart_times)
                 time.sleep(0.3)
                 break
-            except (ConnectTimeout, ConnectionError, ReadTimeout, NotTarget, IPBanned,
-                    json.JSONDecodeError, ProxyError, StatusNot200) as e:
-                log(e.__class__.__name__)
+            except (NotTarget, IPBanned, json.JSONDecodeError, ProxyError, StatusNot200) as e:
+                self.log(e.__class__.__name__)
                 self.handle_with_dity_ip(proxy)
-            except (ChunkedEncodingError, TooManyRedirects, SystemBusy) as e:
+            except (ChunkedEncodingError, TooManyRedirects, SystemBusy, ConnectTimeout,
+                    ConnectionError, ReadTimeout, ) as e:
                 self.handle_with_hang_ip(proxy)
-                log(e.__class__.__name__)
+                self.log(e.__class__.__name__)
             except Exception as s:
                 self.other_wrong +=1
-                log(traceback.format_exc(), 'wrong>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-                logger.error(traceback.format_exc())
-                logger.error(u'发生错误，%s订单%s url % 页已停止爬取')
+                self.log('*' * 100)
+                self.log(s)
+                self.log('*' * 100)
                 break
 
     def get_header(self):
@@ -249,32 +238,10 @@ class Crawl(object):
 
     def get_crawled_eid_list(self):
         """
-        从Mysql获取已经爬取的id
+        从Mysql获取已经爬取的id, price
         """
-        pass
-
-    def get_proxy_list(self):
-        """
-        从proxy分发处获取有效代理列表
-        """
-        while 1:
-            response = requests.get(self.ip_api_select)
-            proxy_list = json.loads(response.text)
-            # 组装代理
-            if not proxy_list:
-                log('没有获取到代理！！！！')
-                time.sleep(10)
-                continue
-            for proxy in proxy_list:
-                self.proxy_list.append({
-                    'http': 'http://{0}:{1}'.format(proxy['ip'], proxy['port']),
-                    'https': 'https://{0}:{1}'.format(proxy['ip'],proxy['port']),
-                    'id': proxy['_id'],
-                })
-            # if not self.localhost_ban and {} not in self.proxy_list:
-            #     self.proxy_list.append({})  # 允许使用本地ip去访问
-            log('获取了%s个代理' % len(self.proxy_list))
-            break
+        for eid, price in self.sql_tool.session.query(CrawlData.eid, CrawlData.price):
+            self.set_dict[eid] = price
 
     @try_except
     def handle_with_dity_ip(self, proxy):
@@ -286,14 +253,13 @@ class Crawl(object):
             self.localhost_ban = True
         else:
             self.server.delet_proxy([proxy['id']])
-            # requests.post(self.ip_api_delete, data={'id_list': proxy['id']})
 
     @try_except
     def handle_with_hang_ip(self, proxy):
         """
         处理被挂起的IP: 被封；IP代理连接数满了
         """
-        log('删除了%s, 还剩%s个代理' % (proxy, len(self.proxy_list)))
+        self.log('删除了%s, 还剩%s个代理' % (proxy, len(self.proxy_list)))
         if proxy == {}:
             self.localhost_ban = True
         else:
@@ -305,20 +271,19 @@ class Crawl(object):
         解析数据
         """
         if response.status_code != 200:
-            log(response.status_code, response.url, 'text>>>>>>>>>>>', response.text)
+            self.log(response.status_code, response.url, 'text>>>>>>>>>>>', response.text)
             raise StatusNot200
         # 根据域名判断是否来源服务器的返回
         if self.splithost(response.url) != self.crawl_host:
             raise NotTarget
         data = json.loads(response.text)
-        log(data.get('status', '--status'))
         if data.get('status') != self.vaild_status:
             raise IPBanned
         pager = data.get('pager')
         equip_list = data.get('equip_list')
         if not all([pager, equip_list]):
             # 可能原因 返回  {status: 0, msg: 系统繁忙}
-            log(data)
+            self.log(data)
             raise SystemBusy
         # 数据入库  目录格式:
         """
@@ -335,11 +300,12 @@ class Crawl(object):
             ]
         }
         """
-        log(len(equip_list), '数据量')
+        self.log(len(equip_list), '数据量')
         self.analysis(equip_list)
-        self.next_page = 1 if not equip_list or pager['cur_page'] == pager['num_end'] else self.next_page +1
-        #log(equip_list, 'equip_list>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        # self.sql_tool.session_commit()
+        if not equip_list or pager['cur_page'] == pager['num_end'] or self.next_page == 100:
+            self.next_page = 1
+        else:
+            self.next_page += 1
         # todo 消息提醒
         return data
 
@@ -382,17 +348,40 @@ class Crawl(object):
                 self.set_dict[eid] = price
         if valid_insert_list:
             self.sql_tool.batch_insert(CrawlData, valid_insert_list)
+            self.redis_3.publish('new_crawl_data', json.dumps({
+                'user_id': self.user_id,
+                'data_list': self.datetime_serialize(valid_insert_list),
+                'memo': self.memo,
+            }))
+            self.log('提交了%s条数据' % len(valid_insert_list))
         if valid_update_list:
             self.sql_tool.batch_update(CrawlData, valid_update_list, 'price')
+            self.redis_3.publish('updata_crawl_data', json.dumps({
+                'user_id': self.user_id,
+                'data_list': self.datetime_serialize(valid_update_list),
+                'memo': self.memo,
+            }))
+            self.log('更新了%s条数据' % len(valid_update_list))
 
     @staticmethod
     def splithost(url):
         res = _hostprog.match(url)
         return res.group(1) if res else None
 
+    def datetime_serialize(self, l):
+        for item in l:
+            for k, v in item.items():
+                if isinstance(v, datetime.datetime):
+                    item[k] = str(v)
+        return l
+
+
+
+
 
 if __name__ == '__main__':
     import time
+
     c = Crawl(1, 2, 3, 4, 5)
     start = time.time()
     log('start>>>>>%s' % start)
@@ -419,6 +408,10 @@ if __name__ == '__main__':
         log('fail info', c.fail_info)
 
 
+"""
+更新记录
+1. 2018 4.15  将数据插入由爬取工具连接数据库 转为 数据传入服务器 服务器插入
+"""
 
 
 

@@ -4,8 +4,12 @@ from sqlalchemy.ext.declarative import declarative_base  # 描述表结构
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, VARCHAR, Integer, ForeignKey, SmallInteger, DateTime, VARCHAR
 from sqlalchemy.orm import relationship
+try:
+    from request.crawl import config
+except:
+    import config
 
-engine = create_engine('mysql+pymysql://wordpress:Xj3.14164@127.0.0.1:3306/sql_test?charset=utf8',
+engine = create_engine(config.DB_CONNECT_STRING,
                        max_overflow=0,  # 超过连接池大小外最多创建的连接
                        pool_size=5,  # 连接池大小
                        pool_timeout=30,  # 池中没有线程最多等待时间， 否则报错
