@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type"	content="text/html;	charset=UTF-8">
+    <meta name="Description" CONTENT="藏宝阁贴心小助手">
+    {# 完全为苹果等移动终端特别设置 #}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-touch-fullscreen" content="yes" />
+        {# iphone设备中的safari私有meta标签，它表示允许全屏模式浏览 #}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        {# iphone的私有标签，它指定的iphone中safari顶端的状态条的样式，在web app应用下状态条（屏幕顶部条）的颜色，默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明） #}
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        {# 告诉设备忽略将页面中的数字识别为电话号码 #}
+        <meta content="telephone=no" name="format-detection" />
+
+        {# 强制让文档的宽度与设备的宽度保持1:1，并且文档最大的宽度比例是1.0，且不允许用户点击屏幕放大浏览；#}
+        {% block viewport %}
+        <meta name="viewport" content="width=device-width,height=device-height,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+        {% endblock %}
+	<title>{% block title %}藏宝阁助手{% endblock %}</title>
+    <script src="/static/public_js/jquery-3.3.1.js"></script>
+    <!-- <script src="/static/public_js/vue.js"></script> -->
+    <script src="//v1.vuejs.org/js/vue.min.js"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
+    <!-- 引入组件库 -->
+    <script src="//unpkg.com/iview@1.0.1/dist/iview.min.js"></script>
+
+    <script src="/static/public_js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/public_css/main.css">
+    <script>
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 640*100 + 'px';
+        {# 针对csrf的ajax设置 #}
+        $(function(){
+            new Vue({
+                el: '#qcode-container',
+                data: {
+                    show: false,
+                },
+                methods: {
+                    qcode_show: function(){
+                        this.show = !this.show;
+                    }
+                }
+            })
+            $.ajaxSetup({
+                beforeSend: function(xhr){
+                    　xhr.setRequestHeader("X-CSRFtoken", '{{csrf_token}}')
+                }
+            })
+            // {% if ismobile %}
+            // {% endif %}
+
+        })
+
+    </script>
+        
+
+
+    {% block head %}
+    {% endblock %}
+</head>
+<!-- <body {% if ismobile %} class="fix_full" {% endif %}> -->
+<body>
+<div id="qcode-container">
+    <div id="qcode" @click="qcode_show"></div>
+    <div id="qcode_img" v-show="show">
+        <img src="/user/qrcode?data={{urlnow}}" style="width:100%;" style="width:100%;vertical-align:top;">
+    </div>
+    
+</div>
+{% block body %}
+
+{% endblock %}
+{% block javascript %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}
+登陆
+{% endblock %}
+{% block head %}
+
+<link rel="stylesheet" href="/static/public_css/bootstrap.css">
+<link rel="stylesheet" href="/static/public_css/font-awesome.css">
+<link rel="stylesheet" href="/static/auth/css/auth.css">
+<!-- Javascript -->
+<script src="/static/public_js/bootstrap.js"></script>
+<script src="/static/auth/js/login.js"></script>
+{% endblock %}
+{% block body %}
+
+
+
+        <!-- Top content -->
+        <div class="top-content" id="login-vue">
+        	
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>藏宝阁助手</strong> <!-- 登陆 --></h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                            <div class="form-bottom">
+			                    <form role="form" action="" method="post" class="login-form">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+			                    	<div class="form-group">
+			                    		<!-- <label class="sr-only" for="form-username">Username</label> -->
+			                        	<input type="text" maxlength="12" :class="{'input-error': username_error}" v-model="username"  @focus.stop="input_focus($event)"  placeholder="请输入账号" class="form-control">
+			                        </div>
+			                        <div class="form-group">
+			                        	<!-- <label class="sr-only" for="form-password">Password</label> -->
+			                        	<input type="password" maxlength="16" placeholder="请输入密码" :class="{'input-error': pwd_error}"  v-model="pwd" @focus.stop="input_focus($event)"  class="form-control">
+			                        </div>
+                                    <div class="options clearfix">
+                                        <!-- <a href="/user/register" id="register">注册</a> -->
+                                        <div class="checkbox auto-login">
+                                            <label>
+                                              <input type="checkbox" name="auto-login" v-model="checked">14天免登陆
+                                            </label>
+                                        </div>
+                                        <a href="" id="forget-pass">忘记密码</a>
+                                    </div>
+			                        <button class="btn"  @click.prevent="submit($event)">登 陆</button>
+                                    <a href="/user/register">快速注册</a>
+			                    </form>
+		                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+
+    {% endblock %}
+

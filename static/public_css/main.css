@@ -1,0 +1,15 @@
+.clearfix:after,.clearfix:before{ content: "";display: table;}
+.clearfix:after{ clear:both;}
+.clearfix{zoom:1;}
+
+#top_notic{
+	background-color: white;
+	text-align: center;
+	font-size: 0.216667rem;
+	color: black;
+	height:0.5rem;
+	width: 100%;
+	position: fixed;
+	top:0;
+	letter-spacing:0.033333rem;
+}
