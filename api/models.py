@@ -1,6 +1,5 @@
 from django.db import models
-
-
+# class Proxys(models.Model):
 #     ip = models.CharField(max_length=11, blank=True)
 #     port = models.SmallIntegerField()
 #     types = models.SmallIntegerField()
@@ -15,11 +14,11 @@ from django.db import models
 #         db_table = 'proxys'
 #
 # class CrawlData(BaseModel):
-#     # ÅÀÈ¡µÄÊý¾Ý
+#     # ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #     __tablename__ = 'crawl_data'
-#     # crawl_task_id = Column(Integer)  # ÅÀÈ¡ÈÎÎñµÄid
-#     # eid = Column(VARCHAR(128), nullable=False)  # ÅÀÈ¡µÄÔªÊý¾Ý¶ÔÏóµÄÎ¨Ò»±êÊ¶
-#     # ÏÂÃæ¿´Çé¿ö½øÐÐÀ©Õ¹
+#     # crawl_task_id = Column(Integer)  # ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½id
+#     # eid = Column(VARCHAR(128), nullable=False)  # ï¿½ï¿½È¡ï¿½ï¿½Ôªï¿½ï¿½ï¿½Ý¶ï¿½ï¿½ï¿½ï¿½Î¨Ò»ï¿½ï¿½Ê¶
+#     # ï¿½ï¿½ï¿½æ¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹
 #     id = Column(Integer, primary_key=True, autoincrement=True)
 #     order_id = Column(Integer)
 #     server_name = Column(VARCHAR(32))

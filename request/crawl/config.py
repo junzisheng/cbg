@@ -1,6 +1,3 @@
-
-
-
 USER_AGENTS = [
     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
     "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
@@ -37,19 +34,19 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11",
     "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10"
 ]
-DB_CONNECT_STRING  = 'mysql+pymysql://wordpress:Xj3.14164@122.152.195.174/sql_test?charset=utf8'
-MAX_RESTART_TIMES = 30  # ÅÀÈ¡Ò»Ò³µÄ×î´óÊ§°Ü´ÎÊý
+DB_CONNECT_STRING  = 'mysql+pymysql://wordpress:Xj3.14164@127.0.0.1/test?charset=utf8'
+MAX_RESTART_TIMES = 30  # ï¿½ï¿½È¡Ò»Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü´ï¿½ï¿½ï¿½
 
 # PROXY_GET_API = 'http://122.152.195.174:8000/api/proxy_select?count=40'
 # PROXY_DELETE_API = 'http://122.152.195.174:8000/api/proxy_delete'
 PROXY_GET_API = 'http://127.0.0.1:8000/api/proxy_select?count=40'
 PROXY_DELETE_API = 'http://127.0.0.1:8000/api/proxy_delete'
-# DATA_INSERT_API = 'http://122.152.195.174/api/data_insert'  # ÅÀÈ¡µ½µÄÊý¾Ý²åÈë
-# DATA_UPDATE_API = 'http://122.152.195.174/api/data_update'  # ÅÀÈ¡µ½µÄÊý¾Ý¸üÐÂ
-MIN_PROXY_LIST_COUNT = 10  # ´úÀí³ØÐ¡ÓÚ¶àÉÙÇëÇó´úÀí
-PROXY_RESET_COUNT = 5  # Ã¿¸ö´úÀíÖØÁ¬ºó¿ÉÖØÓÃµÄ´ÎÊý
+# DATA_INSERT_API = 'http://122.152.195.174/api/data_insert'  # ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½
+# DATA_UPDATE_API = 'http://122.152.195.174/api/data_update'  # ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½
+MIN_PROXY_LIST_COUNT = 10  # ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+PROXY_RESET_COUNT = 5  # Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ´ï¿½ï¿½ï¿½
 
-# ÏòredisÍÆËÍÏûÏ¢
+# ï¿½ï¿½redisï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 import redis
 REDIS3_CONFIG = {
     'host': 'localhost',

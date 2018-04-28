@@ -3,11 +3,13 @@ import time
 import random
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from unit.utility import *
+from django.views.decorators.csrf import csrf_exempt
 # from .models import *
 import json
 import threading
 ip_manager = IProxyManager()
 
+@csrf_exempt
 def insert(requests, IProxyManager):
     """添加"""
     # ip = requests.GET.get('ip')
@@ -25,6 +27,7 @@ def insert(requests, IProxyManager):
     return HttpResponse(r)
 
 
+@csrf_exempt
 def delete(requests, IProxyManager):
     if requests.method != 'POST':
         return HttpResponseBadRequest()

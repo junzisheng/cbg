@@ -86,7 +86,7 @@ class Server(object):
     @try_except
     def delet_proxy(self, id_list):
         id_list = [id_list] if type(id_list) != list else id_list
-        log(id_list)
+        log('删除了ip', id_list)
         requests.post(self.ip_api_delete, data={'id_list': id_list})
 
 
@@ -158,7 +158,7 @@ class Crawl(object):
         """
         初始化
         """
-        # self.server.get_proxy_list(self.proxy_list)
+        self.server.get_proxy_list(self.proxy_list)
         self.sql_tool = SqlHelper()
         self.sql_tool.init_db()
         # self.get_crawled_eid_list()  # 获取已经爬取过
@@ -204,8 +204,8 @@ class Crawl(object):
                 if len(self.proxy_list) <= self.limit_proxy_count:  # 当维护的代理池小于20个时， 则需要拉取新的代理
                     pass
                     # self.server.get_proxy_list(self.proxy_list)
-                # proxy = random.choice(self.proxy_list) if restart_times < self.max_restart_times/2 or not self.localhost_ban else {}  # 当重试达到最大次数一半的时候使用本地ip进行爬取
-                proxy = {}
+                proxy = random.choice(self.proxy_list) if restart_times < self.max_restart_times/2 or not self.localhost_ban else {}  # 当重试达到最大次数一半的时候使用本地ip进行爬取
+                # proxy = {}
                 self.self_ip += 1 if proxy == {} else 0
                 # nice代理 proxy = {'https': 'https://129.70.129.187:3128'}
                 header = self.get_header()
@@ -248,7 +248,7 @@ class Crawl(object):
     @try_except
     def handle_with_dity_ip(self, proxy):
         """
-        处理无效的IP(访问被拒绝， timeout)
+        处理无效的IP(访问被拒绝， timeout)  # todo 可以做成异步的
         """
         self.handle_with_hang_ip(proxy)
         if proxy == {}:
@@ -414,15 +414,5 @@ if __name__ == '__main__':
 更新记录
 1. 2018 4.15  将数据插入由爬取工具连接数据库 转为 数据传入服务器 服务器插入
 """
-
-
-
-
-
-
-
-
-
-
 
 

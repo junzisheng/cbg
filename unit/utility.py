@@ -77,7 +77,7 @@ def ip_visit_limit(user_ip , key_prefix , num , unit_time):
     key = "%s_%s" % (key_prefix ,user_ip)
     new_val = gpub.redis3.incr(key)
     if new_val == 1:
-        gpub.redis3.expire(key, unit_time)
+        settings.redis3.expire(key, unit_time)
     return new_val > num
 
 

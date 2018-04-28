@@ -1,17 +1,20 @@
+import sys
+if sys.platform == 'linux':
+    BROKER_URL = 'redis://:Xj3.14164@127.0.0.1:6379/1'
+else:
+    BROKER_URL = 'redis://:47.104.193.247:6379/1'
 CELERY_IMPORTS = ("request.tasks")
-BROKER_URL = 'redis://:Xj3.14164@122.152.195.174:6379/1'
-CELERY_RESULT_BACKEND = 'redis://:Xj3.14164@122.152.195.174:6379/1'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_RESULT_EXPIRES = 60 * 60 * 24   # ÈÎÎñ¹ýÆÚÊ±¼ä
-CELERY_ACCEPT_CONTENT = ["pickle", "json"]            # Ö¸¶¨ÈÎÎñ½ÓÊÜµÄÄÚÈÝÀàÐÍ.
+CELERY_TASK_RESULT_EXPIRES = 60 * 60 * 24   # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+CELERY_ACCEPT_CONTENT = ["pickle", "json"]            # Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 CELERY_TIMEZONE = 'Asia/Shanghai'
-# Ä³¸ö³ÌÐòÖÐ³öÏÖµÄ¶ÓÁÐ£¬ÔÚbrokerÖÐ²»´æÔÚ£¬ÔòÁ¢¿Ì´´½¨Ëü
+# Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ÖµÄ¶ï¿½ï¿½Ð£ï¿½ï¿½ï¿½brokerï¿½Ð²ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ï¿½ï¿½
 CELERY_CREATE_MISSING_QUEUES = True
-CELERYD_CONCURRENCY = 20  # ²¢·¢workerÊý
-CELERYD_FORCE_EXECV = True    # ·Ç³£ÖØÒª,ÓÐÐ©Çé¿öÏÂ¿ÉÒÔ·ÀÖ¹ËÀËø
+CELERYD_CONCURRENCY = 20  # ï¿½ï¿½ï¿½ï¿½workerï¿½ï¿½
+CELERYD_FORCE_EXECV = True    # ï¿½Ç³ï¿½ï¿½ï¿½Òª,ï¿½ï¿½Ð©ï¿½ï¿½ï¿½ï¿½Â¿ï¿½ï¿½Ô·ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 CELERYD_MAX_TASKS_PER_CHILD = 100
-# CELERYD_TASK_TIME_LIMIT = 60    # µ¥¸öÈÎÎñµÄÔËÐÐÊ±¼ä²»³¬¹ý´ËÖµ£¬·ñÔò»á±»SIGKILL ÐÅºÅÉ±ËÀ
+# CELERYD_TASK_TIME_LIMIT = 60    # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä²»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á±»SIGKILL ï¿½Åºï¿½É±ï¿½ï¿½
 CELERY_DISABLE_RATE_LIMITS = True
 
 

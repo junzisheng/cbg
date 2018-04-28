@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # encoding: utf-8
 """将templates中的文件js的域从梦幻改为/static/"""
 import re

@@ -35,6 +35,7 @@ class SqlHelper(object):
         self.session.commit()
 
     def batch_update(self, Model, m_list, k):
+        # todo 插入价格更新表
         for m in m_list:
             self.session.query(Model).filter(Model.order_id == m['order_id'], Model.eid == m['eid'])\
                 .update({k: m[k]})

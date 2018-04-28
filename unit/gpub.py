@@ -1,4 +1,3 @@
-import redis
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseNotAllowed
 import traceback
 try:
@@ -13,8 +12,8 @@ from unit.utility import response_json
 # exit()
 import time
 
-redis3 = redis.StrictRedis(host='127.0.0.1', password='Xj3.14164', db=3)
-redis2 = redis.StrictRedis(host='127.0.0.1', password='Xj3.14164', db=2)
+# redis3 = redis.StrictRedis(host='127.0.0.1', password='Xj3.14164', db=3)
+# redis2 = redis.StrictRedis(host='127.0.0.1', password='Xj3.14164', db=2)
 
 class ExceptionHTTPResponse(Exception):
     pass
