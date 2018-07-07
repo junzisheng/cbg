@@ -1,0 +1,157 @@
+{% set title = '通知页面'%}
+{% set is_scroll = True %}
+{% extends 'base_toper.html' %}
+{% block head %}
+<script src="/static/public_js/clipboard.js"></script>
+<script src="/static/order/js/crawl_data_page.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/order/css/crawl_data_page.css">
+{% endblock %}
+{% block content %}
+
+<!-- <Scroll :on-reach-bottom="handleReachBottom" :style="{'height':'100%','width':'100%'}"> -->
+<div>	
+	<div class="options"> 
+		<Dropdown trigger="click" style="position: relative;" @on-click="choose_price_down">
+	        <a href="javascript:void(0)">
+	        	((show))
+	            <Icon type="arrow-down-b"></Icon>
+	        </a>
+	        <Dropdown-menu slot="list" >
+	            <Dropdown-item :name="((show == '全部记录' ? '降价记录' : '全部记录'))">((show == '全部记录' ? '降价记录' : '全部记录'))</Dropdown-item>
+	        </Dropdown-menu>
+    	</Dropdown>
+    	<span class="edit" @click="edit_click">((edit ? '取消' : '编辑'))</span>
+	</div>
+
+
+	<div v-show="show=='全部记录'">
+		<scroll-item :refresh_obj="all_data_info" :style="{height: scroll_height}">
+			<div class="container" v-for="data in all_data_info.query_list" :key="data.id">
+				<!-- 区 -->
+				<div class="container-top">
+					<span>((data.server_name))</span>
+					<span>更新时间&nbsp;((data.update_time))</span>
+					<i-button size="small" :data-clipboard-text="data.link" class="copy-btn">复制链接</i-button>
+				</div>
+				<!-- 信息 -->
+				<div class="container-center clearfix" @click="container_click(data,$event)">
+					<div class="checkbox-container">
+						<Checkbox :style="{'display': edit ? 'block' : 'none'}" v-model="data.checked"></Checkbox>
+						
+					</div>
+
+					<!-- 左边的缩略图 -->
+					<div class="img-contaner">
+						<img :src="((data.icon))" class="thumb">
+					</div>
+						<!-- 左边的宝宝信息 -->
+					<div class="info">
+						<div>
+							<span class="huanjia" v-if="data.accept_bargain">还</span>
+							<span class="gongshi" v-if=" data.status_desc=='公示期' ">公</span>
+							<span class="type">((data.equip_name))</span>&nbsp;&nbsp;|&nbsp;
+							<span class="level">((data.subtitle))</span>
+							
+						</div>
+						<div class="detail">
+							((data.desc_sumup_short))
+						</div>
+						<div class="light">
+							<span v-for="light in data.highlight">((light[0]))</span>
+						</div>
+						
+					</div>
+
+					<!-- 右边的商品信息i -->
+					<div class="sale-info">
+						<div class="price-change" v-if="data.old_price">
+								原价: ￥((data.old_price))
+						</div>
+						<div class="real-price">￥((data.price))</div>
+						<div class="collect">((data.collect_num))人收藏</div>
+						<div class="sale-date">((data.selling_time))</div>
+					</div>
+				</div>
+			</div>
+		</scroll-item>
+		<!-- <div v-if="!all_data_info.list.length && !loading_show" class="no-data-notic">
+				暂无数据
+		</div> -->
+		<div class="no-data-notic" v-if="all_data_info.offset >= all_data_info.total && all_data_info.query_list.length">
+				ㄟ( ▔, ▔ )ㄏ&nbsp;&nbsp;&nbsp;再怎么找也没有啦
+		</div>
+		
+	</div>
+
+	<div v-show="show == '降价记录' ">
+		<scroll-item :refresh_obj="price_data_info" :style="{height: scroll_height}">
+			<div class="container" v-for="data in price_data_info.query_list" :key="data.id">
+				<!-- 区 -->
+				<div class="container-top">
+					<span>((data.server_name))</span>
+					<i-button size="small" :data-clipboard-text="data.link" class="copy-btn">复制链接</i-button>
+				</div>
+				<!-- 信息 -->
+				<div class="container-center clearfix" @click="container_click(data,$event)">
+					<div class="checkbox-container">
+						<Checkbox :style="{'display': edit ? 'block' : 'none'}" v-model="data.checked"></Checkbox>
+						
+					</div>
+
+					<!-- 左边的缩略图 -->
+					<div class="img-contaner">
+						<img :src="((data.icon))" class="thumb">
+					</div>
+						<!-- 左边的宝宝信息 -->
+					<div class="info">
+						<div>
+							<span class="huanjia" v-if="data.accept_bargain">还</span>
+							<span class="gongshi" v-if=" data.status_desc=='公示期' ">公</span>
+							<span class="type">((data.equip_name))</span>&nbsp;&nbsp;|&nbsp;
+							<span class="level">((data.subtitle))</span>
+						</div>
+						<div class="detail">
+							((data.desc_sumup_short))
+						</div>
+						<div class="light">
+							<span v-for="light in data.highlight">((light[0]))</span>
+						</div>
+						
+					</div>
+
+					<!-- 右边的商品信息i -->
+					<div class="sale-info">
+						<div class="price-change" v-if="data.old_price">原价: ￥((data.old_price))</div>
+						<div class="real-price">￥((data.price))</div>
+						<div class="collect">((data.collect_num))人收藏</div>
+						<div class="sale-date">((data.selling_time))</div>
+					</div>
+
+				</div>
+			</div>
+		</scroll-item>
+	</div>
+	<div v-if="info.is_last && !info.refreshing && info.query_list.length == 0" class="no-data-notic">
+		暂无数据
+	</div>
+
+
+	<div class="del-data-container" v-show="edit" style="z-index: 2">
+		<Checkbox size="large" v-model="all_choose" @click.native.stop="all_choose_click"></Checkbox> 
+		全选
+		<div class="del" :class="{'btn-active': checked_exist().length > 0}" @click.stop="del_btn_click">
+			删除记录
+		</div>
+	</div>
+
+	
+<!-- </Scroll> -->
+</div>
+
+
+{% endblock %}
+{% block javascript %}
+<script>
+var order_id = {{order_id}};
+</script>
+{% endblock %}

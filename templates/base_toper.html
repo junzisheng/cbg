@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
+{% if browser != 'PC'%}
+<div class="border-full" style="background-color: #fff;text-align: left;line-height: 40px;font-size: 14px;text-align: center;position: fixed;width: 100%">
+	<Icon type="arrow-left-c" style="position:absolute;top:50%;transform: translate(0,-50%);left: 12px;font-size: 20px;"></Icon>
+    <span>{{ title }}</span>
+	<Icon type="navicon-round" style="position:absolute;top:50%;transform: translate(0,-50%);right: 12px;font-size: 20px;" @click.native="menu_show('top')"></Icon>
+</div>
+<simple-choice-item :title="'菜单'" :choice_list="menu_choice_list" :callback="menu_choose" ref="menu" :top="true" style="top:41px"></simple-choice-item>
+{% endif %}
+
+
+
+
+<div class="content-container" style="top: 41px;height: calc(100% - 41px);overflow-y: auto;">
+
+{% block content %}
+
+{% endblock %}
+	
+</div>
+
+{% endblock %}

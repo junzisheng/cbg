@@ -1,0 +1,33 @@
+{# 上面使base64图片， 下面是文字#}
+{% macro b64_text_item(info, w)%}
+	{% set text, href, b64 = info %}
+	<a href="{{href}}" style="width:{{w}}%;background-image: url('{{b64}}')" class="b64">
+		<span class="b64-text" style="color: #666;font-size: 12px;">
+		<span class="b64-text" class="b64-text">
+			{{text}}	
+		</span>
+	</a>
+{% endmacro %}
+
+{% macro text_text_item(info, w) %}
+{% set text1, href, text2= info %}
+<a href="{{href}}" style="width:{{w}}%;height:100%;display: inline-block;padding:1rem 0 0.6875rem;text-align:center;" class="text">
+	<p>{{text1|safe}}</p>
+	<p>{{text2}}</p>
+</a>
+{% endmacro %}
+
+
+{% macro line_b64_tabs(tabs_list) -%}
+<section class="my_section">
+	{% set l = tabs_list | length %}
+	{% for i in tabs_list %}
+	{% set text, href, header = i %}
+	{% if header|start_with('data:image') %}
+	{{b64_text_item(i, 100/l)}}
+	{% else %}
+	{{text_text_item(i, 100/l)}}
+	{% endif %}
+	{% endfor %}
+</section>
+{% endmacro %}

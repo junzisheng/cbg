@@ -1,0 +1,264 @@
+{% set title = '服务' %}
+{% extends 'base_toper.html' %}
+{% block head %}
+<script src="/static/public_js/jquery-cookie.js"></script>
+<script src="/static/service/js/pet_info.js"></script>
+<script src="/static/service/js/server_info.js"></script>
+<script src="/static/service/js/search_page.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/service/css/search_page.css">
+{% endblock %}
+
+{% block content %}
+<div class="search-top">
+	<div class="server-choose-title"> 
+			请选择服务器范围， 
+			<span class="more-server" @click="more_server">更多&gt;&gt;</span>
+	</div>
+
+	<div class="big-range-choose">
+		{# ps: 全服没有server_type这个参数#}
+		<div :style="{display: params.serverid ? 'none' : 'block'}">
+		 	<div v-for="(k, v, i) in server_range" :class="{'require-active' : v==params.server_type}" class="button i-button-item" @click="choose(v)">((k))
+		 		<span class="require-cancel"></span>	
+	 		</div>
+	 	</div>
+
+	 	<div :style="{display: params.serverid ? 'block' : 'none'}">
+	 		<cbtn-item :show="server_detail_show" @click.native=" params.serverid = '' " :class="{'require-active': params.serverid}">
+            </cbtn-item>
+	 	</div>
+	</div>
+
+	<Collapse :active-key="1">
+        {% include 'components/request/crawl_options.html' %}
+        <Panel name="price" class="collapse-panel">
+        	价格(元)
+        	<div class="require_show">((price_show))</div>
+            <div slot="content">
+            	<div>
+            		<input v-model="params.price_min" placeholder="最低" type="number" clearable class="search-input">
+            		&nbsp;-&nbsp;
+            		<input v-model="params.price_max"  placeholder="最高" type="number" clearable class="search-input">
+            	</div>
+            	<div @click.stop="price_click($event)">
+	            	<cbtn-item v-for="(s, index) in price_list" :show="s" :index="index" :class="{'require-active': price_active == index}">
+	            	</cbtn-item>
+            		
+            	</div>
+            </div>
+        </Panel>
+
+        <Panel name="level" class="collapse-panel">
+        	等级
+        	<div class="require_show">((level_show))</div>
+            <div slot="content">
+            	<div>
+            		<input v-model="params.level_min"  placeholder="最低" type="number" clearable class="search-input">
+            		&nbsp;-&nbsp;
+            		<input v-model="params.level_max"  placeholder="最高" type="number" clearable class="search-input">
+            	</div>
+            	<div @click.stop="level_click($event)">
+	            	<cbtn-item v-for="(s, index) in level_list" :show="s" :index="index" :class="{'require-active': level_active == index}">
+	            	</cbtn-item>
+            		
+            	</div>
+            </div>
+        </Panel>
+
+        <Panel name="kindid" class="collapse-panel">
+        	参战等级
+        	<div class="require_show">((kindid_show))</div>
+            <div slot="content" @click.stop="kindid_click($event)">
+            	<cbtn-item v-for="(kind_show, kindid, index) in kindid_list" :show="kind_show" :pk="kindid" :index="index" :class="{'require-active': params.kindid.indexOf(kindid) !=-1}">
+            	</cbtn-item>
+            </div>
+        </Panel>
+
+        <div class="just-bb">
+        	只显示宝宝
+        	<div>
+	        	<i-switch size="small" v-model="params.is_baobao"></i-switch>
+        	</div>
+        </div>
+
+        <Panel name="skill" class="collapse-panel">
+        	技能
+        	<div class="require_show">((params.skill_with_suit ? '包含套装技能,' : ''))(( skill_show ))</div>
+            <div slot="content">
+		        <div class="bb-eqip-skill">
+		        	包含套装技能
+		        	<div>
+			        	<i-switch size="small" v-model="params.skill_with_suit"></i-switch>
+		        	</div>
+		        </div>
+
+		        <li>高级技能</li>
+
+		        <div @click.sotp="skill_click($event)">
+	            	<cbtn-item v-for="(skill, pk, index) in high_skill_list" :show="skill" :name="'high_skill_item'" :pk="pk" :index="index" :class="{'require-active': params.skill.indexOf(pk) !=-1}">
+	            	</cbtn-item>
+	            </div>
+
+		        <li>初级技能</li>
+
+	            <div @click.stop="skill_click($event)">
+	            	<cbtn-item v-for="(skill, pk, index) in low_skill_list" :show="skill" :name="'low_skill_item'" :pk="pk" :index="index" :class="{'require-active': params.skill.indexOf(pk) !=-1}">
+	            	</cbtn-item>
+	            </div>
+
+            	<li>其它</li>
+
+            	<div @click.stop="skill_click($event)">
+	            	<cbtn-item  :show="'单法'" :name="'single_skill_item'" :pk="'2'" :class="{'require-active': params.skill.indexOf('2') !=-1}">
+	            	</cbtn-item>
+	            	<cbtn-item  :show="'群法'" :name="'group_skill_item'" :pk="'1'" :class="{'require-active': params.skill.indexOf('1') !=-1}">
+	            	</cbtn-item>
+	            </div>
+            </div>
+
+        </Panel>
+
+        <Panel name="over-view" class="collapse-panel">
+        	概况
+        	<div class="require_show">((over_view_show))</div>
+            <div slot="content">
+			    <div class="kgtv-contaier" v-for="(k,v,i) in over_view">
+			    	<span>((k))</span>
+			    	<div>((v | gtlt ))
+			    		<input v-model="params[((v))]" type="number">
+			    	</div>
+			    </div>
+
+            </div>
+        </Panel>
+
+        <div class="just-bb">
+        	类型
+        	<div class="require_show" style="margin-right:35px">((pet_show))</div>
+        	<div style="position: absolute;right: 13px;height: 100%;width: 20px;cursor: pointer;" @click="pet_click">
+	        	<Icon type="chevron-right"></Icon>
+        	</div>
+        </div>
+
+        <Panel name="aptitude" class="collapse-panel">
+        	资质
+        	<div class="require_show">((aptitude_show))</div>
+            <div slot="content">
+			    <div class="kgtv-contaier" v-for="(k,v,i) in pet_aptitude">
+			    	<span>((k))</span><div>((v | gtlt ))
+			    		<input v-model="params[((v))]" type="number"></input></div>
+			    </div>
+
+            </div>
+        </Panel>
+
+        <Panel name="attr" class="collapse-panel">
+        	属性
+        	<div class="require_show">((attr_show))</div>
+            <div slot="content">
+			    <div class="kgtv-contaier" v-for="(k,v,i) in pet_attr">
+			    	<span>((k))</span><div>((v | gtlt ))
+			    		<input  v-model="params[((v))]" type="number">
+			    	</div>
+			    </div>
+
+            </div>
+        </Panel>
+
+
+        <Panel name="texing" class="collapse-panel">
+        	特性
+        	<div class="require_show">((texing_show))</div>
+            <div slot="content">
+            	<div @click.stop="texing_click">
+	             	<cbtn-item v-for="(texing, pk, index) in texing_types" :show="texing" :pk="pk" :index="index" :class="{'require-active': params.texing.indexOf(pk) !=-1}">
+	            	</cbtn-item>
+            	</div>
+
+	            <li>正面效果</li>
+	            <div @click.stop="positive_effect_click">
+		         	<cbtn-item v-for="(texing, pk, index) in TexingPositiveEffectTypes" :show="texing" :pk="pk" :index="index" :class="{'require-active': params.positive_effect.indexOf(pk) !=-1}">
+		        	</cbtn-item>
+	            	
+	            </div>
+
+	            <li>负面效果</li>
+
+	        	<div @click.stop="negative_effect_click">
+		         	<cbtn-item v-for="(texing, pk, index) in TexingNegativeEffectTypes" :show="texing" :pk="pk" :class="{'require-active': params.negative_effect.indexOf(pk) !=-1}" :index="index">
+		        	</cbtn-item>
+	        		
+	        	</div>
+
+            </div>
+
+        </Panel>
+
+
+        <Panel name="neidan" class="collapse-panel">
+        	内丹
+        	<div class="require_show">((neidan_show ))</div>
+            <div slot="content">
+
+	            <li>高级内丹</li>
+ 				<div @click.stop="high_neidan_click($event)">
+					 <cbtn-item  v-for="(neidan, pk, index) in HighNeidans" :show="neidan" :pk="pk" :index="index"  :class="{'require-active': params.high_neidan.indexOf(pk) !=-1}">
+					  </cbtn-item>
+ 				</div>
+
+	            <li>低级内丹</li>
+
+	            <div @click.stop="low_neidan_click($event)">
+		         	<cbtn-item v-for="(neidan, pk, index) in LowNeidans" :show="neidan" :pk="pk" :index="index" :class="{'require-active': params.low_neidan.indexOf(pk) !=-1}" :index="index">
+		        	</cbtn-item>
+	            	
+	            </div>
+            </div>
+
+        </Panel>
+    </Collapse>
+</div>
+
+<div class="seacher-fotter">
+	<div class="clear_params" @click.stop="clear_params_click">清除选项</div>
+	<div class="done" @click.stop="done">确 定</div>
+</div>
+
+
+
+
+<Modal :mask-closable="false" v-model="done_show" title="请输入备注" @on-ok="memo_ok" @on-cancel=" memo='' ">
+    <p class="memo_tip">为了以后能够快速查找到搜索记录，建议您填写搜索备注</p>
+    <i-input icon="pricetags" v-model="memo" placeholder="填写备注" style="width: 100%"></i-input>
+</Modal>
+
+<Modal v-model="option_model" title="服务选项帮助">
+    <p>1.当前已有数据通知: 在藏宝阁机器人工作前存在的符合条件的商品给您通知;建议选择不通知(如果范围内的商品降价则根据下面的提醒设置进行通知)</p>
+    <p>2.消息通知: 选择新上架商品的通知类型;下单后可以在订单的 <span class="font-active">查看通知</span>中获取符合条件的最新商品信息; ps: 每条订单的前20条短信提醒免费，超过的部分以0.1元从余额中抵扣，不足将不再发送短信提醒;</span></p>
+    <div slot="footer"></div>
+</Modal>
+
+<!-- <form-item :action="'/service/crawl_request'" :method="'POST'" ref="form">
+     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <input type="" name="type" v-model="type">
+    <input type="" name="args" v-model="args">
+    <input type="" name="memo" v-model="memo">
+
+</form-item>
+ -->
+
+{% include 'components/request/server.html' %}
+{% include 'components/request/pet.html' %}
+
+
+
+{% endblock %}
+{% block javascript %}
+<script>
+var params = '{{ params | safe }}';
+// var params = '';
+
+
+
+</script>
+{% endblock %}

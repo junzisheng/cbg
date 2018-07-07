@@ -78,7 +78,7 @@ body {
     color: #888;
     line-height: 30px;
     text-align: center;
-    background: url('/static/auth/images/2.jpg');
+    /*background: url('/static/auth/images/2.jpg');*/
     background-size: cover;
     height: 100vh;
 }
@@ -246,29 +246,7 @@ img { max-width: 100%; }
 .options #forget-pass{
 	float: right;
 }
-#qcode{
-	position:absolute;
-	right:0px;
-	top:0px;
-	width:0;
-	height:0;
-	border-left: 30px solid transparent;
-	border-top: 30px solid #DC4141;
-	z-index:999;
-}
-#qcode_img{
-	position:absolute;
-	right:15px;
-	top:15px;
-	width:140px;
-	height:140px;
-	background-color:
-	white;
-	border:1px solid black;
-	padding:5px;
-	z-index:999;
-	/*display:none;*/
-}
+
 .fix_full{
 	position: fixed;
 	top:0;
@@ -305,4 +283,15 @@ img { max-width: 100%; }
 	h1, h2 { font-size: 32px; }
 
 }
-
+.captcha{
+    background-color: #feaf5f;
+    width: 87px;
+    height:32px;
+    line-height: 32px;
+    color:#fff;
+    position: absolute;
+    right: 12px;
+    top:50%;
+    transform: translate(0,-50%);
+    text-align: center;
+}

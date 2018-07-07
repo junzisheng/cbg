@@ -1,0 +1,44 @@
+{% set title = '订单详情'%}
+{% extends 'base_toper.html' %}
+{% import 'components/order/order_macro.html' as macro %}
+
+
+{% block cssstyle %}
+<style type="text/css">
+	{{ macro.order_item_css() }}
+</style>
+{% endblock %}
+
+{% block content %}
+	{{ macro.order_item(order) }}
+
+<div style="position: fixed;bottom: 0;width: 100%">
+	<order-options-item :order="order" :call_back="del_order"></order-options-item>
+</div>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+
+
+<script type="text/javascript">
+
+	var s = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			'order': {{ order | obj_2_json_str(order.out_params) | safe }},
+		},
+		methods: {
+			del_order: function(order_id){
+				location.href = '/order/delete_order/' + order_id;
+			}
+		}
+	})
+</script>
+
+
+
+{% endblock %}

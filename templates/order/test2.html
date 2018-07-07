@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block cssstyle %}
+<style type="">
+	html{
+		height: 100%;
+	}
+	#body{
+		height: 100%;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+	<scroll-item :refresh_obj="refresh_obj">
+	</scroll-item>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+	var Scroll = {
+		template: "<div><slot></slot></div>",
+		props: ['refresh_obj'],
+	
+		created: function(){
+			var watch_obj = {
+				handler: this.refresh,
+				immediate: true,
+			    // deep: true
+			}
+			// 动态添加对tab切换, order的监听
+			let active_log = 1;
+			for(let key of Object.keys(this.refresh_obj) ){
+				this.$watch('refresh_obj.' + key + '.active', {immediate: true, handler: function(){
+					if(active_log != 1) return false;
+					if(this.refresh_active_obj.is_last === ''){   // is_last === '' 表示没有刷新过数据
+						this.refresh();
+					}
+					active_log += 1;
+				}});
+				this.$watch('refresh_obj.' + key + '.order', {immediate: false, handler: function(){
+					this.refresh_active_obj.query_list = []; // 清空数据
+					this.refresh_active_obj.is_last = false;
+					this.refresh()
+				}})
+			}
+		},
+		methods: {
+			refresh(){
+				let that = this;
+				let obj = this.refresh_active_obj;
+				console.log(obj);
+				if(obj.refreshing || obj.is_last) return false;  //正在刷新的和刷新到结尾了
+				let data = {};
+				// for(let data_item of ['order', 'filter', 'exclude', 'offset', 'order_change']){
+				// 	if(obj[data_item]){ 
+				// 		data[data_item] = data_item == 'filter' ? JSON.stringify(obj[data_item]) : obj[data_item];
+				// 	};
+				// }
+				// normal_ajax(obj.url, 'GET', data, function(ret){
+				// 	if(ret.retcode === 'SUCC'){
+				// 		obj.query_list = obj.query_list.concat(ret.query_list);
+				// 		info.offset = ret.offset;
+				// 		info.is_last = ret.is_last;
+				// 	}
+				// }, null, function(){obj.refreshing = false});
+			},
+		}
+		,
+		computed: {
+			// 监听当前活跃的刷新对象
+			refresh_active_obj(){
+				for(let key of Object.keys(this.refresh_obj)){
+					if(this.refresh_obj[key].active) return this.refresh_obj[key];
+				}
+			},
+		}
+	}
+	Vue.component('scroll-item', Scroll);
+
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			refresh_obj: {
+				tab_1: {
+					url: '123123',
+					is_last: '',
+					offset: 1,
+					order: '',
+					filter: '',
+					exclude: '',
+					order_change: false,
+					refreshing: false,
+					active: true,
+				},
+				tab_2: {
+					url: '123123',
+					is_last: '',
+					offset: 1,
+					order: '',
+					filter: '',
+					exclude: '',
+					order_change: false,
+					refreshing: false,
+					active: false,
+				}
+			}
+		},
+		
+	})
+</script>
+{% endblock %}

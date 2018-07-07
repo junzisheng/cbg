@@ -1,0 +1,22 @@
+<div class="server-list-container" :class="{'server_container_active': server_container_active}">
+	<div class="server-choose-title"> 
+		<span class="x" @click.stop="hide_server_list"></span> 
+		&nbsp;&nbsp;&nbsp;&nbsp;选择大区
+	</div>
+	<ul>
+		<li v-for="k in server_letter_list" :key="k">
+
+			<div :id="'s' + k" class="letter">((k))</div>
+			<div class="server-container" @click="area_choose($event)">
+				<cbtn-item v-for="area_info in server_list[k]" :show="area_info.area" :server_list="area_info.server_list.join(';')" :area_name="area_info.area"></cbtn-item>
+			</div>
+		</li>
+	</ul>
+	<ul class="letter-list-container" :style="{'display': server_container_active ? 'block' : 'none' }">
+		<a v-for="l in server_letter_list" :href="'#s' + l" :key="l">
+			((l))
+		</a>
+	</ul>
+</div>
+
+<simple-choice-item :title="area_name" :choice_list="area_server_list" :callback="server_choose" ref="server_list_choice"></simple-choice-item>

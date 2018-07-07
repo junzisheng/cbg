@@ -1,0 +1,232 @@
+
+
+////////////////// 公用的方法 //////////////////////////////////////
+String.prototype.format = function(args) {
+    var result = this;
+    if (arguments.length > 0) {
+        if (arguments.length == 1 && typeof (args) == "object") {
+            for (var key in args) {
+                if(args[key]!=undefined){
+                    var reg = new RegExp("({" + key + "})", "g");
+                    result = result.replace(reg, args[key]);
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] != undefined) {
+                    var reg= new RegExp("({)" + i + "(})", "g");
+                    result = result.replace(reg, arguments[i]);
+                }
+            }
+        }
+    }
+    return result;
+}
+// 通用的AJAX操作，请求URL，请求数据为data_user，成功和失败分别调用不同的函数
+function normal_ajax(url, method, _data, succ_callback , fail_callback , complete_callback , datatype , args_advance, sync){
+
+    var arg_ajax = {    url         : url,
+                        async       : sync,
+                        type        : method || "GET",
+                        data        : _data,
+                        dataType    : datatype || "json",
+
+                        complete    : function(XMLHttpRequest, textStatus){
+                                        // textStatus的值：success,notmodified,nocontent,error,timeout,abort,parsererror
+
+                                        if ($.isFunction(complete_callback))
+                                            complete_callback(XMLHttpRequest, textStatus)
+                                    } ,
+
+                        success     : function(data, textStatus) {
+                                        if ($.isFunction(succ_callback))
+                                            succ_callback(data, textStatus)
+                                    } ,
+
+                        error       : function (XMLHttpRequest, textStatus, errorThrown) {
+                                        // XMLHttpRequest.readyState:
+                                        //   0 － （未初始化）还没有调用send()方法
+                                        //   1 － （载入）已调用send()方法，正在发送请求
+                                        //   2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+                                        //   3 － （交互）正在解析响应内容
+                                        //   4 － （完成）响应内容解析完成，可以在客户端调用了
+                                        // XMLHttpRequest.status:
+                                        //   200-确定。客户端请求已成功。
+                                        //   3xx-重定向
+                                        // textStatus的值：null, timeout, error, abort, parsererror4
+                                        // errorThrown的值：收到http出错文本，如 Not Found 或 Internal Server Error.
+
+                                        if ($.isFunction(fail_callback))
+                                            fail_callback(XMLHttpRequest, textStatus, errorThrown);
+                                    }
+                    };
+
+    if (args_advance)
+        $.extend(arg_ajax, args_advance);
+
+    return $.ajax(arg_ajax);
+}
+
+function sns_convert_time(string_time , now){
+
+    if (now == undefined)
+        now = Date.now()
+
+    //ts_this = Date.parse(string_time) ios上不支持-的时间转换
+    var ts_this = Date.parse(string_time.replace(/-/g,"/"));
+    var now_delta = now - ts_this;
+
+    if (now_delta < -3600000 * 24 * 3) {
+        return '刚刚';
+    }
+    else if (now_delta > 3600000 * 24 * 3) {
+        var dt_this = new Date(ts_this);
+        var dt_now  = new Date();
+
+        var dt_ret  = dt_now.getFullYear() != dt_this.getFullYear() ? dt_this.getFullYear() + '-' : '';
+        return dt_ret + fmt_integer_low100((dt_this.getMonth() + 1)) + '-' + fmt_integer_low100(dt_this.getDate()) + ' ' + fmt_integer_low100(dt_this.getHours()) + ':' + fmt_integer_low100(dt_this.getMinutes());
+    }
+    else if (now_delta > 3600000 * 24) {
+        return Math.floor(now_delta / 3600000 / 24) + '天前';
+    }
+    else if (now_delta > 3600000) {
+        return Math.floor(now_delta / 3600000) + '小时前';
+    }
+    else if (now_delta > 60000) {
+        return Math.floor(now_delta / 60000) + '分钟前';
+    }
+
+    return '刚刚';
+}
+
+
+
+
+$.extend({
+    top_notic: function(text){
+        var time = function(){
+           setTimeout(function(){
+                top_notic.fadeOut();
+            }, 2000)
+        }
+        $('#top_notic').remove();
+        // if(top_notic.length){
+        //     top_notic.text(text).stop().hide().fadeIn(time);
+
+        // }else{
+        top_notic = $('<div id="top_notic">{0}</div>'.format(text));
+        $('body').append(top_notic);
+        top_notic.fadeIn(time);
+        // }
+    },
+    fullScreen: function () {  
+        var elem = document.documentElement;  
+        if (elem.webkitRequestFullScreen) {  
+            elem.webkitRequestFullScreen();  
+        } else if (elem.mozRequestFullScreen) {  
+            elem.mozRequestFullScreen();  
+        } else if (elem.requestFullScreen) {  
+            elem.requestFullscreen();  
+        }
+
+   },
+    exitFullScreen: function() {  
+        var elem = document;  
+        if (elem.webkitCancelFullScreen) {  
+            elem.webkitCancelFullScreen();  
+        } else if (elem.mozCancelFullScreen) {  
+            elem.mozCancelFullScreen();  
+        } else if (elem.cancelFullScreen) {  
+            elem.cancelFullScreen();  
+        } else if (elem.exitFullscreen) {  
+            elem.exitFullscreen();  
+        } 
+        return false;
+    },
+    // 一个简单的函数节流
+    debounce: function debounce(fn, delay){
+        var timestamp = 0;
+        function _(){
+            if(Date.now() - timestamp>=delay) fn();
+            timestamp = Date.now();  
+        }
+        return _;
+    },
+    cloneObject:  function(obj){
+        var str, newobj = obj.constructor === Array ? [] : {};
+        if(typeof obj !== 'object'){
+            return;
+        } else if(window.JSON){
+            str = JSON.stringify(obj), //系列化对象
+            newobj = JSON.parse(str); //还原
+        } else {
+            for(var i in obj){
+                newobj[i] = typeof obj[i] === 'object' ? 
+                cloneObj(obj[i]) : obj[i]; 
+            }
+        }
+        return newobj;
+    },
+})
+
+
+///////////////////////// Vue的部分: 过滤器模块等;///////////
+Vue.filter('gtlt', function(key, ){
+    return key.slice(-3,) == 'max' ? '<= ' : '>= '
+});
+// Tabs组件
+var tabs_conmonent = {
+    template: '<div>\
+                    <ul class="tabs-container">\
+                        <li v-for="(v,k, index) in tabs_object" :class="{\'tabs-active\': v.active}" @click.stop="tab_click(k)">{{v.title}}</li>\
+                    </ul>\
+                    <ul class="panel-contanier">\
+                        <li v-for="(v,k, index) in tabs_object" :index="index" v-show="v.active">\
+                        <slot :name="\'panel-\' + index"></slot>\
+                        </li>\
+                    </ul>\
+                </div>\
+             ',
+    data: function(){
+        return {
+            tabs_object: this.tab_object,
+        }
+    },
+    props : ['tab_object'],
+    methods: {
+        tab_click: function(key){
+            for(var item in this.tab_object) this.tab_object[item].active = false;
+            this.tab_object[key].active = true;
+            this.$emit('handle_click', key);
+        }
+    },
+
+};
+//     v-for="todo in todos"
+//     v-bind:key="todo.id"
+//   >
+//     <!-- 我们为每个 todo 提供一个 slot 元素， -->
+//     <!-- 然后，将 `todo` 对象作为 slot 元素的一个 prop 传入。 -->
+//     <slot v-bind:todo="todo">
+//       <!-- 这里是回退内容(fallback content) -->
+//       {{ todo.text }}
+//     </slot>
+//   </li>
+// </ul>
+// 现在，在我们引用 <todo-list> 组件的位置，我们可以将 todo items 插槽内容稍作修改，定义为一个 <template>，并且通过 slot-scope 特性访问子组件数据：
+
+// <todo-list v-bind:todos="todos">
+//   <!-- 将 `slotProps` 作为插槽内容所在作用域(slot scope)的引用名称 -->
+//   <template slot-scope="slotProps">
+//     <!-- 为 todo items 定义一个模板， -->
+//     <!-- 通过 `slotProps` 访问每个 todo 对象。 -->
+//     <span v-if="slotProps.todo.isComplete">✓</span>
+//     {{ slotProps.todo.text }}
+//   </template>
+// </todo-list>
+
+
+
+
+Vue.component('tabs-item', tabs_conmonent);

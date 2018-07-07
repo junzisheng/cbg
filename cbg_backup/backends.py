@@ -10,7 +10,6 @@ import six
 
 # Original link:
 # https://code.djangoproject.com/attachment/ticket/24694/24694.py
-__author__ = 'carljm'
 
 
 class Jinja2Backend(jinja2backend.Jinja2):

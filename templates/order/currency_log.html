@@ -1,0 +1,167 @@
+{% set title = '货币充值和消费记录'%}
+{% extends 'base_toper.html' %}
+
+
+{% block cssstyle %}
+<style type="text/css">
+	.currency-left-box{
+		height: 140px;
+		background-color: #00b9ff;
+		padding-left: 5px;
+		color: #fff;
+	}
+	.currency-left-title{
+		margin-top: 10px;
+	}
+	.table {
+		font-size: 0;
+		background-color: #fff;
+		height: 100%;
+	
+
+	}
+	.table .tr{
+		color: #ffad5e;
+	}
+	.table .tr, .table .th{
+		width: 100%;
+	}
+	.table ul{
+		border-bottom: 1px solid #e5e5e5;
+		height: 34px;
+	}
+	.table li{
+		width: 100%;
+		text-align: center;
+		height: 100%;
+		line-height: 34px;
+		display: inline-block;
+		font-size: 12px;
+		width: 25%;
+		vertical-align: middle;
+	}
+	.table li div{
+		height: 50%;
+		line-height: 17px;
+		vertical-align: middle;
+	}
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="currency-left-box clearfix">
+	<div class="currency-left-title">
+		货币余额 (元)
+	</div>
+
+	<div style="font-size: 50px;margin-top: 10px;">
+		{{'%.2f' % (request.user.userprofile.currency/100)}}
+	</div>
+</div>
+<tabs-item :tab_object="tab_object" @handle_click="tab_click">
+	<div slot="panel-0">
+		<ul class="table">
+			<ul class="tr">
+				<li>订单号</li>
+				<li>充值时间</li>
+				<li>充值数量</li>
+				<li>赠送数量</li>
+			</ul>
+			<scroll-item :refresh_obj="recharge_info" :style="{'height': height}">
+				<ul v-for="obj in recharge_info.query_list" class="th">
+					<li>((obj.id))</li>
+					<li>
+						<div>((obj.pay_time.split(' ')[0]))</div>
+						<div>((obj.pay_time.split(' ')[1]))</div>
+					</li>
+					<li>((obj.quantity))</li>
+					<li>((obj.give))</li>
+				</ul>
+			</scroll-item>
+		</ul>
+	</div>
+	<div slot="panel-1">
+		<ul class="table">
+		<ul class="tr">
+			<li>订单号</li>
+			<li>消费时间</li>
+			<li>消费数量</li>
+			<li>服务</li>
+		</ul>
+		<scroll-item :refresh_obj="pay_info" :style="{'height': height}">
+			<ul v-for="obj in pay_info.query_list" class="th">
+				<li>((obj.id))</li>
+				<li>
+					<div>((obj.create_time.split(' ')[0]))</div>
+					<div>((obj.create_time.split(' ')[1]))</div>
+				</li>
+				<li>((obj.quantity))</li>
+				<li style="word-break: break-all;word-wrap: break-word;line-height: 12px;">
+					((obj.brief))
+				</li>
+			</ul>
+		</scroll-item>
+	</div>
+</tabs-item>
+<a href="/order/currency_recharge_page">
+	<div class="fixed-bottom-btn" style="background-color: #feaf5f">去充值</div>
+</a>
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: function(){
+			height = this.get_win_size()[1] - 140 - 50 - 77 - 41 + 'px';
+			return {
+				height: height,
+				tab_object: {
+					recharge_info: {
+						title: '充值记录',
+						active: true,
+					},
+					pay_info: {
+						title: '消费记录',
+						active: false,
+					}
+				},
+				recharge_info: {
+					query_list: [],
+					refreshing: false,
+					is_last: '',
+					url: '/order/pull_currency_recharge_log',
+					active: true,
+					query_obj: {},
+				},
+				pay_info: {
+					query_list: [],
+					refreshing: false,
+					is_last: '',
+					url: '/order/pull_currency_conssume_log',
+					active: false,
+					query_obj: {},
+				},
+			}
+		},
+		mounted: function(){
+			// this.bind_scroll_refresh(this.$refs.sroll_box1.$el, this.$refs.scroll_visible_el1.$el);
+		},
+		methods: {
+			tab_click: function(key){
+				var _l = ['recharge_info', 'pay_info'];
+				for(var i=0;i<_l.length;i++ ){
+					var _key = _l[i];
+					this[_key].active = key == _key;
+				}
+
+			}
+		}
+	})
+</script>
+
+{% endblock %}

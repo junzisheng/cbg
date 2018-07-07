@@ -1,0 +1,180 @@
+font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+li{
+	list-style: none;
+}
+img{
+    display: inline-block;
+    border: none;
+}
+/*隐藏滚动条*/
+html{
+    height: 100%;
+}
+html body{
+    background-color:#f7f7f7;
+    height: 100%;
+}
+/*二维码*/
+#qcode{
+    position:absolute;
+    right:0px;
+    top:0px;
+    width:0;
+    height:0;
+    border-left: 30px solid transparent;
+    border-top: 30px solid #DC4141;
+    z-index:999;
+}
+#qcode_img{
+    position:absolute;
+    right:15px;
+    top:15px;
+    width:140px;
+    height:140px;
+    background-color:
+    white;
+    border:1px solid black;
+    padding:5px;
+    z-index:999;
+    /*display:none;*/
+}
+#qcode_img img{
+    width: 100%;
+}
+#top_notic{
+	background-color: white;
+	text-align: center;
+	font-size: 0.216667rem;
+	color: black;
+	height:0.5rem;
+	width: 100%;
+	position: fixed;
+	top:0;
+	letter-spacing:0.033333rem;
+}
+/*tabs上面的内容*/
+.content-container{
+    position: fixed;
+    width: 100%;
+    bottom: 3.375rem;
+    top:0;
+    z-index: 20;
+}
+/*最下面的tabs*/
+.footer-container{
+    position: fixed;
+    width: 100%;
+    height: 3.375rem;
+    bottom: 0;
+    left: 0;
+    font-size: 0;
+    z-index: 10;
+}
+.footer-container a{
+    display: inline-block;
+}
+.footer-container ul{
+    width: 100%;
+    height: 100%;
+}
+.footer-container ul li{
+    cursor: pointer;
+    width: 25%;
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+    line-height: 3.375rem;
+    box-sizing: border-box;
+}
+.footer-container ul li img{
+    display: inline-block;
+    width: 4.375rem;
+    height: 3.3125rem;
+}
+
+.x::before{
+    content: "✕";
+    cursor: pointer;
+}
+            /*选择服务器的样式*/
+/*重写iview中下拉菜单的样式，解决错位的BUG*/
+.ivu-dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*组件样式*/
+.clearfix:after,.clearfix:before{ content: "";display: table;}
+.clearfix:after{ clear:both;}
+.clearfix{zoom:1;}
+.cbg-button{
+    display: inline-block;
+    background-color: #fff;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    color: #666;
+    border-radius: 2px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.line-text-hidden{
+    word-wrap:break-word;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow:  ellipsis; 
+    white-space: nowrap;
+}
+.clamp-line-text-hidden{
+    word-wrap:break-word;
+    word-break: break-all;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+}
+/*自定义tab组件样式*/
+.tabs-container{
+    width:100%;
+    height: 44px;
+    font-size: 0px;
+    line-height: 44px;
+    text-align: center;
+    background-color: #fff;
+}
+.tabs-container li{
+    cursor: pointer;
+    width: 25%;
+    font-size: 14px;
+    display: inline-block;
+}
+.tabs-active{
+    border-bottom: 2px solid #e4393c;
+}
+
+.panel-contanier{
+    width: 100%;
+    height: 100%;
+}

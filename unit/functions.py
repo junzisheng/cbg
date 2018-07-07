@@ -7,6 +7,7 @@ try:
     from cbg_backup.cbg_backup import settings
 except:
     from cbg_backup import  settings
+import time
 
 _letter_cases = "abcdefghjkmnpqrstuvwxy" # 小写字母，去除可能干扰的i，l，o，z
 _upper_cases = _letter_cases.upper() # 大写字母
@@ -107,7 +108,43 @@ def create_strs(draw,chars,length,font_type, font_size,width,height,fg_color):
     return ''.join(c_chars)
 
 
+def normal_request(request):
+    """判断是不是正常的请求，不是刷新，前进或者后退, 针对页面的， 如果是ajax是不会有cookie的，因为cookie域的问题；"""
+    meta_timestamp = request.COOKIES.get('timestamp', '')  # 记录页面生成的时间，和请求的timestamp来判断是否为刷新页面, 前进还是后退
+    if meta_timestamp and meta_timestamp.replace('.', '', 1).isdigit():
+        meta_timestamp = float(meta_timestamp)
+    request_start = request.GET.get('timestamp', '')
+    if not(request_start and request_start.replace('.', '', 1).isdigit()):
+        return True, -2
+    request_start = float(request_start)
+    if type(meta_timestamp) == float and meta_timestamp >= request_start:
+        return False, -3
+    return True, time.time() - request_start
+
+
+class QuerySetObject(object):
+    pass
+
+
+def mysql_execute(conn , sql , cursor = None):
+    """基于MySQL进行SQL查询，返回以QuerySet封装的Python对象，可以使用Python对象方式操作，如：
+    ret = mysql_execute(conn , 'SELECT a , b FROM x')
+    . 返回后可用ret[0].a进行操作
+    """
+    if cursor is None:
+        cursor = conn.cursor()
+    cursor.execute(sql, None)
+    query_set = []
+    for data_db in cursor:
+        obj = QuerySetObject()
+        for desc , field_val in zip(cursor.description , data_db):
+            setattr(obj , desc[0].lower() , field_val)
+        query_set.append(obj)
+    return query_set
+
+
 if __name__ == "__main__":
     code_img = create_validate_code()
     code_img[0].save("validate.gif", "GIF")
+
     print(code_img[1])

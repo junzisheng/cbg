@@ -1,0 +1,87 @@
+
+/*.clear-options{
+    height: 100%
+    width: 100%;
+    text-align: center;
+}
+.clear-options .clear-pass, .clear-options .clear-ok{
+    width: 40%;
+    display: inline-block;
+}
+.clear-options .clear-ok{
+    color: #ff5b5b;
+    letter-spacing: 2px;
+}
+*/
+
+/*订单样式*/
+.ivu-tabs-bar{
+    margin: 0;
+}
+.order-item-thumb-container{
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+.order-item-thumb-container .order-item-top-container{
+    padding: 0 10px;
+    height: 40px;
+    line-height:  40px;
+}
+.order-item-thumb-container .order-item-center-container{
+    background-color: #f7f7f7;
+    height: 100px;
+    padding: 10px;
+    font-size: 0;
+}
+.order-item-center-container .order-thumb-container{
+    display: inline-block;
+    width: 80px;
+    height: 100%;
+}
+/*.order-item-center-container .order-thumb-container .order-thumb{
+    width: 100%;
+    height: 100%;
+}*/
+.order-item-center-container .order-thumb-container img{
+    width: 100%;
+    height: 100%;
+}
+.order-item-center-container  .order-thumb-text-container{
+    vertical-align: top;
+    width: calc(100% - 80px);
+    height: 100%;
+    display: inline-block; 
+    padding: 0 10px;
+    box-sizing: border-box; 
+}
+.order-item-center-container  .order-thumb-text-container .order-type{
+    background-color: #fe555c;
+    color: #fff;
+    width: 58px;
+    height: 18%;
+    font-size: 12px;
+    text-align: center; 
+    line-height: 18px;
+    display: inline-block; 
+}
+.order-item-center-container  .order-thumb-text-container .order-memo{
+    font-size: 14px;
+    height:82%;
+    line-height: 1.5;
+}
+
+
+/*底部loading*/
+
+.no-order-notic{
+    font-size: 14px;
+    padding: 30px 10px 10px;
+    text-align: center;
+    height: 18px;
+    line-height: 18px;
+}
+.order-options{
+    padding: 0 10px 5px 0;
+    text-align: right;
+}

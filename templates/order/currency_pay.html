@@ -1,0 +1,137 @@
+{% set title = '盒币支付' %}
+{% extends 'base_toper.html' %}
+{% block head %}
+{% endblock %}
+
+
+
+{% block cssstyle %}
+<style type="text/css">
+	.img-logo-box{
+		height: 112px;
+		position: relative;
+	}
+	.img-logo-box img{
+		display: inline-block;
+		height: 80px;
+		width: 80px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.detail-box li{
+		height: 49px;
+		line-height: 49px;
+		padding: 0 15px;
+	}
+	.detail-box .left{
+		float:left;
+		font-size: 14px;
+	}
+	.detail-box .right{
+		float: right;
+		padding-right: 10px;
+		font-size: 13px;
+	}
+	.phone-msg-box{
+		height: 49px;
+		position: relative;
+		line-height: 49px;
+		display: inline-block;
+		width: 100%;
+		padding: 0 15px;
+		cursor: pointer;
+	}
+	#pay{
+		height: 43px;
+		line-height: 43px;
+		text-align: center;
+		margin: 12px;
+		background-color: rgb(0, 185, 255);
+		color: #fff;
+		font-size: 14px;
+		letter-spacing: 4px;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="img-logo-box">
+	<img src="https://wr.namibox.com/tina/static/logo.png">
+</div>
+<ul class="detail-box fff-bg">
+	<li class="border-full">
+		<div class="left"> 账户余额 </div>
+		<div class="right font-999"> {{ request.user.userprofile.currency | round_2 }} </div>
+	</li>
+	<li class="border-full">
+		<div class="left"> 订单详情</div>
+		<div class="right font-999"> 宝宝消息通知 </div>
+	</li>
+	<li class="border-full">
+		<div class="left"> 应付金额 </div>
+		<div class="right font-999"> {{order.real_price | round_2}} </div>
+	</li>
+	<li class="border-full">
+		<div class="left"> 手机号 </div>
+		<div class="right font-999"> {{ request.user.username | hide_phone_number}} </div>
+	</li>
+</ul>
+<div class="phone-msg-box fff-bg" @click="$refs.captcha_input.focus();">
+	<div style="font-size: 25px;width: 40px;float:left" class="fff-bg"> <Icon type="locked"></Icon> </div>
+	<input type="number" placeholder="手机验证码" v-model="captcha" maxlength="4" style="border: none;outline: none;float:left;height:100%" ref="captcha_input">
+	<captcha-item :type="'currency_pay'" :token="'{{token}}'" :that="this"></captcha-item>
+</div>
+
+<div id="pay" @click="pay">
+	(( is_click ? '付款中' : '确认付款' ))
+</div>
+
+<page-notic-item :title="'收不到验证码'">
+	<p>1. 请核实您输入的手机号是否正确、是否欠费或者信号是否良好。</p>
+	<p>2. 请检查您的手机拦截软件是否将该短信自动拦截（安全卫士、手机管家等）。</p>
+	<p>3. 如果以上还未能解决您的问题，建议您在不同设备上试试看哦。</p>
+</page-notic-item>
+
+
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			captcha: "", 
+			is_click: false,
+		},
+		methods: {
+			pay: function(){
+				if(this.captcha.length != 4){
+					this.$Message.warning('请输入正确的验证码!')
+					return false;
+				}
+				if(this.is_click) return false;
+				var that = this;
+				normal_ajax('/order/currency_pay_api/{0}/{1}'.format(that.captcha, {{order.id}}), 'GET', null, function(){
+						that.is_click = true
+					},function(ret){
+					if(ret.retcode === 'SUCC'){
+						location.href = '/order/order_pay_success?orderid=' + ret.encrpt_orderid;
+					}else{
+						that.$Message.warning(ret.description)
+
+					}
+
+				}, null, function(){that.is_click = false;})
+			}
+		}
+	})
+</script>
+{% endblock %}

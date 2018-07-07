@@ -1,11 +1,14 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseNotAllowed
 import traceback
+from django.conf import settings
+from unit.utility import render_to_error_response
 try:
     from cbg_backup import settings
 except:
     from cbg_backup.cbg_backup import settings
 import datetime
-from unit.utility import response_json
+from .utility import *
+import logging
 # import logging
 # log_info = logging.getLogger('django')
 # log_info.log('123', msg="", level=1)
@@ -19,70 +22,84 @@ class ExceptionHTTPResponse(Exception):
     pass
 
 
-def wglobal(need_login=False, allow_tuple=None, ajax=False):
+
+def wglobal(need_login=False, allow_tuple=None, ajax=False, check_active=True):
     def _decorate(func):
         def _wrapper(*args, **kwargs):
-            _request = args[0]
-            if ajax and not _request.is_ajax():
-                raise Http404
-            if allow_tuple and _request.method not in allow_tuple:
-                raise Http404
-            request_start = time.time()
-            _args = list(args)
-            response = HttpResponse()
-            _args.append(response)
-            wsgi_url_scheme = _request.META['wsgi.url_scheme']
-            render = {
-                'request': _request,
-                'settings': settings,
-                'urlnow': wsgi_url_scheme + '://' + _request.META['HTTP_HOST'] + _request.get_full_path(),  # 请求的完整路径
-                'timenow': datetime.datetime.now(),
-                'DOMAIN': settings.DOMAIN,
-                'user_login': _request.user.is_authenticated(),
-                'is_staff': False,
-                'super_user': False,
-            }
-            # render.update(settings.RENDER_BASE)  # 可以使用django.settings中的公共CONTEXT
-            build_render_enviorment_by_request(_request, render)
-
-            if need_login and not render['user_login']:
-                if _request.is_ajax():
-                    return response_json('FAIL', command='LOGIN')
-                else:
-                    return HttpResponseRedirect('/user/login?redirect=%s' % render['urlnow'])
-
-            if render['user_login'] and _request.user.is_staff:
-                render['is_staff'] = True
-            if render['user_login'] and _request.user.is_superuser:
-                render['super_user'] = True
-            _args.append(render)
-            try:
-                ret_val = func(*_args, **kwargs)
-                ret_code = ret_val.status_code
-            except ExceptionHTTPResponse as e:
-                ret_val = e.args[0]
-                ret_code = ret_val.status_code
-            except Exception as r:
-                print(r)
-                _request._cache_exception = traceback.format_exc()
-                ret_code = 500
-                raise
-            finally:
-                time_tick = time.time() - request_start
-                info_log  = u'%6d %s (%s-%s-%s) %s %s %s' % (int(time_tick * 1000000) ,
-                                                             _request.user.username if _request.user.is_authenticated() else '*' ,
-                                                             _request.META['REMOTE_ADDR'] ,
-                                                             render['browser'] or 'browser' ,
-                                                             render['platform'],
-                                                             ret_code , render['urlnow'] ,
-                                                             _request.META.get('HTTP_REFERER' , ''))
-                # log_info.log(log_info)
-                print(info_log)
-
-            return ret_val
-
+            return func(*args, **kwargs)
         return _wrapper
     return _decorate
+
+
+# def wglobal(need_login=False, allow_tuple=None, ajax=False, check_active=True):
+#     def _decorate(func):
+#         def _wrapper(*args, **kwargs):
+#             _request = args[0]
+#             if settings.DEBUG is False:
+#                 if ajax and not _request.is_ajax():
+#                     raise Http404
+#                 if allow_tuple and _request.method not in allow_tuple:
+#                     raise Http404
+#             request_start = time.time()
+#             _args = list(args)
+#             response = HttpResponse()
+#             _args.append(response)
+#             wsgi_url_scheme = _request.META['wsgi.url_scheme']
+#             render = {
+#                 'request': _request,
+#                 'settings': settings,
+#                 'urlnow': wsgi_url_scheme + '://' + _request.META['HTTP_HOST'] + _request.get_full_path(),  # 请求的完整路径
+#                 'timenow': datetime.datetime.now(),
+#                 'DOMAIN': settings.DOMAIN,
+#                 'user_login': _request.user.is_authenticated(),
+#                 'is_staff': False,
+#                 'super_user': False,
+#             }
+#             # render.update(settings.RENDER_BASE)  # 可以使用django.settings中的公共CONTEXT
+#             build_render_enviorment_by_request(_request, render)
+#
+#             if need_login and not render['user_login']:
+#                 if _request.is_ajax():
+#                     return response_json('FAIL', msg='LOGIN', description='请先登陆')
+#                 else:
+#                     return HttpResponseRedirect('/user/login?redirect=%s' % render['urlnow'])
+#
+#             if render['user_login']:
+#                 if check_active and _request.user.is_active == 0:
+#                     if _request.is_ajax():
+#                         return response_json('FAIL', msg='Ban', description='账号已被封禁，如有疑问，请联系管理员')
+#                     else:
+#                         return render_to_error_response(_request, response, render, '账号已被封禁，如有疑问，请联系管理员')
+#                 render['is_staff'] = _request.user.is_staff == 1
+#                 render['super_user'] = _request.user.is_superuser == 1
+#
+#             _args.append(render)
+#             try:
+#                 ret_val = func(*_args, **kwargs)
+#                 ret_code = ret_val.status_code
+#             except ExceptionHTTPResponse as e:
+#                 ret_val = e.args[0]
+#                 ret_code = ret_val.status_code
+#             except Exception as r:
+#                 _request._cache_exception = traceback.format_exc()
+#                 ret_code = 500
+#                 raise
+#             finally:
+#                 time_tick = time.time() - request_start
+#                 info_log  = u'%6d %s (%s-%s-%s) %s %s %s' % (int(time_tick * 1000000) ,
+#                                                              _request.user.username if _request.user.is_authenticated() else '*' ,
+#                                                              _request.META['REMOTE_ADDR'] ,
+#                                                              render['browser'] or 'browser' ,
+#                                                              render['platform'],
+#                                                              ret_code , render['urlnow'] ,
+#                                                              _request.META.get('HTTP_REFERER' , ''))
+#                 # log_info.log(log_info)
+#                 print(info_log)
+#
+#             return ret_val
+#
+#         return _wrapper
+#     return _decorate
 
 
 
@@ -103,7 +120,7 @@ def build_render_enviorment_by_request(request , render):
     user_agent  = request.META['HTTP_USER_AGENT'].lower() if 'HTTP_USER_AGENT' in request.META else ''
 
     render['browser'] = 'PC'
-    if 'micromessenger' in user_agent or request.REQUEST.get('weixin'):
+    if 'micromessenger' in user_agent or request.GET.get('weixin'):
         render['browser'] = 'weixin'
     # 判断出浏览器的平台：iPad、iPhone、iPod, Android、Windows Phone, MQQBrowser（QQ手机浏览器）
     # 将上述都设置为移动类型，其他都是非移动类型
@@ -117,7 +134,7 @@ def build_render_enviorment_by_request(request , render):
         if 'windows phone' in user_agent:
             render['ismobile'] , render['platform'] = True , 'winphone'
 
-        elif 'mqqbrowser' in user_agent or request.REQUEST.get('qq' , ''):
+        elif 'mqqbrowser' in user_agent or request.GET.get('qq' , ''):
             render['ismobile'] , render['platform'] = True , 'qq'
 
         else:

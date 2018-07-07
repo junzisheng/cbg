@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="content-container">
+
+{% block content %}
+
+{% endblock %}
+	
+</div>
+
+
+
+<div class="footer-container" id="footer">   
+    <ul>
+        <li>
+            <a href="">
+                {% if index %}
+                <img src="https://m.360buyimg.com/mobilecms/jfs/t15145/137/2502885754/3106/de5e0b14/5aa10cd2N46f18ce6.png">
+                {% else %}
+               
+                <img src=" https://m.360buyimg.com/mobilecms/jfs/t18526/211/696109898/3876/a61be82c/5aa10cd2N1318ac50.png">
+                {% endif %}
+
+            </a>
+            
+        </li>
+        <li>
+            <a href="/service/index">
+                <img src="https://m.360buyimg.com/mobilecms/jfs/t19183/49/696491919/3763/dec8cceb/5aa10cdbNa9cd0320.png">
+            </a>
+            
+        </li>
+        <li>
+            <a href="">
+                <img src="https://m.360buyimg.com/mobilecms/jfs/t19183/49/696491919/3763/dec8cceb/5aa10cdbNa9cd0320.png">
+            </a>
+            
+        </li>
+        <li>
+            <a href="/user/mine">
+                {% if mine %}
+                <img src="https://m.360buyimg.com/mobilecms/jfs/t18598/41/712219415/3756/7828621f/5aa10cf6Nbfbdc1af.png">
+                {% else %}
+                <img src="https://m.360buyimg.com/mobilecms/jfs/t16849/271/702371255/4462/d55edd83/5aa10cf6Nee5122a5.png">
+                {% endif %}
+            </a>
+        </li>
+        <li class="footer-options">
+            <a style="font-size: 30px;color:rgb(95,97,108)" @click.stop="menu_show('bottom')">
+                <Icon type="navicon-round"></Icon>
+            </a>
+        </li>
+    </ul>
+</div>
+<simple-choice-item :title="'菜单'" :choice_list="[{text: '提交问题'}]" :callback="menu_choose" ref="menu"></simple-choice-item>
+
+{% endblock %}
+
+

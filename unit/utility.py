@@ -1,13 +1,15 @@
 #encoding=utf-8
 import re
-import types
+import time
 import datetime
 import json
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.template import RequestContext
-from unit import gpub
 import configparser
+from Cryptodome.Cipher import AES
+from binascii import b2a_hex, a2b_hex
+from django.db import models
+
 try:
     from cbg_backup import settings
 except:
@@ -22,37 +24,44 @@ except:
 to_list = lambda x : list(x) if isinstance(x , (tuple, dict, set, list)) else [x] if x else []
 
 
-def queryset_to_list_of_dict(queryset , support_json = False):
+def del_session_key(session, key):
+    if key in session:
+        del session[key]
+        return True
+
+
+def obj_2_json(qs, support_fields=None, support_json=False):
+    """把orm对象转换成js对象"""
+    dict_qs = {}
+    for field in qs._meta.fields:
+        field_name = field[0].attname if isinstance(field , (list, tuple)) else field.attname
+        if support_fields and field_name and field_name not in support_fields:
+            continue
+        field_val = getattr(qs , field_name)
+        if support_json:
+            if type(field_val) == datetime.date:
+                field_val = dtlib.FDD2(field_val)
+
+            elif type(field_val) == datetime.datetime:
+                field_val = dtlib.FDT2(field_val)
+
+        dict_qs[field_name] = field_val
+    return dict_qs
+
+
+def queryset_to_list_of_dict(queryset , support_fields=None, support_json=False):
     """将QuerySet转换为字典结构的数组，方便进行JSON转换
     . 如果指定支持JSON转化，则会将日期等类型转换
     """
-
     list_ret = []
     for qs in queryset:
-        dict_qs = {}
-
-        for field in qs._meta.fields:
-            field_name = field[0].attname if isinstance(field , (list, tuple)) else field.attname
-            field_val  = getattr(qs , field_name)
-
-            if support_json:
-                if type(field_val) == datetime.date:
-                    field_val = dtlib.FDD2(field_val)
-
-                elif type(field_val) == datetime.datetime:
-                    field_val = dtlib.FDT2(field_val)
-
-
-            dict_qs[field_name] = field_val
-
-        list_ret.append(dict_qs)
-
+        list_ret.append(obj_2_json(qs, support_fields, support_json))
     return list_ret
 
 
 def response_json(retcode , description = '', **kwargs):
     """快捷函数，返回JSON格式的HttpResponse，至少提供retcode和description两个参数，和附加命名参数"""
-    dict_ret = {'retcode': retcode}
+    dict_ret = {'retcode': retcode, 'timestamp': time.time()}
     if description:
         dict_ret['description'] = description
     dict_ret.update(kwargs)
@@ -65,20 +74,8 @@ def render_to_response(request, response, render, template_name):
     return response
 
 
-def ip_visit_limit(user_ip , key_prefix , num , unit_time):
-    """
-    判断同一IP访问次数
-    :param user_ip      :   用户ip
-    :param key_prefix   :   访问类型前缀
-    :param num          :   访问次数上限
-    :param unit_time    :   多长时间，单位秒
-    :return             :
-    """
-    key = "%s_%s" % (key_prefix ,user_ip)
-    new_val = gpub.redis3.incr(key)
-    if new_val == 1:
-        settings.redis3.expire(key, unit_time)
-    return new_val > num
+def render_to_error_response(request, response, render, error_msg):
+    return HttpResponse(error_msg)
 
 
 def validate_nick_name(nick_name):
@@ -127,7 +124,6 @@ def _validate_nick_name_len(nick_name):
     return True, ""
 
 
-
 class MyConfigParser(configparser.ConfigParser):
     """继承configparser来重写optionxform使其区分大小写"""
     _instance = None
@@ -149,6 +145,40 @@ class MyConfigParser(configparser.ConfigParser):
     def __getitem__(self, item):
         assert item in self.sections()
         return self.options(item)
+
+
+class Prpcrypt(object):
+    key = ('guwenjia' * 2).encode()
+    mode = AES.MODE_CBC
+    # def __init__(self, key):
+    #     self.key = key.encode()
+
+    # 加密函数，如果text不是16的倍数【加密文本text必须为16的倍数！】，那就补足为16的倍数
+    @classmethod
+    def encrypt(cls, text, key=('guwenjia' * 2).encode()):
+        text = str(text)
+        if not isinstance(text, bytes):
+            text = text.encode()
+        cryptor = AES.new(key, cls.mode, key)
+        # 这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度.目前AES-128足够用
+        length = 16
+        count = len(text)
+        add = length - (count % length)
+        text = text + ('\0' * add).encode()
+        ciphertext = cryptor.encrypt(text)
+        # 因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题
+        # 所以这里统一把加密后的字符串转化为16进制字符串
+        return b2a_hex(ciphertext).decode()
+
+    # 解密后，去掉补足的空格用strip() 去掉
+    @classmethod
+    def decrypt(cls, text, key=('guwenjia'*2).encode()):
+        try:
+            cryptor = AES.new(key, cls.mode, key)
+            plain_text = cryptor.decrypt(a2b_hex(text))
+            return plain_text.decode().strip('\0')
+        except:
+            return None
 
 # def get_current_url(request , full_domain = False , quote_path = False , quote_query = False):
 #     """取得当前Request请求的URL，full_domain控制是否获取完整的全路径
@@ -276,30 +306,9 @@ class IProxyManager(object):
 
 
 if __name__ == '__main__':
-    # from sys import getsizeof
-    # i = IProxyManager()
-    # i.bulk_insert([[0, 1, 2, 3, 2]])
-    # i.bulk_insert([[0, 1, 2, 3, 1]])
-    # i.bulk_insert([[1, 1, 2, 3, 5]])
-    # i.bulk_insert([[0, 1, 2, 3, 8]])
-    # i.bulk_insert([[0]])
-    # i.single_insert([3,1,2,3, 10])
-    # i.single_insert([5])
-    # s = i.select()
-    # print(s)
-    # print(getsizeof(i))
-    # print(len(i))
-    # i.single_remove([3,1,4,3])
-    # i.bulk_remove([[0, 1, 2, 3], [1,2,3,45]])
-    a = MyConfigParser(os.path.join(settings.BASE_DIR, 'cbg_backup', 'limitword.ini'))
-    print(validate_nick_name('你妈B'))
-
-
-
-
-
-
-
-
-
+    # a = MyConfigParser(os.path.join(settings.BASE_DIR, 'cbg_backup', 'limitword.ini'))
+    # print(validate_nick_name('你妈B'))
+    import hashlib
+    s = Prpcrypt.decrypt('6d3d36e0b874ac16c93eb326969283b8').split('currency_')[1]
+    print(s)
 

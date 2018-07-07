@@ -1,0 +1,20 @@
+<div class="pet-list-container" :class="{'pet-container-active': pet_container_show}">
+	<div class="server-choose-title"> 
+		<span class="x" @click.stop="pet_hide"></span> 
+		&nbsp;&nbsp;&nbsp;&nbsp;类型
+	</div>
+	<ul>
+		<li v-for="k in pet_letter_list" :key="k">
+			<div :id="'pet' + k" class="letter">((k))</div>
+			<div class="server-container" @click.stop="pet_name_click($event)">
+ 				<cbtn-item :name="k" :show="id_name.name" :pk="id_name.id" :index="k+index" v-for="(id_name, index) in pet_name_info[k]" @_click="pet_name_click" :class="{'require-active': k+index==pet_active_index}">
+            	</cbtn-item>
+			</div>
+		</li>
+	</ul>
+	<ul class="letter-list-container" style="top:10%" :style="{'display': pet_container_show ? 'block' : 'none' }">
+		<a v-for="l in pet_letter_list" :href="'#pet' + l" :key="l">
+			((l))
+		</a>
+	</ul>
+</div>

@@ -1,0 +1,82 @@
+{% import "macro.html" as _macro %}
+{% set profile = request.user.userprofile %}
+{% extends 'base_frame.html' %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/static/auth/css/mine.css">
+{% endblock %}
+{% block cssstyle %}
+<style type="text/css">
+/*	.ivu-badge-count{
+		height: 12px;
+		width: 12px!important;
+		min-width: 12px!important;
+		border-radius: 6px!important;
+		line-height: 12px;
+		text-align: center;
+		padding:0;
+		top: -6px;
+	}*/
+</style>
+{% endblock %}
+{% block content %}
+<div class="mine-header-container">
+	<div class="mine-header-wrap">
+		<div class="mine-header-content">
+			<div class="mine-header-img">
+				<img src="https://img11.360buyimg.com/jdphoto/s120x122_jfs/t5683/191/7076936752/5123/834e5571/596dd62bN7a8affc5.png">
+			</div>
+
+			<div class="mine-header-msg">
+				<div class="mine-header-name">
+					<span class="mine-header-name-text">
+						顾文江
+					</span>
+					<i class="mine-header-name-edit">
+					</i>
+				</div>
+				<div class="mine-header-account">
+					用户名：mynameisgwj
+				</div>
+				<div class="mine-header-info">
+					<a href="" class="mine-header-points">
+						积分{{ profile.points }}
+					</a>
+				</div>
+			</div> 
+
+			<div class="mine-header-right-options"> 
+				<a href="/message" style="color:black">
+					<Icon type="android-settings" style="margin-right: 10px;"></Icon>
+				</a>
+				<Badge dot>
+					<a href="/slkjls" style="color:blackx">
+					<Icon type="chatbubble-working"></Icon>
+						
+					</a>
+				</Badge>
+			</div>
+		</div>
+	</div>
+</div>
+{{ _macro.line_b64_tabs([
+('待付款', '/order/main?status=待付款', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAElBMVEUAAADdnlnfn1rgo1zgoVvdnlgEImJPAAAABXRSTlMA43cZScMfxp4AAABASURBVCjPY6AbcAzFACIMopiCgQyhWAClgpQBrGYOKkFlI0zBIAYGVQzBYAYGU8KCCO2YFg0Cv2NLNtgTGL0AAN0trh/jrEP+AAAAAElFTkSuQmCC'),
+('进行中', '/order/main?status=进行中', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAJ1BMVEUAAADenlnen1ngoVven1zen1neoFndnljdnlnhoFn/qoDdn1ndnlh7gNDGAAAADHRSTlMA5LJJPZJ789UrBr1euVjwAAAAhklEQVQoz2MgAzDLnIECYYQg4xkYOIgQ5DkDB5QLTm0H2YgquBRiI4og1x4IA0WQ9QwWwTnYBGOwCfZgE6zBJniGZEGUoIOxkAMZIYgESBHEBMKoggjbMQH9BGWwOckQm+OBQAYki2BAgA6QfQjBgAAfIPsIggEBbEB2AoIBBU6CKggGSQAA2PqdcWoc0kYAAAAASUVORK5CYII='),
+('已完成', '/order/main?status=已完成', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAtUExURUdwTN2eV9uXU92dV9ugV9yeV92eV92dV92eV92eV92fWNyfV96dV92eVt2eWLiRcBUAAAAOdFJOUwDwDJgjVYnVy7dEMm4c+qa6LAAAAUNJREFUKM99k81Kw0AQxwebVBNBsFdhSQNaTyLiQRCC4BPoVQjiA/SgvQm5eC/Vizcpgh4lvkEfxRDSmCLzDM5ONh+bhc7pzy/zPRuAtbZ/JpKna51dCiRLTtvsAJXdNcyaVvD3oobfWNte7SgamFSuh9iyewXHpN9HiLNtEksVLR1mNuLckaqM70mZQVTAl1THDIdS5l64Au5swDDkAostmYFjpAWsB/Z8k0XKUAb9lDV35FCshA4TVqhDBHBjUKMs+kpQlRUIHSbUeNYU8v0jLhQQDPScKcgFhDrMAKd5OSbn3BU85scQ455eiBbi4K2lQ1qdS+7jNuQlRymMjHOEGJuHc+ibcWJLFJ4VVSxXFw7xxXw2fSw884EF+Gg+RervxHywV5icG9B6Q3y48TvU5pYmHeo+E/zrZtj4fBWTdT/KP7h1WU+tJnMCAAAAAElFTkSuQmCC'),
+('全部订单', '/order/main?status=全部订单', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGFBMVEUAAADqPD7xRETqPD7qPT/qOz/yQEDpOz2tEuliAAAAB3RSTlMA4wuDekkUL49mBwAAAElJREFUKM9jIAWwipcjgcIAsCBjOQoQAAuyowoWDGLBYqjnmNyRBMtgXlbHqnLQOJ40b6ogBBHeZMKqcnA5nsqCmIkWe/ImAQAA21zn+V6DoroAAAAASUVORK5CYII=')]) }}  
+
+{{_macro.line_b64_tabs([
+	('<span style="font-size: 14px;font-weight: bold;">0</span> 张', '', '优惠券'),
+	('<span style="font-size: 14px;font-weight: bold;">' + '%.2f' % (profile.currency/100) + '</span> 个', '/order/currency_log_page' , '盒币'),
+	
+])}}
+{% endblock %}
+
+
+{% block javascript %}
+{{ super() }}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+	})
+</script>
+{% endblock %}

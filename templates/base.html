@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type"	content="text/html;	charset=UTF-8">
+	<meta http-equiv="Content-Type"	content="text/html" charset="UTF-8">
     <meta name="Description" CONTENT="藏宝阁贴心小助手">
     {# 完全为苹果等移动终端特别设置 #}
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -18,61 +18,131 @@
         <meta name="viewport" content="width=device-width,height=device-height,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
         {% endblock %}
 	<title>{% block title %}藏宝阁助手{% endblock %}</title>
+
     <script src="/static/public_js/jquery-3.3.1.js"></script>
-    <!-- <script src="/static/public_js/vue.js"></script> -->
-    <script src="//v1.vuejs.org/js/vue.min.js"></script>
-
-    <!-- 引入样式 -->
-    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <!-- 引入组件库 -->
-    <script src="//unpkg.com/iview@1.0.1/dist/iview.min.js"></script>
-
-    <script src="/static/public_js/main.js"></script>
+    <script src="/static/public_js/jquery-cookie.js"></script>
+    <script src="/static/public_js/vue.js"></script>
+    <link rel="stylesheet" href="/static/public_css/iview.css">
+    <script src="/static/public_js/iview.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/public_css/main.css">
-    <script>
-        document.documentElement.style.fontSize = document.documentElement.clientWidth / 640*100 + 'px';
-        {# 针对csrf的ajax设置 #}
-        $(function(){
-            new Vue({
-                el: '#qcode-container',
-                data: {
-                    show: false,
-                },
-                methods: {
-                    qcode_show: function(){
-                        this.show = !this.show;
-                    }
-                }
-            })
-            $.ajaxSetup({
-                beforeSend: function(xhr){
-                    　xhr.setRequestHeader("X-CSRFtoken", '{{csrf_token}}')
-                }
-            })
-            // {% if ismobile %}
-            // {% endif %}
-
-        })
-
-    </script>
-        
+    <link rel="stylesheet" type="text/css" href="/static/public_css/iview.css">
 
 
     {% block head %}
     {% endblock %}
+
+    {% block cssstyle %}
+    {% endblock %}
+
 </head>
 <!-- <body {% if ismobile %} class="fix_full" {% endif %}> -->
 <body>
-<div id="qcode-container">
+<div id="qcode-container" v-show="false">
     <div id="qcode" @click="qcode_show"></div>
     <div id="qcode_img" v-show="show">
-        <img src="/user/qrcode?data={{urlnow}}" style="width:100%;" style="width:100%;vertical-align:top;">
+        <img src="/user/qrcode?data={{urlnow}}">
     </div>
     
 </div>
-{% block body %}
+<div id="body">
+    <div style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 10000" v-show="render_loading">
+        <img src="/static/public_img/loading.gif" style="width: 100%;height:100%;">
+    </div>
 
+{% block body %}
 {% endblock %}
+
+
+    <Modal v-model="warn_modal_show" width="360" :mask-closable="false" :closable="warn_modal_closable">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>((warn_modal_header))</span>
+        </p>
+        <div style="text-align:center" v-html="warn_modal_body">
+            
+        </div>
+        <div slot="footer">
+            <i-button type="error" size="large" long :loading="warn_modal_loading" @click.stop="warn_del_click">((warn_modal_footer))</i-button>
+        </div>
+    </Modal>
+
+    <Back-top :height="100" :bottom="100" v-show="totop_show">
+        <div class="totop">
+            <img src="/static/public_img/totop.png" style="width: 100%">
+        </div>
+    </Back-top>
+    
+
+    <Modal v-model="simple_modal_show" :closable="false" width="360">
+        <div style="text-align:center">
+            <p>((simple_modal_title))</p>
+        </div>
+        <div slot="footer">
+            <div class="simple-modal-options">
+                <span class="simple-modal-pass" @click="simple_modal_show=false">((simple_modal_left))</span>
+                <span tex>|</span>
+                <span class="simple-modal-ok" @click="simple_modal_handle">((simple_modal_right))</span>
+            </div>
+        </div>
+    </Modal>
+
+
+    
+
+
+
+
+
+</div>
+<script>
+    $.cookie('timestamp', (new Date()).getTime() / 1000, {expires: 1, path: location.pathname})  // 设置cookie和timestamp来判断页面是否刷新了 cookie中的cookiestamp > 动态的timestamp 则说明是刷新
+    console.log(location.pathname, '页面耗时', (new Date().getTime() / 1000) - {{ time.time() }})
+
+    {% if rem %}  {# 是否使用rem #}
+    document.documentElement.style.fontSize = document.documentElement.clientWidth / 375*16 + 'px';
+    {% endif %}
+    var g_app_os = '{{platform}}';
+    var g_user_id = null;
+    {% if user_login %}
+        var g_user_id = {{ request.user.id }};
+    {% endif %}
+    {#$.fullScreen(); 浏览器安全问题 无法自动全屏#}
+    // 判断是ios还是andriod
+    var csrf_token = '{{csfr_token or ""}}';
+    var ua = navigator.userAgent.toLowerCase(); 
+    if (/iphone|ipad|ipod/.test(ua)) {
+        g_app_os = 'ios';
+    } else if (/android/.test(ua)) {
+        g_app_os = 'android';
+    }
+    $(function(){
+        new Vue({
+            el: '#qcode-container',
+            data: {
+                show: false,
+            },
+            methods: {
+                qcode_show: function(){
+                    this.show = !this.show;
+                }
+            }
+        })
+        {# 针对csrf的ajax设置 #}
+        $.ajaxSetup({
+            beforeSend: function(xhr){
+                xhr.setRequestHeader("X-CSRFtoken", csrf_token)
+            }
+        })
+
+        // {% if ismobile %}
+        // {% endif %}
+
+    })
+    var csrf_token = '{{csrf_token}}';
+
+</script>
+
+<script src="/static/public_js/main.js"></script>
 {% block javascript %}
 {% endblock %}
 

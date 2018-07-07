@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-登陆
+藏宝阁注册-注册
 {% endblock %}
 {% block head %}
 <link rel="stylesheet" href="/static/public_css/bootstrap.css">
@@ -11,7 +11,7 @@
 <script src="/static/auth/js/register.js"></script>
 {% endblock %}
 {% block body %}
-    <div class="top-content" id="register-vue">
+    <div class="top-content">
     	
         <div class="inner-bg">
             <div class="container">
@@ -31,7 +31,7 @@
 		                        </div>
 -->                                    <div class="form-group">
                                     <!-- <label class="sr-only" for="form-username">Username</label> -->
-                                    <input type="text" v-model="username" maxlength="12" @focus.stop="input_focus($event)" placeholder="请输入账号" :class="{'input-error': username_error}" class="form-control">
+                                    <input type="text" v-model="username" maxlength="11" @focus.stop="input_focus($event)" placeholder="请输入手机号" :class="{'input-error': username_error}" class="form-control">
                                 </div>
 		                        <div class="form-group">
 		                        	<!-- <label class="sr-only" for="form-password">Password</label> -->
@@ -39,14 +39,20 @@
 		                        </div>
                                 <div class="form-group">
                                     <!-- <label class="sr-only" for="form-password">Password</label> -->
-                                    <input type="password" v-model="checkcode" @focus.stop="input_focus($event)"  placeholder="验证码" maxlength="4" :class="{'input-error': checkcode_error}" class=" form-control" >
+                                    <input type="text" v-model="checkcode" @focus.stop="input_focus($event)"  placeholder="验证码" maxlength="4" :class="{'input-error': checkcode_error}" class=" form-control" >
                                     <img :src="checkcode_src" @click="checkcode_img" class="checkcode">
                                 </div>
+                                <div class="form-group">
+                                    <!-- <label class="sr-only" for="form-password">Password</label> -->
+                                    <input type="text" v-model="captcha" @focus.stop="input_focus($event)"  placeholder="注册码" maxlength="4" :class="{'input-error': captcha_error}" class=" form-control" >
+                                    <captcha-item :type="'register'" :checkcode="checkcode" :username="username" :that="this" :token="'{{token}}'"></captcha-item>
+                                    
+                                </div>
+                       
                                 <div class="options">
                                     <a href="/user/login" id="register">登陆</a>
                                 </div>
 		                        <button class="btn" @click.prevent="submit($event)">注 册</button>
-                                <a href="">快速注册</a>
 		                    </form>
 	                    </div>
                     </div>

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block cssstyle %}
+<style type="">
+	html{
+		height: 100%;
+	}
+	#body{
+		height: 100%;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+	<scroll-item :refresh_obj="refresh_obj.tab_1" :tab_obj="tab_obj.tab_1" :immediate="true">
+	</scroll-item>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+	var Scroll = {
+		delimiters : ["((", "))"],
+		template: "<div></div>",
+		props: ['refresh_obj', 'tab_obj', 'immediate'],
+		created: function(){
+			// 将监听对象丢入到scroll中 scroll的时候会增量刷新
+			this.refresh_obj_list.append([this.refresh_obj, this.tab_obj])
+
+		},
+		watch:{
+			// 监听tab active
+			'tab_obj.active': {
+				handler: function(){
+					if(this.refresh_obj.is_last === ''){
+						this.refresh_func(this.refresh_obj)
+					};
+				},
+				immediate: true,  // 第一个tab会初始化刷新
+			},
+			// 监听排序
+			'refresh_obj.order': function(){
+				this.refresh_obj.query_list = [];
+				this.refresh_obj.is_last = false;
+				this.refresh_func(this.refresh_obj);
+			},
+		}
+	}
+	Vue.component('scroll-item', Scroll);
+
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			refresh_obj: {
+				tab_1: {
+					url: '123123',
+					is_last: '',
+					query_obj: {
+						offset: 1,
+						order: '',
+						filter: '',
+						exclude: '',
+						order_change: false,
+					}
+					refreshing: false,
+					active: true,
+				},
+				tab_2: {
+					url: '123123',
+					is_last: '',
+					offset: 1,
+					order: '',
+					filter: '',
+					exclude: '',
+					order_change: false,
+					refreshing: false,
+					active: false,
+				}
+			},
+			tab_obj:{
+				tab_1: {
+					active: true,
+				},
+				tab_2: {
+					active: false,
+				}
+			}
+		},
+		
+	})
+</script>
+{% endblock %}

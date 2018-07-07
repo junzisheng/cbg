@@ -13,12 +13,17 @@ Including another URLconf
     1. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf import settings
+from django.views import static
+from order.views.data import crawl_data_page
 
 
 urlpatterns = [
-    
-    url(r'user/', include('user.urls')),
-    url(r'^cbg/', include('request.urls')),
-    url(r'^api/', include('api.urls')),
+    url('^d/(?P<order_id>\d+)/?$', crawl_data_page, {'need_login': True}),  # 爬取数据的页面 这里是为了减少短信的长度而作为根url
+    url(r'^user/', include('user.urls')),
+    url(r'^service/', include('service.urls')),
+    url(r'^others/', include('others.urls')),
+    url(r'^order/', include('order.urls')),
+    url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static')  # setting.DEBUG is False
 ]
+

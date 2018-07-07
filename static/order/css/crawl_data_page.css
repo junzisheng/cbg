@@ -1,0 +1,133 @@
+.container{
+	font-weight: 500;
+	background-color: #fff;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+.copy-btn{
+	float: right;
+	margin-top: 7px;
+}
+.options{
+	height: 40px;
+	line-height: 40px;
+	background-color: #fff;
+	text-align: center;
+	margin-bottom: 10px;
+	position: relative;
+}
+.options .edit{
+	position: absolute;
+	right: 10px;
+	cursor: pointer;
+}
+.container-top{
+	height: 40px;
+	line-height: 40px;
+	padding: 0 10px;
+	border-bottom: 1px solid #c3b6b6;
+}
+.container-top span{
+	color: #6b5959;
+	display: inline-block;
+}
+.container-center{
+	padding: 20px 10px;
+}
+.checkbox-container{
+	float: left;
+}
+.container-center .img-contaner{
+	height: 65px;
+	float:left;
+}
+.container-center  .thumb{
+	height: 100%;
+}
+.info{
+	float: left;
+	margin-left: 10px;
+	position: relative;
+}
+.info .huanjia, .info .gongshi{
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	border-radius: 2px;
+	text-align: center;
+	color: #fff;
+	display: inline-block;
+}
+.info .huanjia{
+	background-color: #ff5b5b
+}
+.info .gongshi{
+	background-color: #00b9ff;
+}
+.info .type{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.info .detail, .info .light, .sale-info, .info .level{
+	color: #777;
+}
+.info .detail{
+	padding-top: 10px;
+	display: inline-block;
+}
+.info .light{
+	padding-top: 10px;
+	width: 400px;
+	position: absolute;
+	bottom: -32px;
+}
+.info .light span{
+	display: inline-block;
+	padding: 3px 5px;
+	border-radius: 2px;
+	background-color: #e6e6e6;
+	margin-right: 5px;
+}
+
+.sale-info{
+	float: right;
+	text-align: right;
+}
+.sale-info .price-change{
+	text-decoration: line-through;
+}
+.sale-info  .real-price{
+	font-size: 18px;
+	color: #ff5b5b;
+}
+
+
+.del-data-container{
+	border-top: 1px solid #c3b6b6;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	padding-left: 10px;
+	background-color: #fff;
+	position: fixed;
+	bottom: 0;
+	font-size: 15px;
+}
+.del-data-container .del{
+	top:0;
+	position: absolute;
+	right: 0;
+	height: 100%;
+	background-color: #eee;
+	width: 88px;
+	text-align: center;
+	cursor: pointer;
+}
+.no-data-notic{
+    font-size: 14px;
+    padding: 30px 10px 10px;
+    text-align: center;
+    height: 18px;
+    line-height: 18px;
+}
