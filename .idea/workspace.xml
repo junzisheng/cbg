@@ -2,82 +2,728 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a6734bc-90a4-4249-974e-0d706d884ce1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/coupon/functions.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/coupon/urls.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/order/admin.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/others/templates/bug_submit2.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/service/js/search_page.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/upload/user/0/201836011636-2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/upload/user/1/201821012221-3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/upload/user/1/201821012221-4.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/upload/user/1/201824012224-5.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/validate.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/user/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/user/migrations/0002_smsqueue.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/service/migrations/__init__.py" afterPath="$PROJECT_DIR$/activity/urls.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/order/currency_pay.html" afterPath="$PROJECT_DIR$/order/templates/currency_pay.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/order/main.html" afterPath="$PROJECT_DIR$/order/templates/main.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/order/order_detail.html" afterPath="$PROJECT_DIR$/order/templates/order_detail.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/order/pay_page.html" afterPath="$PROJECT_DIR$/order/templates/pay_page.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/order/pay_success.html" afterPath="$PROJECT_DIR$/order/templates/pay_success.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/service/index.html" afterPath="$PROJECT_DIR$/service/templates/index.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/service/search_page.html" afterPath="$PROJECT_DIR$/service/templates/baobao_service.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/user/migrations/__init__.py" afterPath="$PROJECT_DIR$/coupon/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/operations/sms_log" afterPath="$PROJECT_DIR$/operations/sms_log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/cbg_backup.iml" afterPath="$PROJECT_DIR$/.idea/cbg_backup.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README" afterPath="$PROJECT_DIR$/README" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cbg_backup/filters.py" afterPath="$PROJECT_DIR$/cbg_backup/filters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cbg_backup/settings.py" afterPath="$PROJECT_DIR$/cbg_backup/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cbg_backup/urls.py" afterPath="$PROJECT_DIR$/cbg_backup/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libraries/ali_sms/sms_send.py" afterPath="$PROJECT_DIR$/libraries/ali_sms/sms_send.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/middleware/gpub.py" afterPath="$PROJECT_DIR$/middleware/gpub.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/middleware/models.py" afterPath="$PROJECT_DIR$/middleware/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/middleware/webrequestmonitor.py" afterPath="$PROJECT_DIR$/middleware/webrequestmonitor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/order/functions.py" afterPath="$PROJECT_DIR$/order/functions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/order/models.py" afterPath="$PROJECT_DIR$/order/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/order/urls.py" afterPath="$PROJECT_DIR$/order/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/order/views/currency.py" afterPath="$PROJECT_DIR$/order/views/currency.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/order/views/data.py" afterPath="$PROJECT_DIR$/order/views/data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/order/views/order.py" afterPath="$PROJECT_DIR$/order/views/order.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/others/models.py" afterPath="$PROJECT_DIR$/others/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/others/templates/bug_submit.html" afterPath="$PROJECT_DIR$/others/templates/bug_submit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/others/views.py" afterPath="$PROJECT_DIR$/others/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/admin.py" afterPath="$PROJECT_DIR$/service/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/functions.py" afterPath="$PROJECT_DIR$/service/functions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/models.py" afterPath="$PROJECT_DIR$/service/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/urls.py" afterPath="$PROJECT_DIR$/service/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/views.py" afterPath="$PROJECT_DIR$/service/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setting/localhost.py" afterPath="$PROJECT_DIR$/setting/localhost.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/share/functions.py" afterPath="$PROJECT_DIR$/share/functions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/share/setting_share.py" afterPath="$PROJECT_DIR$/share/setting_share.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/auth/css/mine.css" afterPath="$PROJECT_DIR$/static/auth/css/mine.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/auth/js/login.js" afterPath="$PROJECT_DIR$/static/auth/js/login.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/order/css/order_main.css" afterPath="$PROJECT_DIR$/static/order/css/order_main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/order/js/crawl_data_page.js" afterPath="$PROJECT_DIR$/static/order/js/crawl_data_page.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/order/js/order_main.js" afterPath="$PROJECT_DIR$/static/order/js/order_main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/public_css/main.css" afterPath="$PROJECT_DIR$/static/public_css/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/public_js/main.js" afterPath="$PROJECT_DIR$/static/public_js/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/auth/mine.html" afterPath="$PROJECT_DIR$/templates/auth/mine.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/auth/register.html" afterPath="$PROJECT_DIR$/templates/auth/register.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base_frame.html" afterPath="$PROJECT_DIR$/templates/base_frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base_toper.html" afterPath="$PROJECT_DIR$/templates/base_toper.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/components/order/order_macro.html" afterPath="$PROJECT_DIR$/templates/components/order/order_macro.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/components/request/crawl_options.html" afterPath="$PROJECT_DIR$/templates/components/request/crawl_options.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/macro.html" afterPath="$PROJECT_DIR$/templates/macro.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/order/crawl_data_page.html" afterPath="$PROJECT_DIR$/templates/order/crawl_data_page.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/order/currency_log.html" afterPath="$PROJECT_DIR$/templates/order/currency_log.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/a_1.py" afterPath="$PROJECT_DIR$/test/a_1.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unit/cache.py" afterPath="$PROJECT_DIR$/unit/cache.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unit/decoration.py" afterPath="$PROJECT_DIR$/unit/decoration.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unit/dtlib.py" afterPath="$PROJECT_DIR$/unit/dtlib.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user/admin.py" afterPath="$PROJECT_DIR$/user/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user/functions.py" afterPath="$PROJECT_DIR$/user/functions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user/models.py" afterPath="$PROJECT_DIR$/user/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user/urls.py" afterPath="$PROJECT_DIR$/user/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user/views.py" afterPath="$PROJECT_DIR$/user/views.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/cbg_backup.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dictionaries/namibox.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/README" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/admin.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/templates/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/tests.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/activity/views.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/backends.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/filters.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/jinja_env.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/limitword.ini" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/nazli.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/settings.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cbg_backup/wsgi.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/admin.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/templates/coupon_center.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/templates/my_coupon.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/tests.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/coupon/views.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/celery_init.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/celeryconfig.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/crawl/Base_Class.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/crawl/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/crawl/config.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/crawl/crawl_class.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/crawl/exceptions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/crawl/logger.config" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/crawl_celery/tasks.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/id_rsa_cbg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/id_rsa_cbg.pub" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/MANIFEST.in" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/README.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyun_python_sdk_dysmsapi.egg-info/PKG-INFO" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyun_python_sdk_dysmsapi.egg-info/SOURCES.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyun_python_sdk_dysmsapi.egg-info/dependency_links.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyun_python_sdk_dysmsapi.egg-info/requires.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyun_python_sdk_dysmsapi.egg-info/top_level.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdybaseapi/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdybaseapi/request/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdybaseapi/request/v20170525/QueryTokenForMnsQueueRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdybaseapi/request/v20170525/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/QueryInterSmsIsoInfoRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/QuerySendDetailsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/QueryTokenForMnsQueueRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/SendBatchSmsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/SendInterSmsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/SendSmsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/aliyunsdkdysmsapi/request/v20170525/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdybaseapi/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdybaseapi/request/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdybaseapi/request/v20170525/QueryTokenForMnsQueueRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdybaseapi/request/v20170525/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/QueryInterSmsIsoInfoRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/QuerySendDetailsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/QueryTokenForMnsQueueRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/SendBatchSmsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/SendInterSmsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/SendSmsRequest.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/build/lib/aliyunsdkdysmsapi/request/v20170525/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/const.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/demo_sms_api.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/demo_sms_query.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/dist/aliyun_python_sdk_dysmsapi-1.0.0-py3.5.egg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/README" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/bin/mnscmd" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_account.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_client.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_common.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_exception.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_http.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_pkg_info.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_queue.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_request.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_subscription.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_tool.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_topic.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/mns/mns_xml_handler.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample.cfg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/access_log.8080" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/createqueue.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/createtopic.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/deletequeue.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/deletetopic.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/endpoint_log.8080" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/publishmessage.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/recvdelmessage.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/sample_common.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/sendmessage.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/server.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/simple_http_notify_endpoint.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/simple_https_notify_endpoint.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/subscribe.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/sample/subscribe_queueendpoint.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/mns_python_sdk/setup.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/setup.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/ali_sms/sms_send.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/cbg_logging.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/.scrutinizer.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/CHANGELOG.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/batch.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/batch_copy.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/batch_delete.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/batch_move.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/batch_rename.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/batch_stat.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/cdn_bandwidth.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/cdn_flux.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/cdn_log.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/change_mime.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/change_type.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/copy_to.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/create_bucket.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/delete.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/delete_afte_days.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/download.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/fetch.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/fops.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/kirk/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/kirk/list_apps.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/kirk/list_services.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/kirk/list_stacks.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/list.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/move_to.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/pfop_vframe.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/pfop_watermark.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/prefetch_to_bucket.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/prefetch_to_cdn.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/refresh_dirs.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/refresh_urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/rtc_server.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/stat.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/timestamp_url.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/update_cdn_sslcert.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/upload.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/upload_callback.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/upload_pfops.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/upload_token.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/examples/upload_with_zone.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/manual_test_kirk.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/setup.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/python-sdk-master/test_qiniu.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/auth.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/compat.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/config.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/http.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/main.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/cdn/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/cdn/manager.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/compute/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/compute/app.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/compute/config.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/compute/qcos_api.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/pili/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/pili/rtc_server_manager.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/processing/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/processing/cmd.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/processing/pfop.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/storage/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/storage/bucket.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/storage/upload_progress_recorder.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/services/storage/uploader.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/utils.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/qiniu/zone.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/.tx/config" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/adminx.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/apps.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/filters.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/forms.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/layout.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/de_DE/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/de_DE/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/de_DE/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/de_DE/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/en/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/en/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/en/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/en/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/es_MX/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/es_MX/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/es_MX/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/es_MX/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/eu/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/eu/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/eu/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/eu/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/id_ID/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/id_ID/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/id_ID/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/id_ID/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ja/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ja/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ja/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ja/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/lt/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/lt/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/lt/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/lt/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/nl_NL/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/nl_NL/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/nl_NL/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/nl_NL/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pl/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pl/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pl/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pl/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pt_BR/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pt_BR/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pt_BR/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/pt_BR/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ru_RU/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ru_RU/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ru_RU/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/ru_RU/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/zh_Hans/LC_MESSAGES/django.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/zh_Hans/LC_MESSAGES/django.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/zh_Hans/LC_MESSAGES/djangojs.mo" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/locale/zh_Hans/LC_MESSAGES/djangojs.po" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/migrations/0001_initial.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/migrations/0002_log.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/migrations/0003_auto_20160715_0100.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/migrations/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/actions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/aggregation.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/ajax.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/auth.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/batch.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/bookmark.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/chart.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/comments.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/details.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/editable.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/export.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/filters.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/images.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/importexport.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/inline.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/language.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/layout.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/mobile.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/multiselect.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/passwords.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/portal.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/quickfilter.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/quickform.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/refresh.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/relate.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/relfield.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/sitemenu.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/sortablelist.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/themes.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/topnav.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/utils.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/wizard.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/plugins/xversion.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/sites.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/component.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/themes/bootstrap-theme.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/themes/bootstrap-theme.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/themes/bootstrap-xadmin.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.form.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.main.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.mobile.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.page.dashboard.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.plugin.aggregation.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.plugin.formset.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.plugin.importexport.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.plugin.quickfilter.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.plugins.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.responsive.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.widget.editable.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/css/xadmin.widget.select-transfer.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.main.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.page.dashboard.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.page.form.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.page.list.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.actions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.batch.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.bookmark.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.charts.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.details.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.editable.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.filters.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.formset.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.importexport.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.portal.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.quick-form.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.quickfilter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.refresh.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.revision.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.sortablelist.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.plugin.themes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.responsive.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.widget.datetime.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.widget.multiselect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.widget.select-transfer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/js/xadmin.widget.select.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/autotype/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-clockpicker/bootstrap-clockpicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-clockpicker/bootstrap-clockpicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-clockpicker/bootstrap-clockpicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-clockpicker/bootstrap-clockpicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/css/datepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.bg.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.ca.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.da.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.el.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.fi.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.he.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.hr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.hu.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.id.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.is.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.it.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.ja.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.kr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.lt.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.lv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.ms.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.nl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.pl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.ro.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.rs-latin.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.rs.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.sk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.sl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.sv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.sw.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.th.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.tr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.uk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-TW.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-image-gallery/css/bootstrap-image-gallery.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-image-gallery/css/bootstrap-image-gallery.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-image-gallery/img/loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-image-gallery/js/bootstrap-image-gallery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-image-gallery/js/bootstrap-image-gallery.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-modal/css/bootstrap-modal.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-modal/img/ajax-loader.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-modal/js/bootstrap-modal.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-modal/js/bootstrap-modalmanager.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-multiselect/js/bootstrap-multiselect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-timepicker/css/bootstrap-timepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-timepicker/css/bootstrap-timepicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-timepicker/js/bootstrap-timepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap-timepicker/js/bootstrap-timepicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/css/bootstrap.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/css/bootstrap.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/fonts/glyphicons-halflings-regular.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/fonts/glyphicons-halflings-regular.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/fonts/glyphicons-halflings-regular.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/js/bootstrap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/bootstrap/js/bootstrap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/excanvas.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/excanvas.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.colorhelpers.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.aggregate.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.canvas.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.categories.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.crosshair.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.errorbars.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.fillbetween.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.image.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.navigate.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.pie.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.resize.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.selection.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.stack.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.symbol.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.threshold.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/flot/jquery.flot.time.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/css/font-awesome.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/css/font-awesome.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/fonts/FontAwesome.otf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/fonts/fontawesome-webfont.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/fonts/fontawesome-webfont.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/fonts/fontawesome-webfont.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/font-awesome/fonts/fontawesome-webfont.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.core.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.core.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.effect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.effect.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.mouse.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.mouse.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.sortable.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.sortable.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.widget.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery-ui/jquery.ui.widget.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery/jquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/jquery/jquery.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/load-image/load-image.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/load-image/load-image.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2-spinner.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_de.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_en.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_es.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_eu.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_fr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_hr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_hu.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_it.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_nl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_pt-BR.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_pt-PT.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_ro.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_ru.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_sk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_sv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_tr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_ua.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_zh-CN.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2_locale_zh-hans.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/select2/select2x2.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.bootstrap2.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.bootstrap3.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.default.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.legacy.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/selectize/selectize.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/snapjs/snap.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/snapjs/snap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/static/xadmin/vendor/snapjs/snap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/404.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/500.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/password_reset/complete.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/password_reset/confirm.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/password_reset/done.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/password_reset/email.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/password_reset/form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/user/add_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/auth/user/change_password.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/base.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/base_site.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/comm.top.setlang.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/comm.top.theme.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/comm.top.topnav.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/modal_list.left_navbar.quickfilter.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_form.before_fieldsets.wizard.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_form.submit_line.wizard.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.nav_form.search_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.nav_menu.bookmarks.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.nav_menu.filters.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.results_bottom.actions.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.results_top.charts.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.results_top.date_hierarchy.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.top_toolbar.exports.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.top_toolbar.importexport.export.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.top_toolbar.importexport.import.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.top_toolbar.layouts.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.top_toolbar.refresh.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/blocks/model_list.top_toolbar.saveorder.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/accordion.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/base.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/blank.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/one.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/stacked.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/tab.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/edit_inline/tabular.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/char.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/checklist.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/date.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/fk_search.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/list.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/number.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/quickfilter.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/filters/rel.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/forms/transfer.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/grids/thumbnails.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/import_export/export_action.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/import_export/import.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/box.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/pagination.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/sitemenu_accordion.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/sitemenu_default.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/submit_line.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/toggle_back.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/includes/toggle_menu.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/layout/field_value.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/layout/field_value_td.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/layout/fieldset.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/layout/input_group.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/layout/td-field.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/app_index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/batch_change_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/dashboard.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/invalid_setup.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/logged_out.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/login.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_dashboard.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_delete_confirm.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_delete_selected_confirm.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_detail.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_history.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/model_list.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/quick_detail.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/quick_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/recover_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/recover_list.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/revision_diff.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/views/revision_form.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/widgets/addform.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/widgets/base.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/widgets/chart.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/widgets/list.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templates/xadmin/widgets/qbutton.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templatetags/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/templatetags/xadmin_tags.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/util.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/vendors.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/base.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/dashboard.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/delete.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/detail.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/edit.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/form.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/list.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/views/website.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libraries/xadmin/widgets.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/manage.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/middleware/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/middleware/gpub.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/middleware/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/middleware/webrequestmonitor.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/email_send.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/emali_push.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/sms_log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/sms_push.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/operations/thread_manager.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/public_views.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/templates/currency_pay.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/templates/main.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/templates/order_detail.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/templates/pay_page.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/templates/pay_success.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/views/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/views/currency.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/views/data.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/order/views/order.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/admin.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/templates/bug_submit.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/tests.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/others/views.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/script/uwsgi.ini" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/script/uwsgi.pid" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/admin.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/templates/baobao_service.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/templates/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/tests.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/service/views.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/setting/ecs.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/setting/localhost.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/share/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/share/setting_share.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/2.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/bg.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/close.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/prizeInfoBg1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/prize_get.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/res_bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/turnplate-bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/turnplate-pointer.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/幸运大转盘.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/img/活动规则.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/activity/js/awardRotate.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/auth/css/auth.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/auth/css/mine.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/auth/images/2.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/auth/js/login.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/auth/js/register.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/ionicons.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/css/crawl_data_page.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/css/order_main.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/102207.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/102207.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/iview.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/iview.js.下载" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/jquery-3.3.1.js.下载" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/main.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/main.js.下载" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/qrcode" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/bb_icon_files/vue.js.下载" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/img/test.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/js/crawl_data_page.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/order/js/order_main.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_css/bootstrap.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_css/font-awesome.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_css/form-elements.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_css/iview.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_css/main.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_img/loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_img/order/mhb.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_img/order/paybyali.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_img/order/paybywx.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_img/submit_loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_img/totop.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/bootstrap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/clipboard.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/iview.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/jquery-3.3.1.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/jquery-cookie.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/main.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/qiniu.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/public_js/vue.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/service/css/search_page.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/service/js/bb_service.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/service/js/pet_info.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/service/js/server_info.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/auth/login.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/auth/mine.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/auth/register.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/base_frame.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/base_toper.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/base/foot_tabs.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/mine/order_top_tabs.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/order/friendly_notic_css.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/order/order_macro.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/request/crawl_options.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/request/pet.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/components/request/server.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/macro.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/order/crawl_data_page.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/order/currency_log.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/order/currency_pay_success.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/order/currency_recharge.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/order/test.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/order/test2.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/a_1.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/a_2.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/a_3.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/local_ip_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/cache.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/db_tools.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/decoration.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/dtlib.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/gpub.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/utility.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit/watch.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/admin.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/functions.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/templates/message/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/templates/setting/change_pwd.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/templates/setting/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/tests.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/urls.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/user/views.py" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -88,11 +734,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+            <state relative-caret-position="-1200">
+              <caret line="59" column="50" lean-forward="false" selection-start-line="59" selection-start-column="50" selection-end-line="59" selection-end-column="50" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -100,35 +746,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/activity/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gpub.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/middleware/gpub.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="43" column="19" lean-forward="true" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="filters.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="filters.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cbg_backup/filters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="48" column="13" lean-forward="false" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="21" />
+            <state relative-caret-position="-121">
+              <caret line="12" column="21" lean-forward="false" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -231,9 +853,9 @@
         <option value="$PROJECT_DIR$/order/views/currency.py" />
         <option value="$PROJECT_DIR$/order/views/order.py" />
         <option value="$PROJECT_DIR$/coupon/functions.py" />
-        <option value="$PROJECT_DIR$/user/views.py" />
         <option value="$PROJECT_DIR$/cbg_backup/filters.py" />
         <option value="$PROJECT_DIR$/activity/views.py" />
+        <option value="$PROJECT_DIR$/user/views.py" />
       </list>
     </option>
   </component>
@@ -274,7 +896,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -288,20 +909,11 @@
               <item name="cbg_backup" type="462c0819:PsiDirectoryNode" />
               <item name="activity" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="cbg_backup" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cbg_backup" type="462c0819:PsiDirectoryNode" />
-              <item name="middleware" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cbg_backup" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cbg_backup" type="462c0819:PsiDirectoryNode" />
-              <item name="user" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -453,15 +1065,15 @@
     <frame x="1358" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12953092" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2228145" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.8598575" sideWeight="0.50158983" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44655582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4461371" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47585115" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32541567" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4283452" sideWeight="0.49841017" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42763874" sideWeight="0.49841017" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -698,7 +1310,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1020">
           <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -706,10 +1317,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="523">
           <caret line="47" column="6" lean-forward="false" selection-start-line="47" selection-start-column="6" selection-end-line="47" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <element signature="e#596#728#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -744,9 +1351,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -774,48 +1378,43 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/middleware/gpub.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
-          <caret line="43" column="19" lean-forward="true" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="19" />
+          <caret line="43" column="19" lean-forward="false" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="19" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/activity/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cbg_backup/filters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="48" column="13" lean-forward="false" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="21" />
+        <state relative-caret-position="-121">
+          <caret line="12" column="21" lean-forward="false" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/activity/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1200">
+          <caret line="59" column="50" lean-forward="false" selection-start-line="59" selection-start-column="50" selection-end-line="59" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
