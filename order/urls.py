@@ -10,6 +10,7 @@ urlpatterns = [
     # 订单
     url('^main/?$', order.order_main, {'need_login': True}),  # 订单主页面
     url('^pay_page/(?P<order_id>\d+)/?$', order.pay_page, {'need_login': True}),  # 订单支付页面
+    url('^get_pay_token_api/(?P<order_id>\d+)/(?P<pay_type>1|2)/?$', order.get_pay_token_api, {'need_login': True}),  # 订单支付页面
     url('^order_paysapi_notify/?$', order.order_paysapi_notify),  # 订单第三方回调接口
     url('^order_pay_success/?$', order.order_pay_success, {'need_login': True}),  # 订单第三方支付成功返回得页面
     url('^order_detail/(?P<order_id>\d+)/?$', order.order_detail, {'need_login': True}),
@@ -23,7 +24,7 @@ urlpatterns = [
     url('^currency_log_page/?$', currency.currency_log_page, {'need_login': True}),  # 货币充值使用记录页面
     url('^pull_currency_recharge_log/?$', currency.currency_recharge_log_api, {'need_login': True, 'ajax': True}),  # ajax获取货币充值记录
     url('^pull_currency_conssume_log/?$', currency.currency_consume_log_api, {'need_login': True, 'ajax': True}),  # ajax获取货币消费记录
-    url('^currency_pay_page/?', currency.currency_pay_page, {'need_login': True}),
+    url('^currency_pay_page/(?P<order_id>\d+)/?$', currency.currency_pay_page, {'need_login': True}),
     url('^currency_pay_api/(?P<captcha>\d{4})/(?P<order_id>\d+)/?$', currency.currency_pay_api, {'need_login': True, 'ajax': True}),
     # 爬取的数据
     url('^crawl_data_page/(?P<order_id>\d+)/?$', data.crawl_data_page, {'need_login': True}),  # 爬取数据的页面

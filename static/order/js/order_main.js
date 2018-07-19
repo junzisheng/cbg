@@ -2,7 +2,7 @@ var v;
 window.onload = function(){
 	var order_item = {
 		template: '<a :href="\'/order/order_detail/\' + order.id"> <div class="order-item-thumb-container" > <!-- 顶部信息 -->\
-					    <div class="order-item-top-container">\
+					    <div class="order-item-top-container border-full">\
 					        <div style="float:left">\
 					            {{ order.status == \'待付款\' ? \'下单时间\' : \'支付时间\' }}：{{ order.status == \'待付款\' ? order.create_time : order.pay_time}}\
 					        </div>\
@@ -10,13 +10,20 @@ window.onload = function(){
 					            {{order.status}}\
 					        </div>\
 					    </div>\
+					    <div style="padding: 0 10px;height: 40px;line-height:40px;color: rgb(0, 206, 158)">\
+						   <span :class="{line_through: order.push_type.indexOf(\'短信\')==-1}">短信通知</span>\
+						   <span :class="{line_through: order.push_type.indexOf(\'邮件\')==-1}">邮件通知</span> \
+						   <span :class="{line_through: !order.price_down_push}">降价提醒</span>\
+						    <span :class="{line_through: !order.first_round_push}">第一轮通知</span>\
+						    <span style="float:right">服务时间: {{order.service_time}}天</span>\
+					    </div>\
 					    <!-- 中部图片， memo -->\
 					    <div class="order-item-center-container">\
 					        <div class="order-thumb-container" >\
-					            <img src="/static/order/img/102207.gif">\
+					            <img :src=" service_obj[order.service_id].show_img ">\
 					        </div>\
 					        <div class="order-thumb-text-container">\
-					            <span class="order-type">召唤兽</span>\
+					            <span class="order-type"> {{ service_obj[order.service_id].name }}</span>\
 					            <div class="order-memo clamp-line-text-hidden" style="-webkit-line-clamp: 4;">'+  // 这里有个坑 不能用\ 这样会被认为对\1600
 					            	'{{order.memo}}\
 					            </div>\
@@ -24,17 +31,14 @@ window.onload = function(){
 					    </div>\
 					    <!-- 底部付款 -->\
 					    <div>\
-					        <!-- 价格 -->\
 					        <div style="text-align: right;font-size: 13px;height:41px;line-height: 41px;padding-right:10px;margin-bottom:">\
-					            &nbsp;&nbsp;&nbsp;付款: <span style="font-size:18px;font-weight: blod;">￥{{ (order.real_price / 100).toFixed(2)}}</span> \
+					            &nbsp;&nbsp;&nbsp;付款: <span style="font-size:18px;font-weight: blod;">￥{{ ( (order.real_price || order.price) / 100).toFixed(2)}}</span> \
 					        </div>\
-					        <!-- 操作 -->\
 					        <slot></slot>\
 					    </div>\
 				    </div></a>'
 				,
-		props: ['order']
-
+		props: ['order'],
 	}
 
 //scrollIntoView(alignWithTop)
@@ -45,7 +49,7 @@ window.onload = function(){
 		delimiters : ["((", "))"],
 		data: function(){
 			return {
-				scroll_height: this.get_win_size()[1] - 51 - 46 + 'px',
+				scroll_height: this.get_win_size()[1] - 52 - 46 + 'px',
 				totop_show: true,
 				tab_active: tab_active,
 				tab_object: {
@@ -158,9 +162,6 @@ window.onload = function(){
 			},
 		},
 		computed: {
-			// merge_list(){
-			// 	return this.wait_pay_info.list.concat.(this.doing_order_info.list).concat(this.done_order_info.list).cocat(this.all_order_info.list);
-			// }
 		}
 
 

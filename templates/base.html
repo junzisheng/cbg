@@ -103,6 +103,7 @@
     {% endif %}
     var g_app_os = '{{platform}}';
     var g_user_id = null;
+    var superuser = {{request.user.is_superuser | json_dumps}};
     {% if user_login %}
         var g_user_id = {{ request.user.id }};
     {% endif %}
@@ -120,6 +121,16 @@
             el: '#qcode-container',
             data: {
                 show: false,
+            },
+            mounted: function(){
+                {#
+                {% for notic in notic_list %}
+                this.$Notice.success({
+                    title: '{{notic.title}}',
+                    desc: '{{notic.desc}}',
+                })
+                {% endfor %}
+                #}
             },
             methods: {
                 qcode_show: function(){
@@ -139,6 +150,7 @@
 
     })
     var csrf_token = '{{csrf_token}}';
+    var service_list = {{ service_list | queryset_to_js | json_dumps | safe}};
 
 </script>
 

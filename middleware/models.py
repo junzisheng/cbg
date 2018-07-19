@@ -25,7 +25,7 @@ class Webrequest(models.Model):
 
 class WebrequestMysql(models.Model):
     """请求的mysql使用统计"""
-    awr = models.ForeignKey(Webrequest)
+    awr = models.ForeignKey(Webrequest, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
     duration = models.FloatField(null=True, blank=True)
     db_alias = models.CharField(max_length=16, blank=True)
@@ -46,7 +46,7 @@ class WebrequestMysql(models.Model):
 
 
 class WebrequestRedis(models.Model):
-    awr = models.ForeignKey(Webrequest)
+    awr = models.ForeignKey(Webrequest, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
     duration = models.FloatField(null=True, blank=True)
     host = models.CharField(max_length=32, blank=True)

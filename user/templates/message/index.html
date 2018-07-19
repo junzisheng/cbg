@@ -1,0 +1,149 @@
+{% set title = '消息' %}
+{% extends 'base_toper.html' %}
+{% block cssstyle %}
+<style type="text/css">
+.message-box{
+	padding: 9px;
+	margin: 0 5px;
+}
+.message-box .img-box{
+	width: 100%;
+}
+.message-box .img-box img{
+	display: block;
+	border: none;
+	width: 100%;
+}
+.message-box .content{
+	padding: 7px;
+}
+.date{
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+	color: #928b8b;
+}
+
+
+	
+</style>
+{% endblock %}
+{% block content %}
+<!-- <Icon type="fireball"></Icon> -->
+<tabs-item :tab_object="tab_object" @handle_click="tab_click">
+	<div slot="panel-0">
+<!-- 		<div v-if="notic.is_last && !notic.refreshing && notic.query_list.length == 0" class="no-data-notic">
+			暂无数据
+		</div>
+ -->		<scroll-item :refresh_obj="notic" :style="{height: height, marginTop: '1px'}">
+			<a v-for="item in notic.query_list" :href="item.href">
+				<div>
+					<div class="date">
+						((item.create_time))
+					</div>
+
+					<!-- 外面的白色边框 -->
+					<div class="message-box fff-bg">
+						<div style="border-radius: 2px">
+							<div class="img-box">
+								<img :src="item.thumb_img">
+							</div>
+							<div style="background-color: rgb(104,104,104);color: #fff" class="content">
+								((item.content)) 
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</scroll-item>
+	</div>
+
+	<div slot="panel-1">
+<!-- 		<div v-if="offer.is_last && !offer.refreshing && offer.query_list.length == 0" class="no-data-notic">
+			暂无数据
+		</div>
+ -->		<scroll-item :refresh_obj="offer" :style="{'height': height}">
+			<a v-for="item in offer.query_list" :href="item.href">
+				<div>
+					<div class="date">
+						((item.create_time))
+					</div>
+
+					<!-- 外面的白色边框 -->
+					<div class="message-box fff-bg">
+						<div style="border-radius: 2px">
+							<div class="img-box">
+								<img :src="item.thumb_img">
+							</div>
+							<div style="background-color: rgb(104,104,104);color: #fff" class="content">
+								((item.content)) 
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</scroll-item>
+	</div>
+	
+</tabs-item>
+
+{% endblock %}
+{% block javascript %}
+	{{super()}}
+<script type="text/javascript">
+	{% set notic_num = request.user.id | get_wait_message('notic') %}
+	{% set offser = request.user.id | get_wait_message('offer') %}
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: function(){
+			height = this.get_win_size()[1] - 46 - 41 + 'px';
+			return {
+				height: height,
+				tab_object: {
+					notic: {
+						title: '通知' + '{{ '' if notic_num == 0 else '(%s)' % notic_num }}',
+						active: true,
+					},
+					offer: {
+						title: '优惠' + '{{ '' if offser == 0 else '(%s)' % offser }}',
+						active: false,
+					}
+				},
+				notic: {
+						query_list: [],
+						refreshing: false,
+						is_last: '',
+						url: '/user/get_message',
+						active: true,
+						query_obj: {
+							filter: JSON.stringify({'type': 'notic'})
+						},
+					},
+				offer: {
+					query_list: [],
+					refreshing: false,
+					is_last: '',
+					url: '/user/get_message',
+					active: false,
+					query_obj: {
+						filter: JSON.stringify({'type': 'offer'})
+					},
+				},
+			}
+		},
+		methods: {
+			tab_click: function(key){
+				var _l = ['notic', 'offer'];
+				for(var i=0;i<_l.length;i++ ){
+					var _key = _l[i];
+					this[_key].active = key == _key;
+				}
+			},
+			location_back: function(){
+				}
+
+		},
+	})
+</script>
+{% endblock %}

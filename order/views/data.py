@@ -1,11 +1,11 @@
-from order.models import CrawlOrders
+from order.models import CbgOrders
 from crawl_celery.models import BbCrawlData
 from unit.decoration import ajax_refresh
 from unit.utility import *
 
 
 def crawl_data_page(request, response, render, order_id):
-    if not CrawlOrders.objects.filter(user_id=request.user.id, id=order_id, is_delete=0).exists():
+    if not CbgOrders.objects.filter(user_id=request.user.id, id=order_id, is_delete=0).exists():
         return HttpResponse('您没有该订单')
     render['order_id'] = order_id
     return render_to_response(request, response, render, 'order/crawl_data_page.html')
@@ -34,7 +34,7 @@ def delete_crawl_data_api(request, response, render):
         del_id_list = request.GET.get('del_id_list', '[]')
         order_id = request.GET.get('order_id')
         del_id_list = json.loads(del_id_list)
-        update_count = BbCrawlData.objects.filter(order_id=order_id, id__in=del_id_list, user_id=request.user.id) \
+        BbCrawlData.objects.filter(order_id=order_id, id__in=del_id_list, user_id=request.user.id) \
             .update(is_display=0)
         return response_json(retcode='SUCC', msg='删除成功')
     except Exception as e:

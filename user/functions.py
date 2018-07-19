@@ -18,6 +18,10 @@ sms_config_dict = {
     'currency_pay': {
         'template_code': settings.ALI_SMS['Verification']['template_code'],
         'sign_name': settings.ALI_SMS['Verification']['sign_name'],
+    },
+    'modify_pwd': {
+        'template_code': settings.ALI_SMS['Verification']['template_code'],
+        'sign_name': settings.ALI_SMS['Verification']['sign_name'],
     }
 }
 
@@ -74,6 +78,7 @@ def send_ali_sms(username, _type):
         )
     # 数据提交后通知redis订阅客户端处理
     settings.redis3.publish('sms_notify', json.dumps([sms,]))
+    return num_str
 
 
 def sms_can_repeat(username, prefix, deadline=60):

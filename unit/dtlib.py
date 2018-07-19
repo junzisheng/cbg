@@ -21,11 +21,13 @@ RE_DD2  = re.compile('^(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})$')
 
 FMT_DD  = '%Y-%m'
 RE_DD   = re.compile('^(?P<year>\d{4})-(?P<month>\d{1,2})$')
+FMT_DD3 = '%Y.%m.%d'
 
 FDT2 = lambda dt: dt.strftime(FMT_DT2)
 FDT  = lambda dt: dt.strftime(FMT_DT)
 FDD2 = lambda dt: dt.strftime(FMT_DD2)
 FDD  = lambda dt: dt.strftime(FMT_DD)
+FDD3 = lambda dt: dt.strftime(FMT_DD3)
 
 def __DT(dt_str , re_dt):
     # 公共的时间转换函数，使用指定的正则表达式
@@ -39,6 +41,9 @@ def __DT(dt_str , re_dt):
     if len(int_time) == 7:
         int_time[6] = int_time[6] * 1000
     return datetime.datetime(*int_time)
+
+def FMT2(dt_str):
+    return datetime.datetime.strptime(dt_str, FMT_DD2).date()
 
 def DT2X(dt_str):
     # 转换函数，将YYYY-MM-DD HH:MM:SS mmm形式文本转换为时间对象，如失败，返回None

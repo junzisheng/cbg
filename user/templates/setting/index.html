@@ -1,0 +1,65 @@
+{% set title = '设置' %}
+{% extends 'base_toper.html' %}
+{% block cssstyle%}
+<style type="text/css">
+	.logout{
+		background-color: #00b9ff;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		width: 90%;
+		color: #fff;
+		letter-spacing: 2px;
+		border-radius: 4px;
+		position: fixed;
+		bottom: 40px;
+		left:50%;
+		transform: translate(-50%);
+		cursor: pointer;
+	}
+	.safe-header{
+		height: 30px;
+		line-height: 30px;
+		padding: 0 12px;
+
+	}
+	.options-box li{
+		padding: 12px;
+		color: #000;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="safe-header">
+        <Icon type="arrow-right-b" style="color:#00b9ff"></Icon>
+        <span style="font-weight: bold;">账户安全</span>
+    </div>
+    <ul class="options-box fff-bg">
+    	<a href="/user/modify_pwd">
+	    	<li class="border-full">
+	    		<Icon type="locked" style="color: rgb(0, 206, 158);font-size: 15px;"></Icon>
+	    		&nbsp;&nbsp;&nbsp;修改密码
+	    		<Icon type="chevron-right" style="float: right;"></Icon>
+	    	</li>
+    	</a>
+    </ul>
+
+
+
+	<a href="/user/userlogout">
+		<div class="logout">退出登陆</div>
+	</a>
+{% endblock %}
+
+
+{% block javascript %}
+{{super()}}
+<script type="text/javascript">
+	var v = new Vue({
+		delimiters : ["((", "))"],
+		el: '#body',
+	})
+	
+</script>
+{% endblock %}

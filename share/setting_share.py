@@ -29,11 +29,11 @@ G_MYSQL = {
                                 },
 					},
 	'ali_1': { 'default':   {       'ENGINE'    :   'django.db.backends.mysql',
-									'NAME'      :   'sql_test',
+									'NAME'      :   'cbg',
 									'USER'      :   'root',
-									'PASSWORD'  :   'guwenjiang',
-									'HOST'      :   ALI1_IP,
-									'PORT'      :   '3306',
+									'PASSWORD'  :   'gwj527910351',
+									'HOST'      :   'gz-cdb-ff2fjjs1.sql.tencentcdb.com',
+									'PORT'      :   '62332',
 									},
 				   },
 }
@@ -86,7 +86,7 @@ ALI_SMS = {
 		'template_code': 'SMS_136856176',
 		'sign_name': '藏宝阁助手',
         'content': '订单:${memo}，有新的${push}通知，点击http://47.104.193.247/d/${oid}查看。',
-	}
+	},
 }
 
 qiniu = {

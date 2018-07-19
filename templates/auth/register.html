@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <!-- <label class="sr-only" for="form-password">Password</label> -->
                                     <input type="text" v-model="captcha" @focus.stop="input_focus($event)"  placeholder="注册码" maxlength="4" :class="{'input-error': captcha_error}" class=" form-control" >
-                                    <captcha-item :type="'register'" :checkcode="checkcode" :username="username" :that="this" :token="'{{token}}'"></captcha-item>
+                                    <captcha-item :type="'register'" :checkcode="checkcode" :username="username" :that="this" :token="'{{  time.time() | sms_token }}'"></captcha-item>
                                     
                                 </div>
                        
@@ -79,6 +79,6 @@
     </div>
 
 {% endblock %}
-        
+
 
 

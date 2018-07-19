@@ -76,7 +76,7 @@
 						<div>((obj.pay_time.split(' ')[0]))</div>
 						<div>((obj.pay_time.split(' ')[1]))</div>
 					</li>
-					<li>((obj.quantity))</li>
+					<li>((obj.quantity + (obj.alias ? "({0})".format(obj.alias) : "") ))</li>
 					<li>((obj.give))</li>
 				</ul>
 			</scroll-item>
@@ -97,7 +97,7 @@
 					<div>((obj.create_time.split(' ')[0]))</div>
 					<div>((obj.create_time.split(' ')[1]))</div>
 				</li>
-				<li>((obj.quantity))</li>
+				<li>(( (obj.quantity / 100).toFixed(2) ))</li>
 				<li style="word-break: break-all;word-wrap: break-word;line-height: 12px;">
 					((obj.brief))
 				</li>

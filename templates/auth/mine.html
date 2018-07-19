@@ -45,16 +45,19 @@
 			</div> 
 
 			<div class="mine-header-right-options"> 
-				<a href="/message" style="color:black">
+				<a href="/user/settings" style="color:white">
 					<Icon type="android-settings" style="margin-right: 10px;"></Icon>
 				</a>
-				<Badge dot>
-					<a href="/slkjls" style="color:blackx">
-					<Icon type="chatbubble-working"></Icon>
-						
+				<Badge {% if request.user.id | get_wait_message('all') > 0%} dot {% endif %}>
+					<a href="/user/message_page" style="color:white">
+						<Icon type="chatbubble-working"></Icon>
 					</a>
 				</Badge>
 			</div>
+			<span class="sign-box" @click="sign">
+				((has_signed ? '已签到' : '签到'))
+				<img src="/static/public_img/submit_loading.gif" v-show="signing">
+			</span>
 		</div>
 	</div>
 </div>
@@ -65,8 +68,10 @@
 ('全部订单', '/order/main?status=全部订单', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAGFBMVEUAAADqPD7xRETqPD7qPT/qOz/yQEDpOz2tEuliAAAAB3RSTlMA4wuDekkUL49mBwAAAElJREFUKM9jIAWwipcjgcIAsCBjOQoQAAuyowoWDGLBYqjnmNyRBMtgXlbHqnLQOJ40b6ogBBHeZMKqcnA5nsqCmIkWe/ImAQAA21zn+V6DoroAAAAASUVORK5CYII=')]) }}  
 
 {{_macro.line_b64_tabs([
-	('<span style="font-size: 14px;font-weight: bold;">0</span> 张', '', '优惠券'),
-	('<span style="font-size: 14px;font-weight: bold;">' + '%.2f' % (profile.currency/100) + '</span> 个', '/order/currency_log_page' , '盒币'),
+	('<span style="font-size: 14px;font-weight: bold;">%s</span> 张' % valid_coupons, '/coupon/my_coupon', '优惠券' ),
+	('<span style="font-size: 14px;font-weight: bold;">(( currency.toFixed(2) ))</span> 个', '/order/currency_log_page' , '盒币'),
+	('<span style="font-size: 14px;font-weight: bold;">%s</span> 张' % valid_coupons, '/coupon/my_coupon', '优惠券' ),
+	('<span style="font-size: 14px;font-weight: bold;">((lottery_times))</span> 次', '/activity/index' , '抽奖'),
 	
 ])}}
 {% endblock %}
@@ -76,7 +81,44 @@
 {{ super() }}
 <script type="text/javascript">
 	var v = new Vue({
+		delimiters : ["((", "))"],
 		el: '#body',
+		data: {
+			has_signed: {{'true' if has_signed else 'false'}},
+			signing: false,
+			lottery_times: {{ request.user | get_lottery_times }},
+			currency: {{ profile.currency/100 }},
+		},
+		methods: {
+			sign: function(){
+				if(this.has_signed || this.signing) 
+					return false;
+				var that =this;
+				normal_ajax('/user/sign', 'GET', null,
+					function(){
+						that.signing = true;
+					},
+					function(ret){
+						if(ret.retcode === 'SUCC'){
+							that.lottery_times += ret.prize_logger_times;
+							that.currency += ret.prize_currency/100;
+							that.has_signed = true;
+							that.$Modal.success({
+								title: '签到成功',
+								content: '恭喜您累计签到{0}天，获得了{1}元盒币和今日{2}次抽奖机会。'.format(ret.continue_days, ret.prize_currency, ret.prize_logger_times),
+								closable: true,
+							})
+						}else{
+							that.$Message.warning(ret.description);
+						}
+					},
+					null,
+					function(){
+						that.signing = false;
+					}
+				)
+			},
+		}
 	})
 </script>
 {% endblock %}

@@ -1,0 +1,97 @@
+{% set title = '密码修改' %}
+{% extends 'base_toper.html' %}
+{% block cssstyle %}
+<style type="text/css">
+	.d{
+		height: 40px;
+		line-height: 40px;
+		padding: 0 12px;
+		position: relative;
+	}
+	.do{
+		background-color: #00b9ff;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		width: 90%;
+		color: #fff;
+		letter-spacing: 2px;
+		border-radius: 4px;
+		cursor: pointer;
+		margin: 20px auto;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="d fff-bg border-full">
+	<span>手机号：</span>
+	{{request.user.username | hide_phone_number}}
+</div>
+<div class="d fff-bg border-full" @click="$refs.pwd_input.focus()">
+	<span>新密码：</span>
+	<input type="password" placeholder="6-16位密码" v-model="new_pwd" maxlength="16" style="border: none;outline: none;height:99%;" ref="pwd_input">
+</div>
+<div class="d fff-bg border-full" @click="$refs.captch_input.focus()">
+	<span>验证码：</span>
+	<input type="text" placeholder="手机验证码" v-model="captcha" maxlength="4" style="border: none;outline: none;height:99%" ref="captch_input">
+	<captcha-item :type="'modify_pwd'" :token="'{{ time.time() | sms_token }}'"></captcha-item>
+</div>
+
+<div class="do" @click.stop="change_pwd">((submiting? '修改中。。。' :'确定'))</div>
+
+<page-notic-item :title="'收不到验证码？'">
+	<p>1. 请核实您输入的手机号是否正确、是否欠费或者信号是否良好。</p>
+	<p>2. 请检查您的手机拦截软件是否将该短信自动拦截（安全卫士、手机管家等）。</p>
+	<p>3. 如果以上还未能解决您的问题，建议您在不同设备上试试看哦。</p>
+</page-notic-item>
+
+{% endblock %}
+
+{% block javascript %}
+{{super()}}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			submiting: false,
+			new_pwd: "",
+			captcha: "",
+		},
+		methods: {
+			change_pwd: function(){
+				if(this.new_pwd.length < 6 || this.new_pwd.length > 16){
+					this.$Message.warning('密码长度需要在6-16位之间！')
+				}else if(this.captcha.length !=4 || /^\d{4}$/.test(this.length)){
+					this.$Message.warning('验证码格式错误！')
+				}else{
+					var that = this;
+					normal_ajax('/user/modify_pwd_api', 'POST', {'new_pwd': this.new_pwd, 'captcha': this.captcha}, function(){
+						that.submiting = true;
+					},function(response){
+						if(response.retcode === 'SUCC'){
+							that.$Modal.success({
+			                    title: '密码修改成功',
+			                    content: '您的账号已被注销，请重新登陆',
+			                    onOk: function(){
+			                    	location.href = '/user/login'
+			                    },
+			                });
+						}else{
+							that.$Message.warning(response.description);
+						}
+					},function(){
+					},function(){
+						that.submiting = false;
+					})
+				}
+			},
+			test: function(){
+				
+			}
+		}
+	})
+</script>
+{% endblock %}

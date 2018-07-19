@@ -1,37 +1,34 @@
 {% macro order_item(order) %}
+{% set push_type, service_time, first_push, price_push, memo = order.resolve_service_info() %}
 <div class="order-box">
 	<img src="http://f.namibox.com/milesson/thumb/thumb_406515_20161219180846964.jpg">
 	<div class="order-detail-box">
 		<div>奇幻拼音</div>
-		<div style="color: #999">{{order.service_time}}天(有效期)</div>
+		<div style="color: #999">{{service_time}}天(有效期)</div>
 		<div class="service">在线服务</div>
-		<div style="font-size: 14px">￥{{ order.real_price | round_2 }}<span style="font-size: 12px"></span></div>
+		<div style="font-size: 14px">￥{{ order.price | round_2 }}<span style="font-size: 12px"></span></div>
 	</div>
 </div>
 <ul class="order-service-box fff-bg">
 	<li>
 		<span>已有数据通知</span>
-		<span>{{ '是' if order.first_round_push else '否'}}</span>
+		<span>{{ '是' if first_push else '否'}}</span>
 	</li>
 	<li>
 		<span>降价提醒</span>
-		<span>{{ '是' if order.price_down_push else '否'}}</span>
+		<span>{{ '是' if price_push else '否'}}</span>
 	</li>
 	<li>
 		<span>提醒方式</span>
-		<span>{{order.push_type or '无'}}</span>
+		<span>{{push_type or '无'}}</span>
 	</li>
 	<li>
-		<span>积分抵扣</span>
-		<span>￥0.00</span>
+		<span>积分抵扣</span> 
+		<span>￥0.00 </span> 
 	</li>
-	<li>
+	<li style="position: relative;">
 		<span>优惠券抵扣</span>
-		<span>￥0.00</span>
-	</li>
-	<li>
-		<span>实付款</span>
-		<span style="color: #feaf5f;font-size: 14px;">￥{{order.real_price | round_2}}</span>
+		<span>召唤兽10元优惠券: ￥0.00 <Icon type="chevron-right" style="position: absolute;right: -17px;top:3px"></Icon></span>
 	</li>
 </ul>
 {% endmacro %}
@@ -67,12 +64,13 @@
 		margin-bottom: 5px;
 	}
 	.order-service-box{
-		padding: 12px;
+		padding: 12px 30px 12px 12px;
 	}
 	.order-service-box li{
 		height: 18px;
 		line-height: 18px;
 		width: 100%;
+		<!-- border-bottom: 1px solid #eee; -->
 	}
 	.order-service-box li span:nth-child(1){
 		float: left;

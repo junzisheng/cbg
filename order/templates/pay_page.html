@@ -1,0 +1,214 @@
+{% set title = '订单页面'%}
+{% extends 'base_toper.html' %}
+{% import 'components/order/order_macro.html' as macro %}
+{% block head %}
+{% endblock %}
+
+
+
+{% block cssstyle %}
+<style type="text/css">
+	{{ macro.order_item_css() }}
+	{{ macro.pay_channel_css() }}
+	.pay-bottom{
+		height: 50px;
+		background-color: #fff;
+		position: fixed;
+		z-index: 10;
+		width: 100%;
+		bottom: 0;
+		background-color: #fff
+	}
+	.pay-bottom .submit{
+		height: 100%;
+		width: 100px;
+		color: #fff;
+		line-height: 50px;
+		text-align: center;
+		float:right;
+		margin-left: 10px;
+		cursor: pointer;
+	}
+	.pay-bottom .price-detail{
+		float:right;
+	}
+	.pay-bottom .price-detail div{
+		height: 50%;
+		line-height: 25px;
+		font-size: 1.1em;
+	}
+	.pay-bottom .price-detail div span{
+		color:#fe555c;
+	}
+	.pay-bottom .price-detail div span span{
+		font-size: 12px;
+	}
+	/*支付弹框*/
+	.pay-type-select-box{
+		height: 350px;
+		width: 100%;
+		position: fixed;
+		z-index: 20;
+		bottom: -350px;
+		background-color: #fff
+	}
+	.pay-type-select-box{
+		transition: all 0.5s;
+	}
+	.pay-select-active{
+		bottom: 0;
+	}
+	.pay-type-select-box .pay-top{
+		padding: 12px 10px;
+		color: #999;
+		position: relative;
+	}
+	.go-pay{
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 50px;
+		color: #fff;
+		line-height: 50px;
+		text-align: center;
+		font-size: 14px;
+		letter-spacing: 4px;
+		cursor: pointer;
+	}
+
+	.mask{
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 15;
+		opacity: 0.4;
+		background-color: #666666;
+	}
+	.pay-select-close{
+	    font-size: 40px;
+	    display: inline;
+	    position: absolute;
+	    right: 12px;
+	    top: 2px;
+	    cursor: pointer;
+	}
+
+</style>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+{# macro.order_item(order) #}
+<order-ul-item :order_='order' :server_options_='{{ order.resolve_service_info() | json_dumps | safe}}' 
+{% if order.status == '初始状态' %}
+:coupon_list_='{{ coupon_list }}' :operate="true"
+{% else %}
+:operate="false" :reduction_log='{{awalid_reduction | queryset_to_js | json_dumps | safe }}'
+{%endif%}
+ ref="order"></order-ul-item>
+
+
+<page-notic-item :title="'友情提醒'">
+	<p>1. 由于第三方支付的规则，实际支付可能和价格有0.01-0.02的价格波动。</p>
+	<p>2. 该商品不支持退货！</p>
+	{#<p>3. 该商品提供{{order.free_push_times}}次/天的短信提醒额度，超过额度将以0.01元/次从余额中扣除，不足将无法接收到短信提醒！</p>#}
+	<p>3. 该商品只支持3次订单修改，包括(搜索条件，推送方式...,服务时间不支持修改)！</p>
+</page-notic-item>
+
+
+<div class="pay-bottom">
+	<div class='submit background-active' @click.stop="pay_select_active = true;">
+		支付
+	</div>
+	<div class="price-detail">
+		<div>合计：<span>￥((real_price ))</span></div>
+		<div>优惠：<span>￥(( (reduction/100).toFixed(2) ))</span></div>
+	</div>
+	
+</div>
+
+<div class="pay-type-select-box" :class="{'pay-select-active': pay_select_active}">
+	<div class="pay-top">
+		支付金额: (( real_price )) 元
+		<Icon type="ios-close-empty" class="pay-select-close" @click.native="pay_select_active = false"></Icon>
+	</div>
+	<pay-channel :real_price="real_price" ref="pay_template" :support_type="['ali', 'wx', 'mhb']" :currency="currency"></pay-channel>
+
+	<div class="fixed-bottom-btn background-active" style="position: absolute!important;" @click="pay">立即支付</div>
+</div>
+<div style="height: 50px;visibility: hidden;"></div>
+
+<div class="mask" v-show="pay_select_active">
+	
+</div>
+
+<submit-loading-item :show="ajaxing" :text="ajaxing_txt"></submit-loading-item>
+
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		mounted: function(){
+			this.$watch('$refs.order.coupon.reduction', function(n){this.reduction = n});
+			this.reduction = this.$refs.order.coupon.reduction;
+			{% if disable_reduction %}
+			var content = "";
+			{% for disable_log in disable_reduction %}
+				{% if disable_log.style == 1 %}
+					content += "您选择的【{{disable_log.coupon_rel.coupon.coupon_name}}】已经过期！" ;
+				{% endif %}
+			{% endfor %}
+			this.$Modal.warning({
+				title: '优惠失效',
+				content: content,
+			})
+			{% endif %}
+		},
+		data: {
+			ajaxing: false,
+			ajaxing_txt: "",
+			order: {{ order | obj_2_json_str | safe }},
+			reduction: 0,
+			currency: {{ currency }},
+			pay_select_active: false,
+			price: {{ order.price }},
+		},
+		methods: {
+			pay: function(){
+				this.$nextTick(function(){
+					// 1. 获取选择的优惠券
+					var my_coupon = "";
+					{% if order.status == '初始状态'%}
+					var my_coupon = this.$refs.order.coupon.id;
+					{% endif %}
+					this.$refs.pay_template.submit({'coupon_id': my_coupon, 'order_id': this.order.id});
+
+				})
+			},
+			// 获取优惠券的信息
+		},
+		computed: {
+			real_price: function(){
+				var _real_price = this.price - this.reduction;
+				return _real_price > 0 ? (_real_price/100).toFixed(2) : 0.01;
+			},
+		},
+		watch: {
+		}
+
+	})
+	
+</script>
+{% endblock %}

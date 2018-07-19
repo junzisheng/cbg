@@ -1,0 +1,153 @@
+{% set title = '领券中心' %}
+{% extends 'base_toper.html' %}
+{% block cssstyle %}
+<style type="text/css">
+	.coupon-box{
+	    position: relative;
+	    margin: 15px 10px;
+	    border-radius: 6px;
+	    border-top: 6px solid currentColor;
+	    border-bottom: 10px solid #fff!important;
+	}
+	.type-1{
+		color: #53c7ca;
+		border-color:#53c7ca;;
+	}
+	.type-2{
+		color: rgb(70,135,212);
+		border-color: rgb(70 135 212);
+	}
+	.type-3{
+		color: #999;
+		border-color: #999,
+	}
+	.coupon-inner-box{
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: flex;
+	    color: currentColor!important;
+	    padding: 10px 10px 0;
+	    min-height: 96px;
+	    box-sizing: border-box;
+	    background-color: #fff;
+	}
+	.coupon-left-view{
+	    width: 27%;
+	    text-align: center;
+	    position: relative;
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: flex;
+	    -webkit-box-orient: vertical;
+	    -webkit-box-direction: normal;
+	    -webkit-flex-direction: column;
+	    flex-direction: column;
+	    -webkit-box-pack: center;
+	    -webkit-justify-content: center;
+	    justify-content: center;
+	    margin-right: 10px;
+	}
+	.coupon-left-view-price{
+		margin-top: -20px;
+		height: 44px;
+	}
+	.coupon-left-view-rule{
+		font-size: 14px;
+		padding-top:20px;
+	}
+	.coupon-left-view-price strong{
+		font-family: font_steelfish;
+	    font-weight: 700;
+	    font-size: 45px;
+	    position: relative;
+	    top: 1px;
+	}
+	.coupon-left-view-price small{
+		font-size: 20px;
+    	margin-left: 2px;
+	}
+	.coupon-righ-view{
+	    -webkit-box-flex: 1;
+		-webkit-flex: 1;
+		flex: 1;
+	 	min-width: 0;
+		position: relative;
+		padding-bottom: 15px;
+	}
+	.coupon-righ-view-limit{
+		font-size: 12px;
+	    color: #666;
+	    height: 3em;
+	    line-height: 1.5em;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-line-clamp: 2;
+	    -webkit-box-orient: vertical;
+	    margin-bottom: 10px;
+	}
+	.coupon-right-view-date{
+		line-height: 1;
+	    font-size: 10px;
+	    color: #999;
+	    margin-top:25px;
+
+	}
+	.coupon-user-now{
+		width: 70px;
+		height: 24px;
+		border-radius: 12px;
+		border: 1px solid;
+		text-align: center;
+		line-height: 24px;
+		position: absolute;
+		top:50px;
+		right: 0
+	}
+	.absolute_center{
+		position: absolute;
+		left:50%;
+		top:50%;
+		transform: translate(-50%,-50%);
+	}
+	.ivu-chart-circle-inner{
+		position: absolute;
+		left:50%;
+		top:50%;
+		transform: translate(-50%,-50%);	
+		height: 20px
+	}
+	.ivu-chart-circle{
+		height: auto!important;
+	}
+	
+</style>
+{% endblock %}
+{% block toper_options %}
+
+{% endblock %}
+
+{% block content %}
+
+
+<coupon-item :type="info.style" :info="info" :percent_show="true" :cp_list="my_cp_list" v-for="info in coupon_list"></coupon-item>
+
+
+
+{% endblock %}
+
+
+{% block javascript%}
+{{super()}}
+<script type="text/javascript">
+
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			my_cp_list: {{my_cp_list}},
+			coupon_list: [{% for coupon in coupon_list %}{{ coupon | obj_2_json_str  | safe}},{% endfor%}]
+		},
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base_frame.html' %}
+{% block title %}
+服务列表
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+{% endblock %}
+
+{% block cssstyle %}
+<style type="text/css">
+	.service-list li{
+		position: relative;
+		margin-top: 5px;
+	}
+	.service-list img{
+		width: 34px;
+		height: 34px;
+		border-radius: 17px;
+		position: absolute;
+		top: 50%;
+		left: 15px;
+		transform: translate(0, -50%);	
+	}
+	.swiper-container{
+		width: 100%;
+	}
+	.swiper-container a,.swiper-container img{
+		display: inline-block;
+		width: 100%;
+	}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<!-- banner页面 轮播展示优惠详情 -->
+
+<swiper-item :banner_list="{{ banner_list }}" :swiper_key="'no1'"></swiper-item>
+
+<ul class="service-list">
+	<div  v-for="service in service_obj">
+		<a :href="'/service/service_page/' + service.id">
+			<li>
+				<img :src="service.show_img">
+				<i-button type="default" long style="height: 40px;">((service.name))</i-button>
+			</li>
+		</a>
+	</div>
+</ul>
+
+<div>
+	<div ref="form_innerwrap">
+		<slot>
+		</slot>
+	</div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+	})
+	
+
+
+</script>
+{% endblock %}

@@ -1,5 +1,7 @@
 import sys
+import os
 import types
+
 from share.setting_share import setting_name
 from importlib import import_module
 
@@ -17,3 +19,8 @@ def import_setting_by_name(settings_module_import):
             continue
         elif not isinstance(v, types.ModuleType):
             setattr(settings_module_import, k, v)
+
+
+def path_insert(base_dir):
+    """添加一些包的路径"""
+    sys.path.insert(0, os.path.join(base_dir, 'libraries'))

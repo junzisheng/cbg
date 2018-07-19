@@ -146,6 +146,9 @@ body .btn-active{
 .clearfix:after,.clearfix:before{ content: "";display: table;}
 .clearfix:after{ clear:both;}
 .clearfix{zoom:1;}
+.disable{background-color: #e6c8c8!important;
+    cursor: not-allowed!important;
+}
 /*自定义tab组件样式*/
 .tabs-container{
     width:100%;
@@ -154,6 +157,7 @@ body .btn-active{
     line-height: 44px;
     text-align: center;
     background-color: #fff;
+    margin-bottom: 2px;
 }
 .tabs-container li{
     cursor: pointer;
@@ -347,4 +351,16 @@ body .btn-active{
 .simple-list-box li.choose-enclickable{
     opacity: 0.4;
     cursor: no-drop;
+}
+
+
+.line_through{
+    text-decoration: line-through;
+}
+
+
+/*iview补丁*/
+.ivu-notice{
+    width: auto!important;
+    min-width: 180px!important;
 }

@@ -1,0 +1,52 @@
+{% set title = '支付成功'%}
+{% extends 'base_toper.html' %}
+{% import 'components/order/order_macro.html' as macro %}
+{% block head %}
+{% endblock %}
+
+
+{% block cssstyle %}
+<style type="text/css">
+.succ-box{
+	height: 138px;
+	background-color: #fff;
+	margin-bottom: 8px;
+	position: relative;
+}
+.absolute_center{
+	text-align: center;
+}
+
+{{ macro.order_item_css() }}
+
+
+	
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="succ-box">
+	<div class="absolute_center">
+		<div><Icon type="checkmark-circled" style="font-size: 55px;color: #00b9ff"></Icon></div>
+		<div style="font-size: 14px;margin-top: 5px;">
+			订单支付完成！
+		</div>
+	</div>
+</div>
+<order-ul-item :order_='{{ order | obj_2_json_str }}' :server_options_='{{ order.resolve_service_info() | json_dumps | safe}}' :operate="false" ref="order" :reduction_log="{{ reduction_log_list | json_dumps}}"></order-ul-item>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+	})
+</script>
+{% endblock %}
+

@@ -297,7 +297,13 @@ Vue.filter('gtlt', function(key){
 // }
 var base_mixin =  {
     data: function(){
+        var service_obj = {};
+        for(var i=0;i<service_list.length;i++){
+            var _obj = service_list[i];
+            service_obj[_obj.id] = _obj;
+        }
         return {
+                service_obj: service_obj,
                 menu_choice_list: [{text: '首页'}, {text:'我的'}, {text:'服务'}, {text:'提交问题'}],
                 csrf_token: csrf_token,
                 render_loading: true,  // 页面渲染完成前的loading图片
@@ -411,10 +417,12 @@ var base_mixin =  {
                     break
                 case '服务':
                     location.href = '/service/index';
+		    break
                 case '提交问题':
                     location.href = '/others/bug_submit_page';
             }
-        }
+        },
+        location_back: function(){history.back()},
     }
 }
 
@@ -493,6 +501,9 @@ var Scroll = {
                  <div class='slot-container'>\
                      <slot></slot>\
                  </div>\
+                <div v-if='refresh_obj.is_last && !refresh_obj.refreshing && refresh_obj.query_list.length == 0' class='no-data-notic'>\
+                    暂无数据\
+                </div>\
                  <div class='no-data-notic' v-if='refresh_obj.is_last && refresh_obj.query_list.length != 0'>\
                     ㄟ( ▔, ▔ )ㄏ&nbsp;&nbsp;&nbsp;再怎么找也没有啦\
                 </div>\
@@ -602,22 +613,22 @@ var pay_channel = {
     template: '<div class="pay-tab-conmonent">\
                     <ul>\
                         <form-item style="display:none" id="pay_form" method="post" :action="\'/order/currency_pay_page\'" ref="form2">\
-                            <input name="order_id" type="text" :value="((_goods_obj.orderid))">\
+                            <input name="order_id" type="text" :value="((token.orderid))">\
                             <input type="hidden" name="csrfmiddlewaretoken" :value="((csrf_token))">\
                         </form-item>\
                         <form-item style="display:none" id="pay_form" method="post" :action="\'https://pay.bbbapi.com/\'" ref="form">\
-                            <input name="goodsname" type="text" :value="((_goods_obj.goodsname))">\
-                            <input name="uid" type="text" :value="((_goods_obj.uid))">\
-                            <input name="price" type="text" :value="((_goods_obj.price))">\
-                            <input name="istype" type="text" :value="((active_obj.type))">\
-                            <input name="notify_url" type="text" :value="((_goods_obj.notify_url)).slice(0, -1) + ((active_obj.type))">\
-                            <input name="return_url" type="text" :value="((_goods_obj.return_url))">\
-                            <input name="orderid" type="text" :value="((_goods_obj.orderid))">\
-                            <input name="orderuid" type="text" :value="((_goods_obj.orderuid))">\
-                            <input name="key" type="text" :value="(( that.signature_obj[active_obj.type] ))">\
+                            <input name="goodsname" type="text" :value="((token.goodsname))">\
+                            <input name="uid" type="text" :value="((token.uid))">\
+                            <input name="price" type="text" :value="((token.price))">\
+                            <input name="istype" type="text" :value="((token.istype))">\
+                            <input name="notify_url" type="text" :value="((token.notify_url))">\
+                            <input name="return_url" type="text" :value="((token.return_url))">\
+                            <input name="orderid" type="text" :value="((token.orderid))">\
+                            <input name="orderuid" type="text" :value="((token.orderuid))">\
+                            <input name="key" type="text" :value="(( token.key ))">\
                             <input type="submit" >\
                         </form-item>\
-                        <li v-for="(obj, k) in pay_object" @click.stop="pay_type_select(obj.type)" :style="{\'opacity\': currency < _goods_obj.price && obj.type == 3 ? 0.4 : 1}">\
+                        <li v-for="(obj, k) in pay_object" @click.stop="pay_type_select(obj.type)" :style="{\'opacity\': currency < real_price && obj.type == 3 ? 0.4 : 1}">\
                             <span>\
                                 <Icon type="ios-circle-outline" style="font-size: 20px;" v-show="!obj.active" @click.native="pay_type_select(obj.type)"></Icon>\
                                 <Icon type="ios-checkmark" style="font-size: 20px;color: #ff5b5b" v-show="obj.active"> </Icon>\
@@ -626,13 +637,14 @@ var pay_channel = {
                                 <img :src="obj.src">\
                             </div>\
                             <div class="pay-introduce">\
-                                <div>{{obj.title}}{{ currency < _goods_obj.price  && obj.type == 3 ? \'(余额不够本次支付 剩余\'+currency+\'元 )\' : \'\'}}</div>\
+                                <div>{{obj.title}}{{ currency < real_price  && obj.type == 3 ? \'(余额不够本次支付 剩余\'+currency+\'元 )\' : \'\'}}</div>\
                                 <div>{{obj.introduce}}</div>\
                             </div>\
                         </li>\
+                        <submit-loading-item :show="ajaxing" :text="\'正在提交订单\'"></submit-loading-item>\
                     </ul>\
                 </div>',
-    props: ['that', '_goods_obj', '_signature_obj', 'support_type', 'currency'],
+    props: ['support_type', 'currency', 'real_price'],
     data: function(){
         var all_pay_object= {
                         'ali': {
@@ -658,14 +670,14 @@ var pay_channel = {
                         }
                     }
         var pay_object = {};
-        var skip_mhb = this.currency < this._goods_obj.price
         for(var i=0; i < this.support_type.length;i++){
             var type = this.support_type[i];
             pay_object[type] = all_pay_object[type]
         }
         return {
             pay_object: pay_object,
-            skip_mhb: skip_mhb,
+            ajaxing: false,
+            token: {},
 
     }},
     methods: {
@@ -675,9 +687,31 @@ var pay_channel = {
                 this.pay_object[key].active = this.pay_object[key].type == type;
             }
         },
-        submit: function(){
-            if(this.active_obj.type == 3) this.$refs.form2.submit()
-            else this.$refs.form.submit();
+        submit: function(params){
+            if(this.active_obj.type == 3){
+                window.location.href = '/order/currency_pay_page/{0}?coupon_id={1}'.format(params.order_id, params.coupon_id)
+                return false;
+            }
+            this.$nextTick(function(){
+                var pay_type = this.active_obj.type;
+                var that = this;
+                normal_ajax('/order/get_pay_token_api/{0}/{1}/'.format(params.order_id, pay_type), 'GET', {'coupon_id': params.coupon_id},
+                    function(){that.ajaxing=true},
+                    function(ret){
+                        if(ret.retcode === 'SUCC'){
+                            that.token = ret.token;
+                            that.$nextTick(function(){
+                                this.$refs.form.submit();
+                            })
+                        }else{
+                            that.$Message.warning(ret.description);
+                        }
+                    },
+                    null,
+                    function(){that.ajaxing=false}
+                )
+            })
+            // else 
         }
 
     },
@@ -691,6 +725,9 @@ var pay_channel = {
                 }
             }
         },
+        skip_mhb: function(){
+            return this.currency < this.real_price;
+        }
     }
 }
 
@@ -729,6 +766,9 @@ var captcha = {
                 },
                 function(data){
                     if(data.retcode === 'SUCC'){
+                        if(superuser){
+                            that.$root.captcha = data.captcha;
+                        }
                         that.send_captcha_active();
                     }else if(data.msg == 'ErrorCheckCode'){
                         that.$root.checkcode_img()
@@ -739,10 +779,10 @@ var captcha = {
                         setTimeout(function(){location.reload(true)}, 500)
                     }else if(data.msg == 'HasSend'){
                         that.$Message.warning('请勿重复发送！');
-                        if(that.$root.checkcode_img != undefined && typeof that.$root.checkcode_img == 'function'){
+                        if(that.$root.checkcode_img != undefined){
                             that.$root.checkcode_img()
-                            that.send_captcha_active();
                         }
+                        that.send_captcha_active();
                         that.captcha_active = true;
                     }else if(data.msg == 'IpSmsMaxed'){
                         that.$Message.warning('已检测到该ip发送短信受限，24小时内无法发送短信！');
@@ -791,13 +831,14 @@ var page_notic = {
 }
 
 var order_options = {
-    template: ' \
-        <div style="background-color: #fff;border-top: 1px solid #e5e5e5;padding: 10px 0;text-align: right;">\
-            <span class="cbg-button" v-if="[\'待付款\', \'已完成\'].indexOf(order.status) != -1" @click.stop.prevent="del_order">删除</span>\
-            <a :href="\'/order/pay_page/\' + order.id" v-if="[\'待付款\'].indexOf(order.status) != -1"><span class="cbg-button">支付</span></a>\
-            <a :href="\'/service/service_page/召唤兽?params=\' + order.upload_params" v-if="[\'待付款\', \'进行中\'].indexOf(order.status) != -1"><span class="cbg-button">修改参数</span></a>\
-            <a :href="\'/order/crawl_data_page/\' + order.id"  v-if="[\'已完成\', \'进行中\'].indexOf(order.status) != -1"><span class="cbg-button">查看通知</span></a>\
-        </div>',
+    template: 
+        '<div style="background-color: #fff;border-top: 1px solid #e5e5e5;padding: 10px 0;text-align: right;">'+
+            '<span class="cbg-button" v-if="[\'待付款\', \'已完成\'].indexOf(order.status) != -1" @click.stop.prevent="del_order">删除</span>'+
+            '<a :href="\'/order/pay_page/\' + order.id" v-if="[\'待付款\'].indexOf(order.status) != -1"><span class="cbg-button">支付</span></a>'+
+            '<a  :href=" order.modify_times <=0 ? \'javascript:void(0);\' : \'/service/service_modify/\' + order.id" v-if="[\'待付款\', \'进行中\'].indexOf(order.status) != -1"><span class="cbg-button" :class="{disable: order.modify_times <=0}">修改参数({{order.modify_times}})</span></a>'+
+
+            '<a :href="\'/order/crawl_data_page/\' + order.id"  v-if="[\'已完成\', \'进行中\'].indexOf(order.status) != -1"><span class="cbg-button">查看通知</span></a>'+
+        '</div>',
     props: ['order',  'order_id_str', 'call_back'],
     methods: {
         del_order: function(){
@@ -880,11 +921,11 @@ var fullscreen = {
         template: '<div class="fullscreen-box" @click.stop="handleClick" v-show="show">\
                        <slot name="fullscreen_item"></slot>\
                    </div>',
-        props: ['_click_hide'],
+        props: ['_click_hide', 'init_show'],
         data: function(){
             return {
-                click_hide: this.click_hide === undefined ? true : !!click_hide,
-                show: false,
+                click_hide: this._click_hide === undefined ? true : !!this._click_hide,
+                show: !!this.init_show,
             }
         },
         methods: {
@@ -898,12 +939,54 @@ var fullscreen = {
         },
 
     };
+
+var submit_loading = {
+    template: '<full-screen :_click_hide="false" ref="fullscreen">\
+        <div slot="fullscreen_item">\
+            <div style="position: absolute;top: 30%;left:50%;transform: translate(-50%, -50%);width: 100%;">\
+                <img src="/static/public_img/submit_loading.gif" style="width: 20%;position: relative;left: 50%;transform: translate(-50%);">\
+                <div style="text-align: center;font-size: 18px;color:rgb(111,81,68);margin-top:10px;">((text_))((suffix_text_))</div>\
+            </div>\
+        </div>\
+    </full-screen>',
+    props: ['show', 'text', 'suffix'],
+    delimiters : ["((", "))"],
+    data: function(){
+        return {
+            set_interval : null,
+            text_ : this.text ? this.text : '正在提交',
+            suffix_: this.suffix == undefined ? true : !!this.suffix,
+            suffix_text_: "",
+        }
+    },
+    methods: {
+    },
+    watch: {
+        'show': function(nv){
+            this.$refs.fullscreen.show = nv;
+            var that =this;
+            if(this.suffix_ && nv){
+                this.set_interval = setInterval(function(){
+                    if(that.suffix_text_.length<3){
+                        that.suffix_text_ += '。';
+                    }else{
+                        that.suffix_text_ = '';
+                    }
+                }, 500)
+            }
+            if(this.suffix_ && !nv){
+                clearInterval(this.set_interval);
+            }
+        }
+        
+    }
+}
     
 var simple_choice = {
     template: '\
         <full-screen ref="fullscreen">\
             <ul class="simple-list-box" slot="fullscreen_item" style="position: absolute;" :style="top===true?simple_top:simple_bottom" ref="simple">\
-                <li class="title">((title))</li>\
+                <li class="title" v-if="!!title">((title))</li>\
                 <li class="border-full" v-for="choose in choice_list" :class="{\'choose-enclickable\': choose.disable === false}" @click.stop="choice(choose)">((choose.text))\
                 </li>\
             </ul>\
@@ -913,6 +996,7 @@ var simple_choice = {
     props: ['title', 'choice_list', 'callback', 'top'],
     data: function(){
         return {
+            is_simple_choice: true,
             simple_top: {top: 0},
             simple_bottom: {bottom: 0},
             simple_animation_init: {
@@ -922,10 +1006,21 @@ var simple_choice = {
     },
     methods:{
         show: function(){
-            var that = this;
-            this.$refs.fullscreen.show = true;
+            // 当要展示的时候需要关闭所有的simple-choice组件
+            if(!this.$refs.fullscreen.show){
+                 refs = this.$root.$refs;
+                var refs_keys = Object.keys(refs);
+                for(var i=0;i<refs_keys.length;i++){
+                    var key = refs_keys[i];
+                    if(refs[key].is_simple_choice){
+                        refs[key].$refs.fullscreen.show = false;
+
+                    }
+                }
+            }
+       
             this.$nextTick(function(){
-                console.log(this.$refs.fullscreen.$el.offsetTop, this.$refs.simple.offsetHeight);
+                this.$refs.fullscreen.show = !this.$refs.fullscreen.show;
             })
         },
         choice: function(choose){
@@ -948,6 +1043,199 @@ var edit_div = {
         },
     },
 }
+var coupon = {
+    template: '\
+    <div class="coupon-box" :class="\'type-\'+type">\
+        <div class="coupon-inner-box">\
+            <div class="coupon-left-view">\
+                <p class="coupon-left-view-price">\
+                    <span v-if="info_.discount">\
+                        <strong>{{info_.discount/10}}</strong>\
+                        <small>折</small>\
+                    </span>\
+                    <span v-if="info_.reduction">\
+                        <small>￥</small>\
+                        <strong>{{info_.reduction/100}}</strong>\
+                    </span>\
+                </p>\
+                <p class="coupon-left-view-rule">满{{info_.fill/100}}元可用</p>\
+            </div>\
+            <div class="coupon-righ-view">\
+                <p class="coupon-righ-view-limit">\
+                    {{info_.service_range}}可用<span v-if="cp_list && my_cp_list.indexOf(info_.id) == -1">({{info_.total_limit === 0 ? \'不限量\' : (\'限发\'+info_.total_limit+\'个\')}})</span>\
+                </p>\
+                <p class="coupon-right-view-date">\
+                    {{info_.acquire_start_time}} - {{info_.acquire_end_time}}\
+                </p>\
+                <a class="coupon-user-now" v-if="info_.current_use" :href="\'/coupon/use_coupon_redirect/\' + info_.coupon_id">立刻使用</a>\
+                <div style="width: 40%;border-left: 1px dashed #d7c8c8;height: 100%;position: absolute;right: 0;top: 0" v-if="percent_show">\
+                    <i-circle :percent="info_.total_limit!=0 ? (info_.acquire_count/info_.total_limit)*100 : 0 " style="width:60%;top:0px;left: 50%;transform: translate(-50%);max-width: 60px" stroke-color="rgb(250,48,42)">\
+                        <span style="font-size:12px;color:rgb(250,48,42);"  class="absolute_center">\
+                            已抢\
+                            <div style="margin-top:5px;">\
+                            {{info_.acquire_count}}\
+                            </div>\
+                        </span>\
+                    </i-circle>\
+                    <div style="position: absolute;left: 50%;transform: translate(-50%);bottom: 0;width: 85%;\
+                    max-width:77px;text-align: center;height: 20px;background-color: rgb(250,48,42);border-radius:10px;line-height: 20px;color:#fff" v-if="my_cp_list.indexOf(info_.id) === -1" @click.stop="get_coupon">\
+                        <span v-show="!ajaxing">\
+                            <span v-if="info_.acquire_count/info_.total_limit < 1 || info_.total_limit == 0">立刻领取</span>\
+                            <span v-if="info_.acquire_count/info_.total_limit == 1 && info_.total_limit !=0 ">已抢完</span>\
+                        </span>\
+                        <span v-show="ajaxing">\
+                            正在领取\
+                        </span>\
+                    </div>\
+                    <div style="position: absolute;left: 50%;transform: translate(-50%);bottom: 0;width: 85%;\
+                    max-width:77px;text-align: center;height: 20px;background-color: rgb(181,136,135);border-radius:10px;line-height: 20px;color:#fff" v-if="my_cp_list.indexOf(info_.id) != -1">\
+                        已拥有\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+    </div>\
+    ',
+    props: ['info', 'type', 'percent_show', 'cp_list'],   // tupe: 风格 discount:打折 reduction:直减  full: 满多少能够使用 use_range: 使用范围
+    data: function(){
+        return {
+            my_cp_list: this.cp_list || [],
+            info_: this.info,
+            ajaxing: false,
+        }
+    },
+    methods: {
+        get_coupon: function(){
+            if(this.info_.acquire_count/this.info_.total_limit>=1 && this.info_.total_limit != 0) return false;
+            if(this.ajaxing) return false;
+            var that = this;
+            normal_ajax('/coupon/get_coupon_api/'+that.info_.id, 'GET', null, function(){
+                    that.ajaxing = true;
+                },function(ret){
+                    if(ret.retcode==='SUCC'){
+                        that.my_cp_list.push(that.info.id)
+                        that.info_.acquire_count += 1;
+                    }else{
+                        that.$Message.warning(ret.description);
+                    }
+
+                },null,function(){
+                    that.ajaxing = false;
+
+            })
+        },
+
+    },
+}
+var order_ul = {
+    template: '\
+        <div>\
+            <div class="order-box">\
+                <img :src=" service_obj[order.service_id].show_img ">\
+                <div class="order-detail-box">\
+                    <div>(( service_obj[order.service_id].name ))</div>\
+                    <div style="color: #999">((server_options.service_time))天(有效期)</div>\
+                    <div class="service">在线服务</div>\
+                    <div style="font-size: 14px">￥(( (order.price / 100).toFixed(2) ))<span style="font-size: 12px"></span></div>\
+                </div>\
+            </div>\
+            <ul class="order-service-box fff-bg" :style="operate_sytle">\
+                <li>\
+                    <span>已有数据通知</span>\
+                    <span>((server_options.first_round_push ? \'是\' : \'否\'))</span>\
+                </li>\
+                <li>\
+                    <span>降价提醒</span>\
+                    <span>(( server_options.price_down_push ? \'是\' : \'否\'))</span>\
+                </li>\
+                <li>\
+                    <span>提醒方式</span>\
+                    <span>(( server_options.push_type ? server_options.push_type : \'无\' ))</span>\
+                </li>\
+                <!-- <li>\
+                    <span>积分抵扣</span> \
+                    <span>￥0.00 </span> \
+                </li>-->\
+                <li style="position: relative;" @click.stop="show_my_coupon" v-if="operate">\
+                    <span>优惠券抵扣</span>\
+                    <span>((coupon.text)): ￥(( (coupon.reduction / 100).toFixed(2) )) <Icon type="chevron-right" style="position: absolute;right: -17px;top:3px"></Icon></span>\
+                </li>\
+                <div v-if="!operate && reduction_log">\
+                    <li v-for="log in reduction_log">\
+                        <span>(( log.alias ))</span> \
+                        <span> -(( (log.reduction / 100).toFixed(2) )) </span> \
+                    </li>\
+                </div>\
+                <li style="position: relative;"  v-if="!operate">\
+                    <span style="color:#fe555c">实付</span>\
+                    <span>(( (order.real_price/100).toFixed(2) ))</span>\
+                </li>\
+            </ul>\
+            <submit-loading-item :show="ajaxing" :text="ajaxing_txt"></submit-loading-item>\
+            <div v-if="operate && coupon_list.length > 1">\
+                <simple-choice-item :title="\'我的优惠券\'" :choice_list="coupon_list" ref="choice" :callback="choose_coupon"></simple-choice-item >\
+            </div>\
+        </div>\
+        ',
+    props: ['order_', 'server_options_', 'coupon_list_', 'operate', 'reduction_log'],
+    delimiters : ["((", "))"],
+    data: function(){
+        var server_options = {'push_type': this.server_options_[0], 'service_time': this.server_options_[1], 'first_round_push': this.server_options_[2], 'price_down_push': this.server_options_[3], 'memo': this.server_options_[4]};
+        // 组装choiselist
+        var coupon_list = [];
+        var none_coupon = {name: '不使用优惠券', text: '不使用优惠券', style: 1, reduction: 0, id:""};
+        console.log(this.coupon_list_)
+        if(!this.coupon_list_ || this.coupon_list_.length === 0){
+            none_coupon.name = none_coupon.text = '无优惠券可用';
+        }
+        none_coupon.extra = none_coupon;
+
+        coupon_list.push(none_coupon);
+
+        var init_coupon = none_coupon;
+        if(this.coupon_list_ && this.coupon_list_.length >= 1){
+            for(var i=0;i<this.coupon_list_.length;i++){
+                var coupon = this.coupon_list_[i];
+                coupon.extra = coupon
+                if(coupon.style === 2) coupon.reduction = (this.order_.price) * (1-coupon.discount/100);
+                // 1. 判断是否足够条件
+                coupon.text = coupon.coupon_name;
+                if(coupon.fill > this.order_.price){
+                    coupon.text +=  '(满{0}元可用)'.format(coupon.fill/100);
+                    coupon.disable = false;
+                }else{
+                    // 计算折扣力度，设置初始选择的优惠券
+                    if(!init_coupon.reduction || init_coupon.reduction < coupon.reduction){
+                        init_coupon = coupon;
+                    }
+                }
+                coupon_list.push(coupon);
+            }
+        }
+        return {
+            operate_sytle: this.operate ? "" : {'padding-right': '12px'},
+            ajaxing: false,
+            ajaxing_txt: "",
+            order: this.order_,
+            server_options: server_options,
+            // 优惠券部分
+            coupon: init_coupon,
+            coupon_list: coupon_list,
+        }
+    },
+    methods: {
+        show_my_coupon: function(){
+            if(this.coupon_list.length > 1){
+                this.$refs.choice.show()
+            }
+        },
+        choose_coupon: function(text, coupon){
+            this.coupon = coupon;
+        }
+    }
+
+}
+Vue.component('coupon-item', coupon);
 Vue.component('edit-div', edit_div);
 Vue.component('fullScreen', fullscreen);
 Vue.component('simple-choice-item', simple_choice);
@@ -959,3 +1247,5 @@ Vue.component('captcha-item', captcha);
 Vue.component('page-notic-item', page_notic);
 Vue.component('order-options-item', order_options);
 Vue.component('swiper-item', swiper);
+Vue.component('submit-loading-item', submit_loading);
+Vue.component('order-ul-item', order_ul);

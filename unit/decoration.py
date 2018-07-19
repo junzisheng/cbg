@@ -5,7 +5,7 @@ import re
 from cbg_backup import settings
 from .utility import response_json, Prpcrypt, to_list, queryset_to_list_of_dict
 from user.functions import sms_ip_send, sms_can_repeat, check_phone_number
-from service.models import Banner
+from service.models import CbgBanner
 from unit.cache import RedisKeyCache
 from libraries.qiniu import Auth
 
@@ -75,8 +75,8 @@ def sms_check(username_str, sms_repeat_deadline):
             ip = request.META.get('REMOTE_ADDR', '')
             # 校验token
             token = method_obj.get('token', '_')
-            type = method_obj.get('type')
-            if type not in ('register', 'currency_pay'):
+            type = method_obj.get('type')  # register, currency_pay, change_pwd
+            if type not in ('register', 'currency_pay', 'modify_pwd'):
                 return response_json('FAIL', description='非法访问', msg='UnlegalVisit')
             try:
                 token = Prpcrypt.decrypt(token) or '_'
@@ -92,9 +92,9 @@ def sms_check(username_str, sms_repeat_deadline):
                 return response_json('FAIL', description='ip短信发送受限', msg='IpSmsMaxed')
             # 检验时限内是否重复发送
             username = method_obj.get(username_str, '')
-            if type in ('register',) and not check_phone_number(username):
+            if type in ('register',) and not check_phone_number(username):  # 用户定义手机号码
                 return response_json('FAIL', description='错误的请求', msg='PhoneReFail')
-            if type not in ('register',):
+            if type not in ('register',):  # 使用登陆账号的手机号码
                 if not render['user_login']:
                     return response_json('FAIL', description='错误的请求', msg='HasSend')
                 username = request.user.username
@@ -106,17 +106,20 @@ def sms_check(username_str, sms_repeat_deadline):
     return _decorate
 
 
-def banner(key):
+def banner(key=None):
     """获取banner的信息"""
     def _decorate(func):
         def _wrapper(*args, **kwargs):
-            tag_list = to_list(key)
+            filter_ = {'is_delete': 0}
+            if key is not None:
+                tag_list = to_list(key)
+                filter_['tag__in'] = tag_list
             render = kwargs['render']
             redis_cache = RedisKeyCache(key_prefix='banner')
             banner_list = redis_cache.get('banner_list')
             if banner_list is None:
                 banner_list = []
-                for banner in Banner.objects.filter(tag__in=tag_list, is_delete=0):
+                for banner in CbgBanner.objects.filter(**filter_):
                     # 处理需要删除的
                     if render['timenow'] >= banner.deadline_time:
                         banner.delete()

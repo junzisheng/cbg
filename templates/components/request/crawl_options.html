@@ -23,7 +23,7 @@
       <div class="service-time">
     	  <div class="service-text">服务时间/天</div>
           <div class="slider-container">
-	          <Slider v-model="option_params.service_time" :min="1" :max="30" :show-input="true" class="slider"></Slider>
+	          <Slider {% if order and order.status=='进行中' %} disabled {% endif %} v-model="option_params.service_time" :min="1" :max="30" :show-input="true" class="slider"></Slider>
           </div>
     	</div>
 

@@ -21,7 +21,6 @@ def key_func(key, key_prefix, version):
 
 
 class CacheManagerBase(object):
-    from django.core.cache import get_cache         # 延迟加载, 等django初始化好默认的cache backend之后再加载
     # local_memory_cache = get_cache("local")          # 将从redis中取出的缓存在内存中保留本风，后续再查找缓存时候有限从内存中取
 
     # @classmethod

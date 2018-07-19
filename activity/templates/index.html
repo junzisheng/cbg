@@ -1,0 +1,396 @@
+{% extends 'base.html' %}
+{% block head %}
+<script type="text/javascript" src="/static/activity/js/awardRotate.js"></script>
+{% endblock %}
+{% block cssstyle %}
+<style type="text/css">
+	body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div{margin:0;padding:0;border:0;}
+	body{color:#333; font-size:12px;font-family:"Microsoft YaHei"}
+	ul,ol{list-style-type:none;}
+	select,input,img,select{vertical-align:middle;}
+	input{ font-size:12px;}
+	a{ text-decoration:none; color:#000;}
+	a:hover{color:#c00; text-decoration:none;}
+	.clear{clear:both;}
+
+	/* 大转盘样式 */
+	.banner{display:block;width:95%;margin-left:auto;margin-right:auto;margin-bottom: 20px;}
+	.banner .turnplate{display:block;width:100%;position:relative;}
+	.banner .turnplate canvas.item{width:100%;}
+	.banner .turnplate img.pointer{position:absolute;width:31.5%;height:42.5%;left:34.6%;top:23%;}
+	#body{
+		overflow-x:hidden;
+		background: url('/static/activity/img/bg.jpg');
+		background-size: cover;
+		background-repeat: no-repeat;
+		min-height: 100%;
+
+	}
+	.banner{
+		width: 75%;
+		margin-top: 100px;
+	}
+	.rule-box{
+		padding-bottom: 20px;
+		width: 80%;
+		background-color: rgba(255,255,255,0.8);
+		margin: 0 auto;
+	}
+	.rule-box .img-box{
+		width: 82%;
+		margin: 20px auto;
+		position: relative;
+	}
+	.rule-box img{
+		width: 100%;
+	}
+	.rule-box .title{
+		width: 100%;
+		font-family: 黑体;
+		position: absolute;
+		top: 50%;
+		left:50%;
+		font-size: 25px;
+		text-align: center;
+		transform: translate(-50%, -50%);
+	}
+	.rules{
+		margin: 0 auto;
+		width: 85%;
+		color: rgb(146, 146, 146);
+		font-size: 15px;
+	}
+	.rules li{
+		margin-bottom: 5px;
+	}
+	.img-show-box{
+		position: fixed;
+		top: 100px;
+		left: 50%;
+		transform: translate(-50%);
+		background: linear-gradient(rgb(250, 133, 133) 0%, rgb(247, 51, 51) 100%);
+		width: 0;
+		height: 0;
+		z-index: 20;
+		width: 0;
+		height: 0;
+		border-radius: 10px;
+		transition: all 500ms;
+		font-size: 0;
+	}
+	.bg-box{
+		background: url('/static/activity/img/res_bg.png'); 
+		background-repeat: no-repeat;
+		background-size: contain;
+		position: absolute;
+		top:0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.img-show-box .prize_get{
+		width: 100%;
+		position: absolute;
+		height: 130px;
+	}
+	.congr-text{
+		width: 80%;
+		height:118px;
+		position: absolute;
+		left:50%;
+		transform: translate(-50%);
+	}
+	.sure{
+		background-color: #fff;
+    	box-shadow: 0px 5px 1Px #ccc;
+    	position: absolute;
+    	top: 70%;
+    	left:50%;
+    	border-radius: 20px;
+    	transform: translate(-50%);
+    	width: 50%;
+    	height: 40px;
+	}
+	.sure .sure_svg{
+		width: 70%;
+		position: absolute;
+		top:50%;
+		left:50%;
+		transform: translate(-50%,-50%);
+	}
+	.animate {
+		width: 250px;
+		height: 350px;
+	}
+	.animate .prize_name {
+		font-size: 14px;
+	}
+	.animate .ku{
+		width: 40px!important;
+	}
+	.animate .sure_button{
+		font-size: 20px!important;
+	}
+	.animate .miss_text{
+		font-size: 16px!important;
+	}
+</style>
+
+{% endblock %}
+
+
+{% block body%}
+	<img src="/static/activity/img/幸运大转盘.png" style="width: 60%;position: relative;top: 50px;left:50%;transform: translate(-50%);">
+    <img src="/static/activity/img/1.png" id="shan-img" style="display:none;" />
+    <img src="/static/activity/img/2.png" id="sorry-img" style="display:none;" />
+	<div class="banner">
+		<div class="turnplate" style="background-image:url(/static/activity/img/turnplate-bg.png);background-size:100% 100%;">
+			<canvas class="item" id="wheelcanvas" width="422px" height="422px"></canvas>
+			<img class="pointer" src="/static/activity/img/turnplate-pointer.png"/>
+		</div>
+	</div>
+	<div class="rule-box fff-bg">
+
+		<div class="img-box">
+			<img src="/static/activity/img/活动规则.png">
+			<span class="title">活动规则</span>
+		</div>
+		<ul class="rules">
+
+			<li>1.抽奖时间：每日8：00-23：00</li>
+			<li>2.抽奖次数：每日3次;签到后增加3次</li>
+			<li>3.好难凑字数啊"(￣_,￣ )"</li>
+
+		</ul>
+	</div>
+	<div class="img-show-box" :class="{animate: animating}">
+		<div class="prize_get">
+
+
+			<svg v-show="!get_prize" version="1.1" class="congr-text" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="800px" height="300px" viewBox="0 0 800 300" enable-background="new 0 0 800 300" xml:space="preserve"><path fill-rule="evenodd" clip-rule="evenodd" fill="#247AEB" d="M770.088,169.701c-13.838,0-25.098-11.326-25.098-25.248 c0-13.922,11.26-25.249,25.098-25.249s25.095,11.327,25.095,25.249C795.183,158.375,783.926,169.701,770.088,169.701z" style="fill: rgb(247, 51, 51);"></path><path fill-rule="evenodd" clip-rule="evenodd" fill="#247AEB" d="M701.667,169.701c-13.838,0-25.096-11.326-25.096-25.248  c0-13.922,11.258-25.249,25.096-25.249s25.098,11.327,25.098,25.249C726.765,158.375,715.505,169.701,701.667,169.701z" style="fill: rgb(247, 51, 51);"></path><path fill-rule="evenodd" clip-rule="evenodd" fill="#247AEB" d="M633.249,169.701c-13.838,0-25.098-11.326-25.098-25.248 c0-13.922,11.26-25.249,25.098-25.249s25.095,11.327,25.095,25.249C658.344,158.375,647.087,169.701,633.249,169.701z" style="fill: rgb(247, 51, 51);"></path><path fill="#247AEB" d="M583.045,240.045c-35.102-3.668-62.579-13.041-81.809-27.885c-17.227,15.777-45.092,25.156-82.975,27.904   l-7.603,0.553v-31.313l6.246-0.748c22.17-2.656,38.144-8.613,47.701-17.762h-51.782v-33.484l-2.165,0.725v-41.646l5.571-1.222   c9.039-1.98,17.065-4.319,23.999-6.986c-7.137-3.384-14.283-5.602-21.321-6.61l-6.084-0.873V65.409l7.389,0.312 c10.306,0.435,19.693,1.995,27.984,4.645V59.192h40.891v25.333c6.121-4.479,10.615-11.029,13.635-19.821l1.644-4.788h45.387 l-3.968,7.974h43.644v28.921l-0.635,1.396c-12.69,27.949-34.034,46.892-63.612,56.532v1.579h64.97v34.477h-53.228   c9.295,8.545,25.323,14.508,47.877,17.785l6.071,0.883v31.4L583.045,240.045z M448.197,156.318v-12.187 c-8.464,3.73-17.904,7.341-28.199,10.783l-4.203,1.403H448.197z M489.088,130.575l0.628-0.152c4.064-0.983,7.587-1.946,10.639-2.873 c-1.058-0.243-2.107-0.47-3.15-0.678l-5.695-1.144v-9.782c-0.798,0.142-1.604,0.271-2.421,0.389V130.575z" style="fill: rgb(247, 51, 51);"></path><path fill="#247AEB" d="M273.791,241.533v-45.664h-59.916V85.286h59.916V58.466h47.388v26.819h59.916v69.288   c0.552,14.501-2.592,25.415-9.345,32.44c-5.726,5.959-13.778,8.979-23.933,8.979c-1.182,0-2.399-0.041-3.651-0.123h-22.987v45.664   H273.791z M333.579,160.667c1.641,0,2.315-0.335,2.437-0.462c0.008-0.01,0.792-0.882,0.591-4.362l-0.011-0.406v-34.949h-15.416  v40.18H333.579z M273.791,160.667v-40.18h-15.416v40.18H273.791z" style="fill: rgb(247, 51, 51);"></path><path fill="#247AEB" d="M71.231,240.084v-55.51c-11.271,20.381-30.207,36.123-56.621,47.004l-9.792,4.031v-34.537l2.972-2.121 c14.699-10.486,23.947-24.592,28.113-42.947H4.818v-35.928h66.413V108.89H14.203V73.688h57.028V59.192h46.667v14.496h56.307v35.202  h-56.307v11.187h66.413v35.928h-31.811c4.16,18.355,13.407,32.457,28.116,42.947l2.974,2.121v34.537l-9.792-4.031   c-25.862-10.652-44.551-25.959-55.9-45.713v54.219H71.231z" style="fill: rgb(247, 51, 51);"></path><g>  <g>     <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M110.807,101.799h56.307v-21.02h-56.307V66.283H78.322v14.496         H21.293v21.02h57.028v25.369H11.909v21.746h32.485c-3.374,24.167-14.201,42.765-32.485,55.81v20.297            c37.538-15.461,58.709-40.828,63.525-76.106h2.888v84.079h32.485v-84.079h2.165c4.806,35.278,25.988,60.646,63.526,76.106v-20.297           c-18.295-13.045-29.123-31.643-32.485-55.81h33.207v-21.746h-66.413V101.799z M374.004,92.376h-59.916V65.557h-33.206v26.819            h-59.916v96.401h59.916v45.664h33.206v-45.664h30.319c20.687,1.451,30.556-9.898,29.597-34.065V92.376z M280.882,167.758h-29.597            v-54.361h29.597V167.758z M333.579,167.758h-19.491v-54.361h29.598v42.04C344.159,163.658,340.798,167.758,333.579,167.758z          M455.288,156.161h26.709V66.283h-26.709v42.765c-9.634,5.323-22.143,9.671-37.538,13.046v26.095           c14.438-4.826,26.946-9.899,37.538-15.222V156.161z M450.233,78.604c-8.663-3.375-18.769-5.312-30.318-5.798v21.745         c10.107,1.45,20.213,5.074,30.318,10.872V78.604z M523.144,183.705h59.917v-20.297h-64.97v-10.146h-18.046          c39.939-5.798,67.37-25.12,82.293-57.986V74.98h-47.644c0.473-0.962,1.195-2.412,2.165-4.349c0.476-1.45,0.96-2.651,1.444-3.625         h-28.876c-4.814,14.021-13.242,23.443-25.266,28.269v14.497c5.29-0.477,10.107-1.45,14.438-2.899v13.046            c7.218,1.45,14.673,3.624,22.378,6.523c-5.775,3.874-15.646,7.499-29.597,10.873v15.946h-7.942v10.146h-63.524v20.297h58.472            c-8.188,17.395-28.4,28.029-60.637,31.893v17.395c39.939-2.898,67.607-13.047,83.016-30.443            c18.283,16.424,45.952,26.57,83.016,30.443v-17.395C550.574,210.773,530.363,200.137,523.144,183.705z M510.15,102.523          c4.33-1.925,8.179-4.349,11.551-7.248h28.873c-7.218,11.121-13.715,19.333-19.49,24.644v-13.046            C524.824,104.46,517.844,103.01,510.15,102.523z M633.249,126.296c-9.944,0-18.007,8.129-18.007,18.158         c0,10.027,8.063,18.156,18.007,18.156c9.943,0,18.004-8.129,18.004-18.156C651.253,134.425,643.192,126.296,633.249,126.296z             M701.667,126.296c-9.944,0-18.004,8.129-18.004,18.158c0,10.027,8.06,18.156,18.004,18.156c9.943,0,18.007-8.129,18.007-18.156         C719.674,134.425,711.61,126.296,701.667,126.296z M770.088,126.296c-9.944,0-18.007,8.129-18.007,18.158           c0,10.027,8.063,18.156,18.007,18.156c9.943,0,18.004-8.129,18.004-18.156C788.092,134.425,780.031,126.296,770.088,126.296z" style="fill: rgb(255, 255, 255);"></path> </g></g></svg>
+
+
+			<svg v-show="get_prize" version="1.1" class="congr-text" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="800px" height="300px" viewBox="0 0 800 300" enable-background="new 0 0 800 300" xml:space="preserve"><polygon fill="none" points="706.948,272.125 706.948,181.432 709.815,181.432 705.242,42.813 800,42.813 795.427,181.432     799.108,181.432 799.108,272.125 "></polygon><polygon fill="#247AEB" points="725.562,253.512 725.562,200.045 729.053,200.045 724.479,61.426 780.761,61.426 776.19,200.045     780.496,200.045 780.496,253.512 " style="fill: rgb(247, 51, 51);"></polygon><path fill="#247AEB" d="M500.929,256.771V149.279c-0.144,0.044-0.286,0.088-0.435,0.131c-2.287,1.13-4.305,1.98-6.143,2.584 l-10.477,3.456v-35.479l3.285-2.386c13.955-10.148,23.833-29.089,29.362-56.292l1.295-6.391h49.541l-0.328,1.633h44.87v7.978    c0,0.937-0.094,2.038-0.294,3.438h75.008v62.43h-11.367v2.626c0,28.818,3.976,49.914,11.813,62.695l1.179,1.919v42.055  l-11.919-6.773c-16.595-9.431-28.616-23.315-35.996-41.514v27.238c0.314,11.794-2.717,21.164-9.023,27.637  c-6.279,6.448-15.508,9.718-27.42,9.718c-0.005,0-1.188-0.009-1.791-0.024l-32.135,0.003v-33.729   c-4.685,4.324-9.904,8.146-15.651,11.462l-4.125,2.376v20.704h-49.25V256.771z M590.157,218.802    c0.058-0.438,0.106-1.031,0.106-1.811v-23.455c-4.279,9.644-9.888,18.075-16.804,25.266H590.157z M550.184,180.17   c3.155-11.039,4.871-25.271,5.126-42.574c-1.388,0.488-2.808,0.953-4.251,1.399l-0.875,0.273V180.17z M590.264,125.028v-9.319   c-3.088,3.378-6.567,6.486-10.434,9.319H590.264z" style="fill: rgb(247, 51, 51);"></path><path fill="#247AEB" d="M413.31,254.348c-0.577,0-1.164-0.01-1.762-0.025l-141.742,0.003v-49.741h-14.62v-34.708h18.679v-46.832  h-6.498V96.952h-9.745V62.241h73.09V53.27h52.501v8.971h74.71v34.711h-11.367v26.092h-4.872v12.194 c0.627,12.088-2.034,21.364-7.904,27.567c-2.858,3.019-6.38,5.237-10.527,6.641l-0.215,0.43h37.324v34.711h-14.619v14.63    c0.615,11.257-1.982,20.05-7.723,26.134C432.387,251.323,424.073,254.348,413.31,254.348L413.31,254.348z" style="fill: rgb(247, 51, 51);"></path><path fill="#247AEB" d="M109.052,255.982c-0.566,0-1.144-0.011-1.725-0.027l-32.104,0.003v-11.414H35.432v-7.979   c0-1.675,0.429-3.395,1.338-5.359c3.97-13.018,7.982-24.95,11.986-35.651c-3.913,0.896-7.969,1.697-12.15,2.396l-9.294,1.555    v-36.109l6.134-1.46c11.618-2.763,21.355-6.993,29.408-12.799H27.312v-38.785h39.795v-4.433H33.812V67.133h33.295V53.27h50.876  v13.863h22.212V53.27h50.063v13.863h33.297v38.786h-33.297v4.433h39.792v38.785h-35.552c8.05,5.806,17.795,10.037,29.418,12.799 l6.131,1.46v36.868l-9.886-2.437c-1.028-0.254-2.223-0.566-3.575-0.932c4.7,12.009,8.841,24.594,12.368,37.577l2.734,10.068h-84.664 l-1.054-6.747c-0.915-5.861-2.127-11.854-3.63-17.959v1.236C142.342,243.255,130.208,255.982,109.052,255.982z M91.321,218.802  c0.41,0,0.74-0.02,1.005-0.045c-0.002-0.075-0.049-0.595-0.049-0.595v-12.435c-1.555,4.671-2.95,9.028-4.183,13.072h3.228V218.802z   M154.523,173.954c-4.318-3.194-8.382-6.761-12.181-10.691v10.691H154.523z M132.256,151.122c-0.47-0.654-0.932-1.316-1.387-1.986   h-4.578c-0.496,0.669-0.993,1.332-1.496,1.986H132.256z M140.191,110.352v-4.433h-22.212v4.433H140.191z" style="fill: rgb(247, 51, 51);"></path><g>  <g>     <path fill="#FFFFFF" d="M182.277,97.941h33.298v-22.83h-33.298V61.247h-34.108v13.865h-38.167V61.247H75.079v13.865H41.786v22.83           h33.293v20.387H35.286v22.831h47.102c-10.836,14.142-26.533,23.646-47.102,28.538v20.384c9.746-1.63,18.679-3.796,26.801-6.522          c-5.964,14.142-11.914,30.986-17.865,50.562c-0.545,1.077-0.813,1.896-0.813,2.445h31.673c2.703-12.5,8.385-30.705,17.053-54.636            h-24.36c12.994-3.799,23.817-9.238,32.482-16.31v52.187c0.536,5.993-2.436,8.972-8.932,8.972h-8.12v21.202h24.365           c17.865,0.535,26.8-8.434,26.8-26.907V159.1h-27.614c5.407-4.895,10.559-10.87,15.433-17.94h12.994         c12.994,20.664,30.859,34.245,53.6,40.771h-14.62c7.574,18.489,12.994,36.695,16.24,54.636h30.86           c-4.874-17.94-10.836-34.783-17.866-50.561c2.158,0.551,5.406,1.096,9.745,1.63c3.781,1.097,6.762,1.912,8.933,2.446v-20.384            c-20.582-4.892-36.279-14.396-47.103-28.538h47.103v-22.831h-39.792V97.941H182.277z M148.169,118.328h-38.167V97.941h38.167            V118.328z M138.424,181.93c7.577,19.034,12.716,37.244,15.429,54.636h30.86c-5.419-21.204-11.646-39.407-18.678-54.636H138.424z          M415.028,169.697c0-1.082,0.265-2.164,0.81-3.262h-35.73c-1.626,4.357-2.436,7.619-2.436,9.785            c-0.548,0.547-0.815,1.095-0.815,1.63h-38.982c0-1.083-0.543-2.446-1.623-4.077c-0.545-3.261-1.09-5.704-1.625-7.338h-35.731            c0.532,1.096,0.813,2.176,0.813,3.262c1.625,3.812,2.701,6.523,3.248,8.153h-39.792v18.757h189.222v-18.757h-40.607         C413.403,174.59,414.48,171.878,415.028,169.697z M437.765,203.133H277.78v43.217h133.997c18.4,0.536,27.068-8.434,25.985-26.907            v-16.31H437.765z M395.537,230.043h-83.649v-10.601h91.766v4.077C404.188,227.874,401.491,230.043,395.537,230.043z          M338.692,96.311h-63.345v18.753H438.58V96.311h-63.342v-7.339h74.711V70.216h-74.711v-8.972h-36.546v8.972h-73.09v18.756h73.09         V96.311L338.692,96.311z M281.844,121.59v41.586h126.689c17.866,1.096,26.253-8.151,25.177-27.723v-13.861H281.844V121.59z           M393.102,147.679h-77.965v-10.597h85.271v2.446C400.943,145.517,398.508,148.23,393.102,147.679z M592.554,133.005h-29.236         c0,30.987-4.34,53.283-12.994,66.866v26.907C579.56,209.934,593.632,178.667,592.554,133.005z M592.554,98.757h54.41v23.646         h31.673V75.926h-77.149c0.532-1.631,1.077-3.529,1.622-5.708c0.533-2.713,0.813-4.612,0.813-5.705h-33.295          c-2.169,19.566-9.479,35.061-21.928,46.477v20.386C569.814,124.849,584.435,113.981,592.554,98.757z M639.656,133.005           c-1.622,45.662,11.903,76.65,40.608,92.958v-26.092c-8.669-14.129-12.994-36.414-12.994-66.866H639.656L639.656,133.005z             M598.24,216.991c0,7.071-2.716,10.333-8.122,9.787h-12.184v21.202H602.3c20.569,0.535,30.579-9.252,30.047-29.355V113.434H598.24           V216.991z M524.341,62.877c-5.965,29.356-16.788,49.743-32.487,61.159v20.387c1.622-0.535,3.513-1.35,5.687-2.446           c5.405-1.631,9.2-2.981,11.365-4.077v110.899h33.298V108.547c6.495-11.416,11.637-26.63,15.431-45.664h-33.293V62.877z           M768.458,192.526l4.06-123.125h-39.795l4.062,123.125H768.458z M733.539,245.534h38.979v-37.509h-38.979V245.534z" style="fill: rgb(255, 255, 255);"></path>   </g></g></svg>
+			<img src="/static/activity/img/prize_get.png" style="width: 100%;height: 100%"  v-show="get_prize">
+		</div>
+		<div style="position: absolute;left:50%;transform: translate(-50%);width: 80%;top:30%;">
+			<img src="/static/activity/img/prizeInfoBg1.png" style="width: 100%;display: block;border:none;outline: none">
+			<div class="text_box" style="width:98%;overflow: hidden;margin:0 auto;height: 100px;background: #fff;margin-bottom:">
+				<div style="height: 56px;position: relative;">
+					<img src="http://image3.weplus.me/2016/09/01/1472722062654.png" style="position: absolute;top:50%;left: 50%;transform: translate(-50%,-50%);width: 22%;" v-show="get_prize">
+					<div class="miss_text" style="color:#9c9c9c;text-align: center;font-size: 0px;" v-show="!get_prize">	
+						<span v-if="miss_times">
+							今天抽奖次数已用完
+							<br>
+							感谢参与
+						</span>
+						<span v-if="!miss_times">
+							((miss_text))
+						</span>
+					</div>
+
+				</div>
+				<div style="border-top: 1px dashed #206cdc;text-align: center;;line-height: 44px;color:#f73333;" class="prize_name">
+					<div v-show="get_prize">
+						((prize_name))
+					</div>
+					<div v-show="!get_prize" style="position: relative;">
+						<svg class="ku" style="width: 0px;position: absolute;transform: translate(-50%,-27%);" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="80px" height="80px" viewBox="-8.98 -16.372 80 80" enable-background="new -8.98 -16.372 80 80" xml:space="preserve"><defs></defs><g>  <g>     <path fill-rule="evenodd" clip-rule="evenodd" fill="#499BF5" d="M5.554,9.752c2.59,0,4.69-2.184,4.69-4.876           c0-2.693-2.1-4.876-4.69-4.876S0.865,2.183,0.865,4.876C0.865,7.568,2.964,9.752,5.554,9.752z M55.842,9.752            c2.59,0,4.689-2.184,4.689-4.876c0-2.693-2.1-4.876-4.689-4.876s-4.689,2.183-4.689,4.876C51.152,7.568,53.252,9.752,55.842,9.752           z M62.141,47.212c-2.411-15.191-15.398-26.796-31.064-26.796c-15.667,0-28.654,11.604-31.064,26.796c0,0-0.298,2.393,2.112,2.552            c2.526,0,3.01-2.552,3.01-2.552C7.486,34.856,18.2,25.52,31.076,25.52c12.876,0,23.59,9.337,25.942,21.692          c0,0,0.219,2.445,2.381,2.552C62.205,49.977,62.141,47.212,62.141,47.212z" style="fill: rgb(247, 51, 51);"></path>  </g></g></svg>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bg-box">
+		</div>
+		<div class="sure" @click="animating=false">
+			<div class="sure_button" style="position: relative;top:50%;left:50%;transform: translate(-50%,-50%);color:rgb(247,51,51);font-size: 0;text-align: center;font-weight: 400;">确 定</div>
+		</div>
+	</div>
+	
+	<div style="position: fixed;top:0;right: 0;left: 0;bottom: 0;z-index: 10;background-color: rgba(0, 0, 0, 0.8)" v-show="animating"></div>
+{% endblock%}
+
+
+{% block javascript %}
+{{super()}}
+<script type="text/javascript">
+var left_times = {{ request.user | get_lottery_times}}
+var v = new Vue({
+	el: '#body',
+	delimiters : ["((", "))"],
+	data: {
+		get_prize: true,
+		prize_name: "",
+		animating: false,
+		left_times: left_times,
+		miss_text: "",
+		miss_times: false,
+	}
+})
+var turnplate={
+		restaraunts:[],				//大转盘奖品名称
+		colors:[],					//大转盘奖品区块对应背景颜色
+		outsideRadius:192,			//大转盘外圆的半径
+		textRadius:155,				//大转盘奖品位置距离圆心的距离
+		insideRadius:68,			//大转盘内圆的半径
+		startAngle:0,				//开始角度
+		bRotate:false				//false:停止;ture:旋转
+};
+
+$(function(){
+	//动态添加大转盘的奖品与奖品区域背景颜色
+	turnplate.restaraunts = ["10盒币", "10积分", "谢谢参与", "5盒币", "优惠券2", "谢谢参与", "1积分", "优惠券1", "1盒币", "5积分"];
+	turnplate.colors = ["#FFF4D6", "#FFFFFF", "#FFF4D6", "#FFFFFF","#FFF4D6", "#FFFFFF", "#FFF4D6", "#FFFFFF","#FFF4D6", "#FFFFFF"];
+
+	
+	var rotateTimeOut = function (){
+		$('#wheelcanvas').rotate({
+			angle:0,
+			animateTo:2160,
+			duration:8000,
+			callback:function (){
+				alert('网络超时，请检查您的网络设置！');
+			}
+		});
+	};
+
+	//旋转转盘 item:奖品位置; txt：提示语;
+	var rotateFn = function (item, txt){
+		var angles = item * (360 / turnplate.restaraunts.length) - (360 / (turnplate.restaraunts.length*2));
+		if(angles<270){
+			angles = 270 - angles; 
+		}else{
+			angles = 360 - angles + 270;
+		}
+		$('#wheelcanvas').stopRotate();
+		$('#wheelcanvas').rotate({
+			angle:0,
+			animateTo:angles+1800,
+			duration:8000,
+			callback:function (){
+				v.get_prize = txt != "谢谢参与";
+				v.miss_text = v.prize_name = txt;
+				v.animating = true
+				turnplate.bRotate = !turnplate.bRotate;
+			}
+		});
+	};
+
+	$('.pointer').click(function (){
+		if(turnplate.bRotate)return;
+		if(v.left_times <=0){
+			v.miss_times = true;
+			v.get_prize = false;
+			v.animating = true;
+			return false;
+		}
+		turnplate.bRotate = !turnplate.bRotate;
+		normal_ajax('/activity/turnplate_begin', 'GET', {}, null, function(ret){
+			if(ret.retcode==='SUCC'){
+				v.left_times -= 1;
+				item = ret.code == 0 ? 9 : ret.code;
+				//奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
+				rotateFn(item, turnplate.restaraunts[item-1]);
+			}else{
+				v.$Message.warning(ret.description);
+			}
+		}, null,null)
+		//获取随机数(奖品个数范围内)
+	});
+	// 绘制
+});
+window.onload = function(){
+	drawRouletteWheel();
+}
+
+function rnd(n, m){
+	var random = Math.floor(Math.random()*(m-n+1)+n);
+	return random;
+}
+
+
+//页面所有元素加载完毕后执行drawRouletteWheel()方法对转盘进行渲染
+
+function drawRouletteWheel() {    
+  var canvas = document.getElementById("wheelcanvas");    
+  if (canvas.getContext) {
+	  //根据奖品个数计算圆周角度
+	  var arc = Math.PI / (turnplate.restaraunts.length/2);
+	  var ctx = canvas.getContext("2d");
+	  //在给定矩形内清空一个矩形
+	  ctx.clearRect(0,0,422,422);
+	  //strokeStyle 属性设置或返回用于笔触的颜色、渐变或模式  
+	  ctx.strokeStyle = "#FFBE04";
+	  //font 属性设置或返回画布上文本内容的当前字体属性
+	  ctx.font = '16px Microsoft YaHei';      
+	  for(var i = 0; i < turnplate.restaraunts.length; i++) {       
+		  var angle = turnplate.startAngle + i * arc;
+		  ctx.fillStyle = turnplate.colors[i];
+		  ctx.beginPath();
+		  //arc(x,y,r,起始角,结束角,绘制方向) 方法创建弧/曲线（用于创建圆或部分圆）    
+		  ctx.arc(211, 211, turnplate.outsideRadius, angle, angle + arc, false);    
+		  ctx.arc(211, 211, turnplate.insideRadius, angle + arc, angle, true);
+		  ctx.stroke();  
+		  ctx.fill();
+		  //锁画布(为了保存之前的画布状态)
+		  ctx.save();   
+		  
+		  //----绘制奖品开始----
+		  ctx.fillStyle = "#E5302F";
+		  var text = turnplate.restaraunts[i];
+		  var line_height = 17;
+		  //translate方法重新映射画布上的 (0,0) 位置
+		  ctx.translate(211 + Math.cos(angle + arc / 2) * turnplate.textRadius, 211 + Math.sin(angle + arc / 2) * turnplate.textRadius);
+		  
+		  //rotate方法旋转当前的绘图
+		  ctx.rotate(angle + arc / 2 + Math.PI / 2);
+		  
+		  /** 下面代码根据奖品类型、奖品名称长度渲染不同效果，如字体、颜色、图片效果。(具体根据实际情况改变) **/
+		  if(text.indexOf("盒币")>0){//流量包
+			  var texts = text.split("盒币");
+			  for(var j = 0; j<texts.length; j++){
+				  ctx.font = j == 0?'bold 20px Microsoft YaHei':'16px Microsoft YaHei';
+				  if(j == 0){
+					  ctx.fillText(texts[j]+"盒币", -ctx.measureText(texts[j]+"盒币").width / 2, j * line_height);
+				  }else{
+					  ctx.fillText(texts[j], -ctx.measureText(texts[j]).width / 2, j * line_height);
+				  }
+			  }
+		  }else if(text.indexOf("盒币") == -1 && text.length>6){//奖品名称长度超过一定范围 
+			  text = text.substring(0,6)+"||"+text.substring(6);
+			  var texts = text.split("||");
+			  for(var j = 0; j<texts.length; j++){
+				  ctx.fillText(texts[j], -ctx.measureText(texts[j]).width / 2, j * line_height);
+			  }
+		  }else{
+			  //在画布上绘制填色的文本。文本的默认颜色是黑色
+			  //measureText()方法返回包含一个对象，该对象包含以像素计的指定字体宽度
+			  ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+		  }
+		  
+		  //添加对应图标
+		  if(text.indexOf("闪币")>0){
+			  var img= document.getElementById("shan-img");
+			  img.onload=function(){  
+				  ctx.drawImage(img,-15,10);      
+			  }; 
+			  ctx.drawImage(img,-15,10);  
+		  }else if(text.indexOf("谢谢参与")>=0){
+			  var img= document.getElementById("sorry-img");
+			  img.onload=function(){  
+				  ctx.drawImage(img,-15,10);      
+			  };  
+			  ctx.drawImage(img,-15,10);  
+		  }
+		  //把当前画布返回（调整）到上一个save()状态之前 
+		  ctx.restore();
+		  //----绘制奖品结束----
+	  }     
+  } 
+}
+
+</script>
+{% endblock %}
+
+
+

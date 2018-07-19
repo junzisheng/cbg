@@ -1,0 +1,79 @@
+{% set title = '订单详情'%}
+{% extends 'base_toper.html' %}
+{% import 'components/order/order_macro.html' as macro %}
+
+
+{% block cssstyle %}
+<style type="text/css">
+	{{ macro.order_item_css() }}
+</style>
+{% endblock %}
+
+{% block content %}
+<order-ul-item :order_='order' :server_options_='{{ order.resolve_service_info() | json_dumps | safe}}' :operate="false"
+{% if order.status == '初始状态' %}
+:coupon_list_='{{ coupon_list }}'
+{% else %}
+ :reduction_log='{{awalid_reduction | queryset_to_js | json_dumps | safe }}'
+{%endif%}
+ ref="order"></order-ul-item>
+
+<div style="position: fixed;bottom: 0;width: 100%">
+	<order-options-item :order="order" :call_back="del_order"></order-options-item>
+</div>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+
+
+<script type="text/javascript">
+
+	var s = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		mounted: function(){
+			{% if disable_reduction %}
+			var content = "";
+			{% for disable_log in disable_reduction %}
+				{% if disable_log.style == 1 %}
+					content += "您选择的【{{disable_log.coupon_rel.coupon.coupon_name}}】已经过期！" ;
+				{% endif %}
+			{% endfor %}
+			this.$Modal.warning({
+				title: '优惠失效',
+				content: content,
+			})
+			{% endif %}
+		},
+		data: function(){
+			var order = {{ order | obj_2_json_str(order.out_params) | safe }};
+			{#
+			// var reduction_list = {{ reduction_log_list | json_dumps | safe}};
+			// // 计算折扣后的价格  这里不能用order.real_price 因为会出现活动，优惠券过期情况
+			// if(order.status == '待付款'){
+			// 	var real_price = order.price;
+			// 	for(var i=0;i<reduction_list.length;i++){
+			// 		var log = reduction_list[0];
+			// 		real_price -= log.reduction;
+			// 	}
+			// 	order.real_price = real_price;
+			// }
+			#}
+			return {
+				order: order,
+			}
+		},
+		methods: {
+			del_order: function(order_id){
+				location.href = '/order/delete_order/' + order_id;
+			}
+		}
+	})
+</script>
+
+
+
+{% endblock %}

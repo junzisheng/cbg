@@ -1,29 +1,31 @@
-{% set title = '通知页面'%}
-{% set is_scroll = True %}
 {% extends 'base_toper.html' %}
 {% block head %}
 <script src="/static/public_js/clipboard.js"></script>
 <script src="/static/order/js/crawl_data_page.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/order/css/crawl_data_page.css">
 {% endblock %}
+{% block cssstyle %}
+<style type="text/css">
+.switch_tab_active{
+	transform: rotate(-180deg);
+}
+	
+</style>
+{% endblock %}
+
+{% block toper_title%}
+<span @click="switch_tab">(( all_data_info.active ? '全部记录': '降价记录')) <span :class="{switch_tab_active: switch_tab_active()}" style="transition: all 0.5s">▲</span></span>  
+{% endblock %}
+
+{% block toper_options %}
+<span class="edit" @click="edit_click" style="position:absolute;top:50%;transform: translate(0,-50%);right: 12px;font-size: 13px;right: 36px;">((edit ? '取消' : '编辑'))</span>
+{% endblock %}
+
 {% block content %}
 
-<!-- <Scroll :on-reach-bottom="handleReachBottom" :style="{'height':'100%','width':'100%'}"> -->
+<simple-choice-item :choice_list="[{text: '全部记录', disable: !all_data_info.active}, {text: '降价记录', disable: !price_data_info.active}]" :callback="choose_price_down" ref="wsitch_tab_menu" :top="true" style="top:41px"></simple-choice-item>
+
 <div>	
-	<div class="options"> 
-		<Dropdown trigger="click" style="position: relative;" @on-click="choose_price_down">
-	        <a href="javascript:void(0)">
-	        	((show))
-	            <Icon type="arrow-down-b"></Icon>
-	        </a>
-	        <Dropdown-menu slot="list" >
-	            <Dropdown-item :name="((show == '全部记录' ? '降价记录' : '全部记录'))">((show == '全部记录' ? '降价记录' : '全部记录'))</Dropdown-item>
-	        </Dropdown-menu>
-    	</Dropdown>
-    	<span class="edit" @click="edit_click">((edit ? '取消' : '编辑'))</span>
-	</div>
-
-
 	<div v-show="show=='全部记录'">
 		<scroll-item :refresh_obj="all_data_info" :style="{height: scroll_height}">
 			<div class="container" v-for="data in all_data_info.query_list" :key="data.id">
@@ -131,9 +133,7 @@
 			</div>
 		</scroll-item>
 	</div>
-	<div v-if="info.is_last && !info.refreshing && info.query_list.length == 0" class="no-data-notic">
-		暂无数据
-	</div>
+
 
 
 	<div class="del-data-container" v-show="edit" style="z-index: 2">

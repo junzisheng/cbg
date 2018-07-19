@@ -6,6 +6,7 @@ import time
 from urllib import parse
 from django.db import connections
 from django.http import HttpResponse
+from django.utils.deprecation import MiddlewareMixin
 from .models import Webrequest, WebrequestMysql
 from unit.functions import normal_request, mysql_execute
 from cbg_backup import settings
@@ -18,7 +19,7 @@ class CpuUsage(object):
     def __init__(self, pid=None):
         self.pid = pid or os.getpid()
         self.last_stat = [0, 0, 0, 0]  # 用户态， 核心态， waited-for用户态， waited-for核心态
-        self.is_linux = sys.platform == 'linux2'
+        self.is_linux = sys.platform.startswith('linux')
         self.start()
 
     def start(self):
@@ -39,11 +40,8 @@ class CpuUsage(object):
         return [0, 0, 0, 0]
 
 
-class WebRequestMonitor(object):
+class WebRequestMonitor(MiddlewareMixin):
     """监测一个http请求的消耗时间"""
-    def __init__(self):
-        pass
-
     def process_request(self, request):
         # 获取前端报文发送的时间
         http_cost = -1

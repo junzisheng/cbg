@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Problems(models.Model):
     """收集用户上传的问题"""
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.CharField(max_length=64, null=True, blank=True)  # 问题的种类
     subtype = models.CharField(max_length=64, null=True, blank=True)  # 子问题
     title = models.CharField(max_length=128, null=True, blank=True)  # 问题的标题
@@ -16,5 +16,5 @@ class Problems(models.Model):
     is_read = models.BooleanField(default=0)  # 是否已经查阅过了
 
     class Meta:
-        db_table = "problems"
+        db_table = "cbg_problems"
         ordering = ['-id']

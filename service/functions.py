@@ -20,7 +20,7 @@ def bb_params_handle(params, service_time):
         elif v:
             args[k] = v
     url_arg = parse.urlencode(args)  # 将参数转为url参数
-    return  '召唤兽提醒服务' , settings.BB_BASE_URL_SEARCH + url_arg  # 组装爬取的url
+    return settings.BB_BASE_URL_SEARCH + url_arg  # 组装爬取的url
 
 
 def equip_params_handel(params, service_time):

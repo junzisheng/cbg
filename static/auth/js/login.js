@@ -48,7 +48,9 @@ jQuery(document).ready(function() {
                     function(data){ // success
                         if(data.retcode == 'SUCC'){  
                             that.is_click = false;
-                            location.href = redirect;
+                            // is_login 表示是登陆进来的， 
+                            var _redirect = redirect.indexOf('?') ? redirect + '&is_login=1' : redirect + '?is_login=1';
+                            location.href = _redirect;
                         }else{
                             that.$Message.warning(data.description);
                         }

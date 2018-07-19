@@ -47,6 +47,8 @@ def submit_problems(request, response, render):
     title = request.POST.get('title', '')
     content = request.POST.get('content', '')
     img_list = request.POST.get('img_list', '')
+    if all([submit_type, type, title, content]):
+        return response_json(retcode='FAIL', msg="ErrorParams", description='错误的提交数据！')
     # if request.FILES:
     #     bol, res = upload_files(request)
     #     if not bol:

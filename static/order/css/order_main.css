@@ -58,7 +58,7 @@
 .order-item-center-container  .order-thumb-text-container .order-type{
     background-color: #fe555c;
     color: #fff;
-    width: 58px;
+    padding: 0 5px;
     height: 18%;
     font-size: 12px;
     text-align: center; 

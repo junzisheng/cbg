@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys
 from aliyunsdkdysmsapi.request.v20170525 import SendSmsRequest
-from aliyunsdkdysmsapi.request.v20170525 import QuerySendDetailsRequest
+# from aliyunsdkdysmsapi.request.v20170525 import QuerySendDetailsRequest
 from aliyunsdkcore.client import AcsClient
 import uuid
 from aliyunsdkcore.profile import region_provider
-from aliyunsdkcore.http import method_type as MT
-from aliyunsdkcore.http import format_type as FT
+# from aliyunsdkcore.http import method_type as MT
+# from aliyunsdkcore.http import format_type as FT
 from . import const
 
 """

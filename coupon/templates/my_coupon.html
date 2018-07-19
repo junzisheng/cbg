@@ -1,0 +1,229 @@
+{% set title = '我的优惠券' %}
+{% extends 'base_toper.html' %}
+{% block cssstyle %}
+<style type="text/css">
+	.coupon-box{
+	    position: relative;
+	    margin: 15px 10px;
+	    border-radius: 6px;
+	    border-top: 6px solid currentColor;
+	    border-bottom: 10px solid #fff!important;
+	}
+	.type-1{
+		color: #53c7ca;
+		border-color:#53c7ca;;
+	}
+	.type-2{
+		color: rgb(70,135,212);
+		border-color: rgb(70 135 212);
+	}
+	.type-3{
+		color: #999;
+		border-color: #999,
+	}
+	.coupon-inner-box{
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: flex;
+	    color: currentColor!important;
+	    padding: 10px 10px 0;
+	    min-height: 96px;
+	    box-sizing: border-box;
+	    background-color: #fff;
+	}
+	.coupon-left-view{
+	    width: 27%;
+	    text-align: center;
+	    position: relative;
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: flex;
+	    -webkit-box-orient: vertical;
+	    -webkit-box-direction: normal;
+	    -webkit-flex-direction: column;
+	    flex-direction: column;
+	    -webkit-box-pack: center;
+	    -webkit-justify-content: center;
+	    justify-content: center;
+	    margin-right: 10px;
+	}
+	.coupon-left-view-price{
+		margin-top: -20px;
+		height: 44px;
+	}
+	.coupon-left-view-rule{
+		font-size: 14px;
+		padding-top:20px;
+	}
+	.coupon-left-view-price strong{
+		font-family: font_steelfish;
+	    font-weight: 700;
+	    font-size: 45px;
+	    position: relative;
+	    top: 1px;
+	}
+	.coupon-left-view-price small{
+		font-size: 20px;
+    	margin-left: 2px;
+	}
+	.coupon-righ-view{
+	    -webkit-box-flex: 1;
+		-webkit-flex: 1;
+		flex: 1;
+	 	min-width: 0;
+		position: relative;
+		padding-bottom: 15px;
+	}
+	.coupon-righ-view-limit{
+		font-size: 12px;
+	    color: #666;
+	    height: 3em;
+	    line-height: 1.5em;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-line-clamp: 2;
+	    -webkit-box-orient: vertical;
+	    margin-bottom: 10px;
+	}
+	.coupon-right-view-date{
+		line-height: 1;
+	    font-size: 10px;
+	    color: #999;
+	    margin-top:25px;
+
+	}
+	.coupon-user-now{
+		width: 70px;
+		height: 24px;
+		border-radius: 12px;
+		border: 1px solid;
+		text-align: center;
+		line-height: 24px;
+		position: absolute;
+		top:50px;
+		right: 0
+	}
+	.absolute_center{
+		position: absolute;
+		left:50%;
+		top:50%;
+		transform: translate(-50%,-50%);
+	}
+	.ivu-chart-circle-inner{
+		position: absolute;
+		left:50%;
+		top:50%;
+		transform: translate(-50%,-50%);	
+		height: 20px
+	}
+	.ivu-chart-circle{
+		height: auto!important
+	}
+	
+</style>
+{% endblock %}
+{% block toper_options %}
+{#<span class="cbg-button" style="position: absolute;right: 40px;top:50%;transform: translate(0, -50%);height: 30px;line-height: 30px;">领券中心</span>#}
+<span style="position: absolute;right: 40px" @click="coupon_center">领券中心</span>
+{% endblock %}
+
+{% block content %}
+
+<!-- <coupon-item :type="2" :discount="8" :use_range="'召唤兽'" time_range="'2018.07.09-2018.07.13'"  :can_use="false" :full="10"></coupon-item> -->
+
+
+<tabs-item :tab_object="tab_object" @handle_click="tab_click">
+	<div slot="panel-0">
+		<scroll-item :refresh_obj="wait_data" :style="{height: scroll_height}">
+			<coupon-item :type="2" :info="info" v-for="info in wait_data.query_list"></coupon-item>
+
+		</scroll-item>
+	</div>
+
+	<div slot="panel-1">
+		<scroll-item :refresh_obj="already_data" :style="{height: scroll_height}">
+			<coupon-item :type="2" :info="info" v-for="info in already_data.query_list"></coupon-item>
+		</scroll-item>
+	</div>
+
+	<div slot="panel-2">
+		<scroll-item :refresh_obj="expire_data" :style="{height: scroll_height}">
+			<coupon-item :type="3" :info="info" v-for="info in expire_data.query_list"></coupon-item>
+		</scroll-item>
+	</div>
+	
+</tabs-item>
+
+
+
+{% endblock %}
+
+
+{% block javascript%}
+{{super()}}
+<script type="text/javascript">
+
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: function(){
+			var height = this.get_win_size()[1] - 41 - 44 + 'px';
+			return {
+				scroll_height : height,
+				tab_object: {
+					wait_data: {
+						title: '未使用',
+						active: true
+					},
+					already_data: {
+						title: '使用记录',
+						active: false,
+					},
+					expire_data: {
+						title: '已过期',
+						active: false,
+					}
+				},
+				wait_data: {
+					query_list: [],
+					refreshing: false,
+					is_last: '',
+					url: '/coupon/my_coupon_api/wait',
+					query_obj: {},
+					active: true,
+				},
+				already_data: {
+					query_list: [],
+					refreshing: false,
+					is_last: '',
+					url: '/coupon/my_coupon_api/already',
+					query_obj: {},
+					active: false,
+				},
+				expire_data: {
+					query_list: [],
+					refreshing: false,
+					is_last: '',
+					url: '/coupon/my_coupon_api/expire',
+					query_obj: {},
+					active: false,
+				},
+			}
+		},
+		methods: {
+			tab_click: function(key){
+				var _list = ['wait_data', 'already_data', 'expire_data'];
+				for(var i=0;i<_list.length;i++){
+					var _key = _list[i]
+					this[_key].active = _key == key;
+				}
+			},
+			coupon_center: function(){
+				location.href = '/coupon/coupon_center'
+
+			},
+		}
+	})
+</script>
+{% endblock %}

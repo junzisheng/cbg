@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from core.models import BaseModel
+from cbg_backup import settings
 
 class UserProfile(models.Model):
     nickname = models.CharField(max_length=32, blank=True)
@@ -39,12 +41,39 @@ class AliSmsQueue(models.Model):
         db_table = 'ali_sms_queue'
 
 
-class EmailQueue(models.Model):
-    """邮件队列"""
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE)  # 发送对象
-    type = models.CharField(max_length=16, null=True, blank=True)  # 邮件的发送类型 1.降价 2.上架
-    message = models.CharField(max_length=1024)  # 内容
-    create_time = models.DateTimeField(auto_created=True)  # 发送时间
+class CbgSysInfo(BaseModel):
+    """所有用户共享的系统通知"""
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)  # 0 表示系统消息
+    content = models.CharField(max_length=256)  # 通知内容
+    href = models.CharField(max_length=512)  # 链接
+    thumb_img = models.CharField(max_length=512)  # 通知的缩略图
+    create_time = models.DateTimeField(auto_now=True)
+    display_time = models.DateTimeField()  # 消息可以展示的时间
+    type = models.CharField(max_length=32)  # 通知的类型（常规通知， 优惠通知） notic, offer
+    out_params = ['user_id', 'content', 'href', 'thumb_img', 'create_time']
+    # is_private = models.BooleanField(default=True)  # 标识是否为公共通知
+
+    def create(self, *args, **kwargs):
+        super(CbgSysInfo, self).create(*args, **kwargs)
+
+
+    class Meta:
+        db_table = 'cbg_sysinfo'
+
+
+class CbgUserSign(models.Model):
+    """每日签到表"""
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    continue_days = models.SmallIntegerField(default=0)  # 持续签到的天数
+    last_sign_time = models.DateField()  # 上次签到的时间
+    sign_time = models.DateField(auto_now_add=True)  # 本次签到的时间
+
+    class Meta:
+        db_table = 'cbg_user_sign'
+
+
+
+
 
 
 

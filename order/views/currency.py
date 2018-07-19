@@ -1,12 +1,13 @@
-from order.models import CrawlOrders, RechargeRecord, CurrencyConsumeRecord
+from order.models import CbgOrders, CbgRechargeRecord, CbgCurrencyConsumeRecord, CbgOrderDetail, CbgOrderReductionLog
 from user.models import UserProfile
-from ..functions import paysapi_signature, check_paysapi_notify_signature
+from coupon.models import CbgCouponUserRelation
+from order.functions import paysapi_signature, check_paysapi_notify_signature, prepare_order_pay, start_task, \
+                            order_bill, check_reduction_log
 from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from unit.decoration import ajax_refresh, sms_send
 from unit.utility import *
-from crawl_celery.tasks import crawl_task
 
 
 def currency_recharge_page(request, response, render):
@@ -31,7 +32,7 @@ def build_curency_order_api(request, response, render, istype, currency):
         give = 45
     # 创建充值记录
     profile = UserProfile.objects.select_for_update().get(user_id=request.user.id)
-    record, is_new = RechargeRecord.objects.get_or_create(
+    record, is_new = CbgRechargeRecord.objects.get_or_create(
         user_id=request.user.id,
         status='待付款',
         defaults={
@@ -62,8 +63,8 @@ def currency_pay_success(request, response, render):
     record_id = request.GET.get('orderid', '')
     try:
         record_id = Prpcrypt.decrypt(record_id).split('currency_')[1]
-        RechargeRecord.objects.get(id=record_id)
-    except RechargeRecord.DoesNotExist:
+        CbgRechargeRecord.objects.get(id=record_id)
+    except CbgRechargeRecord.DoesNotExist:
         return HttpResponseForbidden("can't find this record")
     except:
         return HttpResponseForbidden("can't decrypt")
@@ -88,8 +89,8 @@ def currency_paysapi_notify(request, response, render):
         # 货币第三方支付需要加前缀  currency_2 来和order_id=2的做区别
         record_id = Prpcrypt.decrypt(record_id).split('currency_')[1]
         user_id = Prpcrypt.decrypt(user_id)
-        record = RechargeRecord.objects.get(id=record_id)
-    except CrawlOrders.DoesNotExist:
+        record = CbgRechargeRecord.objects.get(id=record_id)
+    except CbgOrders.DoesNotExist:
         # 有支付回调但是可能找不到对应的订单
         settings.log_paysapi.info('id: {0} user_id: {1} price: {1} real_price'.format(
             record_id, user_id, need_param_dict['price'], need_param_dict['realprice']
@@ -120,46 +121,49 @@ def currency_log_page(request, response, render):
 def currency_recharge_log_api(request, response, render):
     offset, order_by, int_limit, filter_ = render['query_params']
     filter_['status'] = '已支付'
-    queryset = RechargeRecord.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_)
+    filter_['user_id'] = request.user.id
+    queryset = CbgRechargeRecord.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_)
     return {'query_list': queryset}
 
 
 @ajax_refresh(order_limit=('-id',))
 def currency_consume_log_api(request, response, render):
     offset, order_by, int_limit, filter_ = render['query_params']
-    queryset = CurrencyConsumeRecord.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_)
+    filter_['user_id'] = request.user.id
+    queryset = CbgCurrencyConsumeRecord.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_)
     return {'query_list': queryset}
 
 
 @transaction.atomic
 @sms_send
-def currency_pay_page(request, response, render):
+def currency_pay_page(request, response, render, order_id):
     """盒币支付页面"""
-    order_id = request.POST.get('order_id')
-    try:
-        order_id = Prpcrypt.decrypt(order_id)
-        order = CrawlOrders.objects.get(id=order_id, is_delete=0)
-    except:
-        return render_to_error_response(request, response, render, '错误的订单')
+    coupon_id = request.GET.get('coupon_id')
+    b, result = prepare_order_pay(request, order_id, coupon_id)
+    if b is False:
+        return render_to_error_response(request, response, render, result)
+    order, my_coupon= result
     if order.pay_status != '待付款':
         return render_to_error_response(request, response, render, '该订单不处于待付款状态')
-    profile = UserProfile.objects.select_for_update().get(user_id=request.user.id)
+    profile = UserProfile.objects.get(user_id=request.user.id)
     if profile.currency < order.real_price:
         return render_to_error_response(request, response, render, '盒币余额不够！')
     render['order'] = order
-    return render_to_response(request, response, render, 'order/currency_pay.html')
+    render['my_coupon'] = my_coupon
+    render['reduction'] = order.price - order.real_price
+    return render_to_response(request, response, render, 'order/templates/currency_pay.html')
 
 
 @transaction.atomic
-@sms_send
 def currency_pay_api(request, response, render, captcha, order_id):
     """盒币支付api"""
     # 1. 校验验证码
+    now = render['timenow']
     if captcha.encode() != settings.redis3.get('currency_pay_captcha_%s' % request.user.username):
         return response_json(retcode='FAIL', msg='CatpchaError', description='验证码错误')
     # 2.校验订单
     try:
-        order = CrawlOrders.objects.get(id=order_id, is_delete=0)
+        order = CbgOrders.objects.get(id=order_id, is_delete=0)
     except:
         return response_json(retcode='FAIL', msg='ErrorOrder', description='订单号错误')
     if order.status != '待付款':
@@ -168,32 +172,20 @@ def currency_pay_api(request, response, render, captcha, order_id):
     profile = UserProfile.objects.select_for_update().get(user_id=request.user.id)
     if order.real_price > profile.currency:
         return response_json(retcode='FAIL', msg='MissCurrency', description='金额不够本次支付')
-    # 更新订单
+    # 校验优惠是否过期
+    disable_reduction, _ = check_reduction_log(order)
+    if disable_reduction:
+        error_msg = "您的【%s】已经过期，请重新支付" % disable_reduction[0].alias
+        return render_to_error_response(request, response, render, error_msg)
+
     profile.currency -= order.real_price
     profile.save()
-    now = render['timenow']
-    order.pay_status = '已支付'
-    order.status = '进行中'
-    order.pay_channel = 4
-    order.pay_time = now
-    order.pay_tradeno = order.id
-    order.start_time = now
-    order.save()
-    CurrencyConsumeRecord.objects.create(user_id=request.user.id, quantity=order.real_price, left_quantity=profile.currency,
-                                         order_id=order.id, brief=order.service_name + '(%s天)' % order.service_time)
-    service_deadline = now + datetime.timedelta(days=order.service_time)
-    # 开启爬取的任务
-    crawl_task.delay('bb', order.crawl_url, {
-        'order_id': order.id,
-        'memo': order.memo,
-        'umobile': order.umobile,
-        'user_id': order.user_id,
-        'push_type': order.push_type,
-        'end_time': datetime.datetime.strftime(service_deadline, '%Y-%m-%d %H:%M:%S'),
-        'time_range': {'days': 3},
-        'first_round_push': order.first_round_push,
-        'price_down_push': order.price_down_push,
-    })
+    # 更新订单   # todo 是否校验优惠券的可用？ 不要 因为在选择优惠券的时候用户已经被限制住了
+    order_detail = CbgOrderDetail.objects.get(order_id=order.id)
+    order_bill(order, order_detail,4, order.id)
+    CbgCurrencyConsumeRecord.objects.create(user_id=request.user.id, quantity=order.real_price, left_quantity=profile.currency,
+                                         order_id=order.id, brief=order.service_name + '(%s天)' % order_detail.service_time)
+    start_task(order, order_detail)
     return response_json('SUCC', description='付款成功', msg='PaySucc', encrpt_orderid=Prpcrypt.encrypt(str(order.id)))
 
 

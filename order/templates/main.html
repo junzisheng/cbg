@@ -1,0 +1,67 @@
+{% set title = '我的订单' %}
+{% extends 'base_toper.html' %}
+{% block head %}
+<script src="/static/order/js/order_main.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/order/css/order_main.css">
+{% endblock %}
+
+{% block content %}
+<div>
+    <tabs-item :tab_object="tab_object" @handle_click="tab_click">
+        <!-- 待支付 -->
+        <div slot="panel-0">
+            <scroll-item :refresh_obj="wait_pay_info" :style="{height: scroll_height}">
+                <order-item v-for="(item, index) in wait_pay_info.query_list" 
+                :order="item" :key="item.id">
+                    <order-options-item :order="item" :call_back="del_order"></order-options-item>
+                </order-item>
+            </scroll-item>
+        </div>
+        <!-- 进行中 -->
+        <div slot="panel-1">
+            <scroll-item :refresh_obj="doing_order_info" :style="{height: scroll_height}">
+                <order-item v-for="item in doing_order_info.query_list" :order="item" :key="item.id">
+                    <order-options-item :order="item"></order-options-item>
+                </order-item>
+            </scroll-item>
+        </div>
+        <!-- 已完成 -->
+        <div slot="panel-2">
+            <scroll-item :refresh_obj="done_order_info" :style="{height: scroll_height}">
+                <order-item v-for="item in done_order_info.query_list" :order="item" :key="item.id">
+                        <order-options-item :order="item" :call_back="del_order"></order-options-item>
+                </order-item>
+            </scroll-item>
+        </div>
+        <!-- 全部 -->
+        <div slot="panel-3">
+           <scroll-item :refresh_obj="all_order_info" :style="{height: scroll_height}">
+                <order-item v-for="item in all_order_info.query_list" :order="item" :key="item.id">
+                    <order-options-item :order="item" :call_back="del_order"></order-options-item>
+                </order-item>
+            </scroll-item>
+        </div>
+
+    </tabs-item>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+    var active_tab = '{{ status or '待付款' }}'
+    var tab_active;
+    if(active_tab == '待付款') tab_active = 'wait_pay_info';
+    else if(active_tab == '进行中') tab_active = 'doing_order_info';
+    else if(active_tab == '已完成') tab_active = 'done_order_info';
+    else if(active_tab == '全部订单') tab_active = 'all_order_info';
+
+
+</script>
+{% endblock %}

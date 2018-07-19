@@ -3,17 +3,23 @@ import time
 import datetime
 
 from django.http import HttpResponseForbidden, HttpResponse, HttpResponseRedirect
+from django.utils.deprecation import MiddlewareMixin
 from django.views.debug import technical_500_response
 
 from cbg_backup import settings
 from unit.utility import response_json, render_to_error_response
+from unit.cache import RedisKeyCache
+from service.models import CbgService
 
 
-class PublicMiddleWare(object):
+class PublicMiddleWare(MiddlewareMixin):
     """视图处理之前的预处理"""
     def process_view(self, request, view_func, args, kwargs):
         if settings.DEBUG is False and request.path.startswith(settings.STATIC_URL):
-            return view_func(request, *args, **kwargs)
+            return None
+        # xadmin也不需要处理
+        if request.path.startswith('/xadmin'):
+            return None
         args = list(args)
         check_active = kwargs.pop('check_active') if 'check_active' in kwargs else True
         allow_method = kwargs.pop('allow_method') if 'allow_method' in kwargs else None
@@ -35,11 +41,12 @@ class PublicMiddleWare(object):
             'urlnow': wsgi_url_scheme + '://' + request.META['HTTP_HOST'] + request.get_full_path(),  # 请求的完整路径
             'timenow': datetime.datetime.now(),
             'DOMAIN': settings.DOMAIN,
-            'user_login': request.user.is_authenticated(),
+            'user_login': request.user.is_authenticated,
             'is_staff': False,
             'super_user': False,
             'time': time,
         }
+        self.build_render(render)
         # 校验是否需要登陆
         if need_login is True and not render['user_login']:
             if request.is_ajax():
@@ -60,6 +67,7 @@ class PublicMiddleWare(object):
         request.__render__ = render
         kwargs['response'] = response
         kwargs['render'] = render
+        return None
 
     def process_response(self, request, response):
         if not hasattr(request, '__render__'):
@@ -67,7 +75,7 @@ class PublicMiddleWare(object):
         render = request.__render__
         view_cost = time.time() - request.__track__['handle_before']
         info_log  = u'%6d %s (%s-%s-%s) %s %s' % (view_cost ,
-                                                  request.user.username if request.user.is_authenticated() else '未登录',
+                                                  request.user.username if request.user.is_authenticated else '未登录',
                                                   request.META['REMOTE_ADDR'] ,
                                                   render['browser'] or 'browser' ,
                                                   render['platform'],
@@ -77,11 +85,20 @@ class PublicMiddleWare(object):
         settings.log_django.info(info_log)
         return response
 
-    # def process_exception(self, request, exception):
-    #     # 有异常django会处理， 所以不需要写日记了
-    #     raise exception
-    #     if request.user.is_superuser:
-    #         return technical_500_response(request, *sys.exc_info())
+    def process_exception(self, request, exception):
+        # 有异常django会处理， 所以不需要写日记了
+        if request.user.is_superuser and settings.DEBUG is False:
+            return technical_500_response(request, *sys.exc_info())
+
+    def build_render(self, render):
+        """对render加一些补丁"""
+        # 获取服务
+        redis_cache = RedisKeyCache(key_prefix='service')
+        service_list = redis_cache.get('service_list')
+        if service_list is None:
+            service_list = list(CbgService.objects.filter(is_display=1))
+            redis_cache.set('service_list', service_list, timeout=60 * 60 * 24, version=redis_cache.incr_version())
+        render['service_list'] = service_list
 
     def build_render_enviorment_byrequest(self, request , render):
         """根据请求初始化RENDER中的全局环境变量"""

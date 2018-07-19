@@ -18,7 +18,7 @@ window.onload = function(){
 	        delimiters : ["((", "))"],
 			data: function(){
 				return {
-					scroll_height: this.get_win_size()[1] - 41 - 40 + 'px',
+					scroll_height: this.get_win_size()[1] - 41  + 'px',
 					// warn_model 构建
 					warn_modal_header: '删除确认',
                 	warn_modal_body: '<p>该商品降价后将会再次显示</p>',
@@ -67,6 +67,9 @@ window.onload = function(){
 						}
 					};
 					return query_list;
+				},
+				switch_tab: function(){
+					this.$refs.wsitch_tab_menu.show()
 				},
 				choose_price_down: function(key){
 					this.all_data_info.active = key == '全部记录';
@@ -137,14 +140,16 @@ window.onload = function(){
 							that.$Message.error(ret.description);
 						}
 					})
-					
-					
-				}
+				},
+				switch_tab_active: function(){
+					return !!this.$refs.wsitch_tab_menu && !!this.$refs.wsitch_tab_menu.$refs.fullscreen.show;					
+				},
 			},
 			computed: {
 				info: function(){
 					return this.show == '全部记录' ? this.all_data_info : this.price_data_info;
 				},
+				
 			},
 			watch: {
 				edit: function(nv){
@@ -157,7 +162,7 @@ window.onload = function(){
 						}
 					}
 				},
-				
+
 			},
 
 		})
