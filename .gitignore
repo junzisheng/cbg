@@ -2,3 +2,5 @@
 *.pyc
 *.out
 *.log
+id_rsa_cbg_windows
+id_rsa_cbg_windows.pub
