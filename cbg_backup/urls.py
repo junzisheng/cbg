@@ -27,6 +27,6 @@ urlpatterns = [
     url(r'^order/', include('order.urls')),
     url(r'^activity/', include('activity.urls')),
     url(r'^coupon/', include('coupon.urls')),
-    url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static')  # setting.DEBUG is False
+    url(r'^static/(?P<path>.*)$', static.serve, {'document_root': 'static'}, name='static')  # setting.DEBUG is False
 ]
 
