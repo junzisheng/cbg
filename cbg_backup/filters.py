@@ -1,11 +1,8 @@
 import json
-import django
-django.setup()
 from django.db import transaction
 import datetime
 from unit.utility import obj_2_json, Prpcrypt, queryset_to_list_of_dict
 from cbg_backup import settings
-from activity.models import CbgLottery1
 import time
 
 
@@ -48,6 +45,7 @@ def get_wait_message(user_id, type_):
 @transaction.atomic
 def get_lottery_times(user):
     """获取每日抽奖的剩余次数"""
+    from activity.models import CbgLottery1
     today = datetime.date.today()
     try:
         lottery = CbgLottery1.objects.select_for_update().get(user=user)
