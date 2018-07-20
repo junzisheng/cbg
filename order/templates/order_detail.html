@@ -68,7 +68,17 @@
 		},
 		methods: {
 			del_order: function(order_id){
-				location.href = '/order/delete_order/' + order_id;
+				var that = this;
+				normal_ajax('/order/delete_order/{0}'.format(order_id),'GET', null, null, function(ret){
+					if(ret.retcode==='SUCC'){
+						// 将其它tab中的相关订单也删除
+						that.simple_modal_show = false;
+						that.$Message.success('删除成功!');
+						history.back()
+					}else{
+						that.$Message.warning(ret.description);
+					}
+				})
 			}
 		}
 	})

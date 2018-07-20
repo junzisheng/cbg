@@ -36,9 +36,6 @@ class CbgCoupon(models.Model):
             raise ValueError
         return self.reduction if self.style == 1 else price * (1- (self.discount/100) )
 
-
-
-
     class Meta:
         db_table = 'cbg_coupon'
         verbose_name = '优惠券管理'

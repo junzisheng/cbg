@@ -157,11 +157,17 @@ def pull_order_data(request, response, render):
     return {'query_list': query_list}
 
 
+@transaction.atomic
 def delete_order(request, response, render, order_id):
     """删除订单"""
-    CbgOrders.objects.filter(user_id=request.user.id, id=order_id, is_delete=0).update(is_delete=1, status='已删除')
-    # todo 优惠券解锁  优惠记录删除
-    if request.is_ajax():
-        return response_json(retcode='SUCC', description='删除成功')
-    else:
-        return render_to_response(request, response, render, 'order/main.html')
+    try:
+        order = CbgOrders.objects.get(user_id=request.user.id, id=order_id, is_delete=0)
+        order.is_delete = 1
+        order.save()
+        # 删除记录的优惠记录
+        CbgOrderReductionLog.objects.filter(order_id=order.id).delete()
+        # 释放使用的优惠券
+        CbgCouponUserRelation.objects.filter(order_id=order.id).update(status=0)
+    except:
+        return response_json(retcode='FAIL', msg="ErrorOid", description='错误的请求！')
+    return response_json(retcode='SUCC', description='删除成功')

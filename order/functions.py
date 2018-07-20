@@ -102,7 +102,7 @@ def check_reduction_log(order, revise=True):
     """校验优惠是否过期"""
     now = datetime.datetime.now()
     redu_list = CbgOrderReductionLog.objects.filter(order_id=order.id)  # 获取下单时所有的优惠信息
-    if order.status == '已付款':
+    if redu_list and redu_list[0].pay_sucess:  # 如果这个订单已经支付了
         return [], list(redu_list)
     disable_reduction = [_x for _x in redu_list if _x.deadline < now]
     awalid_reduction = [_x for _x in redu_list if _x.deadline >= now]

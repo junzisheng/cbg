@@ -182,7 +182,7 @@ def currency_pay_api(request, response, render, captcha, order_id):
     profile.save()
     # 更新订单   # todo 是否校验优惠券的可用？ 不要 因为在选择优惠券的时候用户已经被限制住了
     order_detail = CbgOrderDetail.objects.get(order_id=order.id)
-    order_bill(order, order_detail,4, order.id)
+    order_bill(order, order_detail, 4, order.id)
     CbgCurrencyConsumeRecord.objects.create(user_id=request.user.id, quantity=order.real_price, left_quantity=profile.currency,
                                          order_id=order.id, brief=order.service_name + '(%s天)' % order_detail.service_time)
     start_task(order, order_detail)
