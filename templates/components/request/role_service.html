@@ -1,0 +1,223 @@
+<Collapse>
+    {% include 'components/request/crawl_options.html' %}
+    <Panel name="price" class="collapse-panel">
+    	价格(元)
+    	<div class="require_show">((role_price_show))</div>
+        <div slot="content">
+        	<div>
+        		<input v-model="role_params.params.price_min" placeholder="最低" type="number" clearable class="search-input">
+        		&nbsp;-&nbsp;
+        		<input v-model="role_params.params.price_max"  placeholder="最高" type="number" clearable class="search-input">
+        	</div>
+        	<div @click.stop="role_price_click($event)">
+            	<cbtn-item v-for="(s, index) in role_price_list" :show="s" :index="index" :class="{'require-active': role_price_active == index}">
+            	</cbtn-item>
+        		
+        	</div>
+        </div>
+    </Panel>
+    <Panel name="level" class="collapse-panel">
+    	等级
+    	<div class="require_show">((role_level_show))</div>
+        <div slot="content">
+        	<div>
+        		<input v-model="role_params.params.level_min"  placeholder="最低" type="number" clearable class="search-input">
+        		&nbsp;-&nbsp;
+        		<input v-model="role_params.params.level_max"  placeholder="最高" type="number" clearable class="search-input">
+        	</div>
+        	<div @click.stop="role_level_click($event)">
+            	<cbtn-item v-for="(s, index) in role_level_list" :show="s" :index="index" :class="{'require-active': role_level_active == index}">
+            	</cbtn-item>
+        		
+        	</div>
+        </div>
+    </Panel>
+    <Panel name="school" class="collapse-panel">
+     	门派
+    	<div class="require_show">((school_show))</div>
+        <div slot="content" @click.stop="school_click($event)">
+        	<cbtn-item v-for="(school_show, shoolid, index) in role_school_list" :show="school_show" :pk="shoolid" :index="index" :class="{'require-active': role_params.params.school.indexOf(shoolid) !=-1}">
+        	</cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="history_school" class="collapse-panel">
+		历史门派
+    	<div class="require_show">((history_school_show))</div>
+        <div slot="content" @click.stop="history_school_click($event)">
+        	<cbtn-item v-for="(school_show, shoolid, index) in role_school_list" :show="school_show" :pk="shoolid" :index="index" :class="{'require-active': role_params.params.school_change_list.indexOf(shoolid) !=-1}">
+        	</cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="role_expt" class="collapse-panel">
+		角色修炼	
+    	<div class="require_show">((role_expt_show))</div>
+        <div slot="content">
+		    <div class="kgtv-contaier" v-for="(k,v,i) in role_expt_obj">
+		    	<span>((k))</span>
+		    	<div>((v | gtlt ))
+		    		<input v-model="role_params.params[((v))]" type="number">
+		    	</div>
+		    </div>
+        </div>
+    </Panel>
+    <Panel name="role_bb_expt" class="collapse-panel">
+    	宠修
+		<div class="require_show">((role_bb_expt_show))</div>
+	    <div slot="content">
+		    <div class="kgtv-contaier" v-for="(k,v,i) in role_bb_expt_obj">
+		    	<span>((k))</span>
+		    	<div>((v | gtlt ))
+		    		<input v-model="role_params.params[((v))]" type="number">
+		    	</div>
+		    </div>
+	    </div>
+    </Panel>
+    <Panel name="feisheng" class="collapse-panel">
+    	是否飞升
+    	<div class="require_show">(( role_params.feisheng_show ))</div>
+        <div slot="content" @click.stop="feisheng_click($event)">
+        	<cbtn-item v-for="(feisheng_show, index) in role_feisheng_list" :show="feisheng_show"  :index="index" :class="{'require-active': role_feisheng_obj[feisheng_show] == role_params.params.zhuang_zhi}">
+        	</cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="role_school_skill" class="collapse-panel">
+    	师门技能	
+    	<div class="require_show">((role_school_show))((role_params.params.qian_yuan_dan ? '乾元丹≥' + role_params.params.qian_yuan_dan : "" ))</div>
+        <div slot="content">
+        	<div>
+		    	<i-select v-model="role_params.params.school_skill_num" style="width:80px;" placeholder="不限">
+			        <i-option v-for="item in ['不限', 1,2,3,4,5,6,7]" :value="item == '不限' ? '' : item" :key="item">((item))</Option>
+		    	</i-select>个技能等级
+		    	<span style="float: right;">
+		    		≥<input v-model="role_params.params.school_skill_level" type="number" style="width: 36px">
+		    	</span>
+        	</div>
+        	<div>
+        		<span style="margin-top: 3px">乾元丹</span>
+        		<span style="float: right;">
+		    		≥<input v-model="role_params.params.qian_yuan_dan" type="number" style="width: 36px">
+		    	</span>
+        	</div>
+	    </div>
+    </Panel>
+    <Panel name="role_live_skill" class="collapse-panel">
+		生活技能	
+    	<div class="require_show">((role_live_skill_show))</div>
+        <div slot="content">
+		    <div class="kgtv-contaier" v-for="(k,v,i) in role_live_skill">
+		    	<span>((k))</span>
+		    	<div>((v | gtlt ))
+		    		<input v-model="role_params.params[((v))]" type="number">
+		    	</div>
+		    </div>
+        </div>
+    </Panel>
+    <Panel name="role_race" class="collapse-panel">
+    	角色
+    	<div class="require_show">((role_race_show))</div>
+        <div slot="content" @click.stop="role_race_click($event)">
+        	<cbtn-item v-for="(race_show, race_id, index) in role_race_obj" :show="race_show" :pk="race_id" :index="index" :class="{'require-active': role_params.params.race.indexOf(race_id) !=-1}">
+        	</cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="role_attr" class="collapse-panel">
+        人物属性   
+        <div class="require_show">((role_attr_show))</div>
+        <div slot="content">
+            <div class="kgtv-contaier" v-for="(k,v,i) in role_attr_obj">
+                <span>((k))</span>
+                <div>((v | gtlt ))
+                    <input v-model="role_params.params[((v))]" type="number">
+                </div>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="role_exp" class="collapse-panel">
+        总经验(亿)
+        <div class="require_show">((role_exp_show))</div>
+        <div slot="content">
+                <input v-model="role_params.params.sum_exp_min" type="number" placeholder="最低" class="search-input">
+                -
+                <input v-model="role_params.params.sum_exp_max" type="number" placeholder="最高" class="search-input">
+        </div>
+    </Panel>
+    <Panel name="role_movie" class="collapse-panel">
+        剧情技能
+        <div class="require_show">((role_movie_skill_show))</div>
+        <div slot="content">
+            <div class="kgtv-contaier" v-for="(k,v,i) in role_movie_skill">
+                <span>((k))</span>
+                <div>((v | gtlt ))
+                    <input v-model="role_params.params[((v))]" type="number">
+                </div>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="role_pet" class="collapse-panel">
+        身上召唤兽
+        <div class="require_show">(( role_pet_match_show ))((role_pet_show))</div>
+        <div slot="content">
+            <span style="color:#999">筛选方式：</span><span style="margin-left:10px;color:#ff5b5b" @click="role_pet_filter_click">
+                (( role_params.params.pet_match_all == 1 ? '满足全部' : '满足一种'))
+                
+                <Icon type="arrow-swap" style="margin-left:5px"></Icon>
+            </span>
+            <div @click.stop="role_pet_click($event)">
+                <cbtn-item v-for="(pet_show, pet_id, index) in role_pet_obj" :show="pet_show" :pk="pet_id" :index="index" :class="{'require-active': role_params.params.pet_type_list.indexOf(pet_id) !=-1}">
+                </cbtn-item>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="role_xiangrui" class="collapse-panel">
+        珍稀祥瑞
+        <div class="require_show">(( role_xiangrui_show ))</div>
+        <div slot="content">
+            <span style="color:#999">筛选方式：</span><span style="margin-left:10px;color:#ff5b5b" @click="role_xiangrui_match_click">
+                (( role_params.params.xiangrui_match_all == 1 ? '满足全部' : '满足一种'))
+                
+                <Icon type="arrow-swap" style="margin-left:5px"></Icon>
+            </span>
+            <div @click.stop="role_xiangrui_click($event)">
+                <cbtn-item v-for="(xiangrui_show, xiangrui_id, index) in role_xiangrui_obj" :show="xiangrui_show" :pk="xiangrui_id" :index="index" :class="{'require-active': role_params.params.xiangrui_list.indexOf(xiangrui_id) !=-1}">
+                </cbtn-item>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="role_clothes" class="collapse-panel">
+        限量锦衣
+        <div class="require_show">(( role_clothes_show ))</div>
+        <div slot="content">
+            <span style="color:#999">筛选方式：</span><span style="margin-left:10px;color:#ff5b5b" @click="role_clothes_filter_click">
+                (( role_params.params.limit_clothes_logic == 'and' ? '整套' : '一件'))
+                
+                <Icon type="arrow-swap" style="margin-left:5px"></Icon>
+            </span>
+            <div @click.stop="role_clothes_click($event)">
+                <cbtn-item v-for="(clothes_show, clothes_id, index) in role_clothes_obj" :show="clothes_show" :pk="clothes_id" :index="index" :class="{'require-active': role_params.params.limit_clothes.indexOf(clothes_id) !=-1}" style="width: 150px;">
+                </cbtn-item>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="role_other_attr" class="collapse-panel">
+        其它条件
+        <div class="require_show">(( role_other_attr_show ))</div>
+        <div slot="content">
+            <div class="kgtv-contaier" v-for="(k,v,i) in role_other_attr_obj" style="width: 100%">
+                <span>((k))</span>
+                <div style="float: right;">((v | gtlt ))
+                    <input v-model="role_params.params[((v))]" type="number">
+                </div>
+            </div>
+        </div>
+    </Panel>
+
+
+
+     <div class="just-bb">
+        可转服务器
+        <div class="require_show" style="margin-right:35px">((bb_params.pet_show))</div>
+        <div style="position: absolute;right: 13px;height: 100%;width: 20px;cursor: pointer;" @click="pet_click">
+            <Icon type="chevron-right"></Icon>
+        </div>
+    </div>
+ </Collapse>

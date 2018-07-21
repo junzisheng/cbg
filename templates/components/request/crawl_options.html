@@ -2,10 +2,10 @@
     设置
     <div class="require_show">((option_show))</div>
     <div slot="content" class="options-container">
-    	<Icon @click.native.stop="option_model=true" class="help_icon" type="help" color="#000">帮助</Icon>
+    	<Icon @click.native.stop="public_params.option_model=true" class="help_icon" type="help" color="#000">帮助</Icon>
     	<div style="margin-bottom:10px">
 	    	 <div>当前已有数据通知&nbsp;&nbsp;
-		    	 <i-switch v-model="option_params.first_round_push" size="large">
+		    	 <i-switch v-model="public_params.option_params.first_round_push" size="large">
 		                <span slot="open">开启</span>
 		                <span slot="close">关闭</span>
 		          </i-switch>
@@ -14,16 +14,16 @@
     	
       <div style="margin-bottom:10px">
           消息通知&nbsp;&nbsp;
-            <Checkbox v-model="option_params.sms_notic">短信</Checkbox>
-            <Checkbox v-model="option_params.email_notic">邮件</Checkbox>
-            <Checkbox v-model="option_params.price_notic" :disabled="!option_params.sms_notic && !option_params.email_notic">降价提醒</Checkbox>
-            <div v-show="option_params.sms_notic" style="color:#ff5b5b;font-size: 12px">请注意，每条订单的前20条短信提醒免费，超过的部分以0.1元从余额中抵扣，不足将不再发送短信提醒;</div>
+            <Checkbox v-model="public_params.option_params.sms_notic">短信</Checkbox>
+            <Checkbox v-model="public_params.option_params.email_notic">邮件</Checkbox>
+            <Checkbox v-model="public_params.option_params.price_notic" :disabled="!public_params.option_params.sms_notic && !public_params.option_params.email_notic">降价提醒</Checkbox>
+            <div v-show="public_params.option_params.sms_notic" style="color:#ff5b5b;font-size: 12px">请注意，每条订单的前20条短信提醒免费，超过的部分以0.1元从余额中抵扣，不足将不再发送短信提醒;</div>
       </div >
 
       <div class="service-time">
     	  <div class="service-text">服务时间/天</div>
           <div class="slider-container">
-	          <Slider {% if order and order.status=='进行中' %} disabled {% endif %} v-model="option_params.service_time" :min="1" :max="30" :show-input="true" class="slider"></Slider>
+	          <Slider {% if order and order.status=='进行中' %} disabled {% endif %} v-model="public_params.option_params.service_time" :min="1" :max="30" :show-input="true" class="slider"></Slider>
           </div>
     	</div>
 

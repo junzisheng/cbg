@@ -1,4 +1,4 @@
-<div class="server-list-container" :class="{'server_container_active': server_container_active}">
+<div class="server-list-container" :class="{'server_container_active': public_params.server_container_active}">
 	<div class="server-choose-title"> 
 		<span class="x" @click.stop="hide_server_list"></span> 
 		&nbsp;&nbsp;&nbsp;&nbsp;选择大区
@@ -12,7 +12,7 @@
 			</div>
 		</li>
 	</ul>
-	<ul class="letter-list-container" :style="{'display': server_container_active ? 'block' : 'none' }">
+	<ul class="letter-list-container" :style="{'display': public_params.server_container_active ? 'block' : 'none' }">
 		<a v-for="l in server_letter_list" :href="'#s' + l" :key="l">
 			((l))
 		</a>

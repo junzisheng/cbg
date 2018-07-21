@@ -357,6 +357,10 @@ body .btn-active{
 .line_through{
     text-decoration: line-through;
 }
+/*选择标题上tab的样式*/
+.switch_tab_active{
+    transform: rotate(-180deg);
+}
 
 
 /*iview补丁*/

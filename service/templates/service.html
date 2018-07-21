@@ -1,0 +1,103 @@
+{% set title = '服务' %}
+{% extends 'base_toper.html' %}
+{% block head %}
+<script src="/static/public_js/jquery-cookie.js"></script>
+<script src="/static/service/js/pet_info.js"></script>
+<script src="/static/service/js/server_info.js"></script>
+<script src="/static/service/js/bb.js"></script>
+<script src="/static/service/js/role.js"></script>
+<script src="/static/service/js/service.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/service/css/search_page.css">
+{% endblock %}
+{% block toper_title%}
+<span @click="service_choose">(( service_obj[public_params.service_id] )) <span :class="{switch_tab_active: switch_tab_active()}" style="transition: all 0.5s">▲</span></span>  
+{% endblock %}
+
+{% block cssstyle %}
+<style type="text/css">
+	.test{
+		max-width: 100px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<simple-choice-item :choice_list="[{text: '召唤兽服务', disable: !(public_params.service_id==1), extra: 1}, {text: '角色服务', disable: !(public_params.service_id==2), extra: 2}]" :callback="service_choose_callback" ref="switch_tab_menu" :top="true" style="top:41px"></simple-choice-item>
+<div class="search-top">
+	<div class="server-choose-title"> 
+			请选择服务器范围， 
+			<span class="more-server" @click="more_server">更多&gt;&gt;</span>
+	</div>
+
+	<div class="big-range-choose">
+		{# ps: 全服没有server_type这个参数#}
+		<div :style="{display: public_params.params.serverid ? 'none' : 'block'}">
+		 	<div v-for="(k, v, i) in server_range" :class="{'require-active' : v==public_params.params.server_type}" class="button i-button-item" @click="choose(v)">((k))
+		 		<span class="require-cancel"></span>	
+	 		</div>
+	 	</div>
+	 	<div :style="{display: public_params.params.serverid ? 'block' : 'none'}">
+	 		<cbtn-item :show="public_params.server_detail_show" @click.native=" public_params.params.serverid = ''; $forceUpdate() " :class="{'require-active': public_params.params.serverid}">
+            </cbtn-item>
+	 	</div>
+	</div>
+    <div v-show="public_params.service_id==1">
+        {% include 'components/request/bb_service.html' %}
+    </div>
+    <div v-show="public_params.service_id==2">
+        {% include 'components/request/role_service.html' %}
+    </div>
+
+	
+</div>
+
+<div class="seacher-fotter">
+	<div class="clear_params" @click.stop="clear_params_click">清除选项</div>
+	<div class="done" {% if order %} @click.stop="modify" {% else %} @click.stop="done" {% endif%}> {% if order %}修改{%else%}确 定{% endif%}</div>
+</div>
+
+
+
+
+<Modal :mask-closable="false" v-model="public_params.done_show" title="请输入备注" @on-ok="memo_ok" @on-cancel=" memo='' ">
+    <p class="memo_tip">为了以后能够快速查找到搜索记录，建议您填写搜索备注</p>
+    <i-input icon="pricetags" v-model="memo" placeholder="填写备注" style="width: 100%"></i-input>
+</Modal>
+
+<Modal v-model="public_params.option_model" title="服务选项帮助">
+    <p>1.当前已有数据通知: 在藏宝阁机器人工作前存在的符合条件的商品给您通知;建议选择不通知(如果范围内的商品降价则根据下面的提醒设置进行通知)</p>
+    <p>2.消息通知: 选择新上架商品的通知类型;下单后可以在订单的 <span class="font-active">查看通知</span>中获取符合条件的最新商品信息; ps: 每条订单的前20条短信提醒免费，超过的部分以0.1元从余额中抵扣，不足将不再发送短信提醒;</span></p>
+    <div slot="footer"></div>
+</Modal>
+
+
+ <submit-loading-item :show="is_submit"></submit-loading-item>
+
+{% include 'components/request/server.html' %}
+{% include 'components/request/pet.html' %}
+
+
+
+{% endblock %}
+{% block javascript %}
+<script>
+var params = "";
+var order_id = ""
+var service_id = {{ service_id or 1}};
+var order_public_params = null;
+var order_bb_params = null;
+var order_role_params = null;
+{% if order %}
+	var params = {{ order.cbgorderdetail.upload_params | safe }};
+	order_public_params = params.public_params;
+	order_id = {{order.id}}
+	service_id = {{order.service_id}};
+	{% if order.service_id == 1 %} {# 召唤兽 #}
+		order_bb_params = params.private_params;
+	{% elif order.service_id == 2 %}
+		order_role_params = params.private_params;
+	{% endif %}
+{% endif %}
+
+</script>
+{% endblock %}

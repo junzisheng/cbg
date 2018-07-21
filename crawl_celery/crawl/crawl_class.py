@@ -15,6 +15,7 @@ from . import config
 
 
 _hostprog = re.compile('https?://([^/?]*)(.*)', re.DOTALL)
+###############################################################count!!!!!!!!!!!!!!!!!!!!##################
 
 
 class Base_Crawl(object):
