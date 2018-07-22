@@ -6,6 +6,7 @@
 <script src="/static/service/js/server_info.js"></script>
 <script src="/static/service/js/bb.js"></script>
 <script src="/static/service/js/role.js"></script>
+<script src="/static/service/js/equip.js"></script>
 <script src="/static/service/js/service.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/service/css/search_page.css">
 {% endblock %}
@@ -15,14 +16,27 @@
 
 {% block cssstyle %}
 <style type="text/css">
-	.test{
-		max-width: 100px;
+	.fullscreen-fixed{
+		height: 100%;
+		width: 100%;
+		position: fixed;
+		z-index: 10;
+		top: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
+		transition: top 500ms;
+		background-color: #fff;
+		padding: 0 12px;
 	}
 </style>
 {% endblock %}
 
 {% block content %}
-<simple-choice-item :choice_list="[{text: '召唤兽服务', disable: !(public_params.service_id==1), extra: 1}, {text: '角色服务', disable: !(public_params.service_id==2), extra: 2}]" :callback="service_choose_callback" ref="switch_tab_menu" :top="true" style="top:41px"></simple-choice-item>
+<simple-choice-item :choice_list="[
+							  {text: '召唤兽服务', disable: !(public_params.service_id==1), extra: 1}, 
+							  {text: '角色服务', disable: !(public_params.service_id==2), extra: 2},
+							  {text: '装备服务', disable: !(public_params.service_id==3), extra: 3}
+							  ]" :callback="service_choose_callback" ref="switch_tab_menu" :top="true" style="top:41px"></simple-choice-item>
 <div class="search-top">
 	<div class="server-choose-title"> 
 			请选择服务器范围， 
@@ -41,12 +55,19 @@
             </cbtn-item>
 	 	</div>
 	</div>
+	<!-- 召唤兽 -->
     <div v-show="public_params.service_id==1">
         {% include 'components/request/bb_service.html' %}
     </div>
+    <!-- 角色 -->
     <div v-show="public_params.service_id==2">
         {% include 'components/request/role_service.html' %}
     </div>
+    <!-- 装备 -->
+    <div v-show="public_params.service_id==3">
+        {% include 'components/request/equip_service.html' %}
+    </div>
+
 
 	
 </div>
@@ -75,6 +96,7 @@
 
 {% include 'components/request/server.html' %}
 {% include 'components/request/pet.html' %}
+{% include 'components/request/equip_suit.html' %}
 
 
 
@@ -87,6 +109,7 @@ var service_id = {{ service_id or 1}};
 var order_public_params = null;
 var order_bb_params = null;
 var order_role_params = null;
+var order_equip_params = null;
 {% if order %}
 	var params = {{ order.cbgorderdetail.upload_params | safe }};
 	order_public_params = params.public_params;
@@ -96,6 +119,8 @@ var order_role_params = null;
 		order_bb_params = params.private_params;
 	{% elif order.service_id == 2 %}
 		order_role_params = params.private_params;
+	{% elif order.service_id == 3 %}
+		order_equip_params = params.private_params;
 	{% endif %}
 {% endif %}
 

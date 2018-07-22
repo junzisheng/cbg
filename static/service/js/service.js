@@ -34,8 +34,10 @@ window.onload = function(){
 		// 传给后台的数据
 		service_obj: {
 			1: '召唤兽服务',
-			2: '角色服务'
+			2: '角色服务',
+			3: '装备服务',
 		},
+
 		is_submit: false,  // 上传
 		args: '',
 		memo: '',
@@ -77,7 +79,7 @@ window.onload = function(){
 		HighNeidans: HighNeidans,
 		LowNeidans: LowNeidans,
 	};
-	$.extend(static_data, role_static);
+	$.extend(static_data, role_static, equip_static);
 	public_dynamic = {
 		server_container_active: false,   // 服务器列表的页的动画显示
 		server_detail_show: '',
@@ -100,6 +102,7 @@ window.onload = function(){
 	dynamic_data.public_params = order_public_params || public_dynamic;  // 各服务共有的动态参数
 	dynamic_data.bb_params = order_bb_params || bb_params;
 	dynamic_data.role_params = order_role_params || role_params;
+	dynamic_data.equip_params= order_equip_params || equip_params;
 	// 方法
 	var methods = {
 		option_help: function(){
@@ -164,15 +167,32 @@ window.onload = function(){
 		
 		clear_params_click: function() {
 			var that = this;
+			var service_id = that.public_params.service_id
 			this.simple_modal_init('确定要清空条件', function(){
 				// 清除服务选项
-				if(that.public_params.service_id == 1){
+				if(service_id == 1){
 					for(var k in bb_params){
-						that.bb_params[k] = $.cloneObject(bb_params[k]);
+						if(typeof k == 'object'){
+							that.bb_params[k] = $.cloneObject(bb_params[k]);
+						}else{
+							that.bb_params[k] = bb_params[k];
+						}
 					}
-				}else if(that.public_params.service_id == 2){
+				}else if(service_id == 2){
 					for(var k in role_params){
-						that.role_params[k] = $.cloneObject(role_params[k]);
+						if(typeof k == 'object'){
+							that.role_params[k] = $.cloneObject(role_params[k]);
+						}else{
+							that.role_params[k] = role_params[k];
+						}
+					}
+				}else if(service_id == 3){
+					for(var k in equip_params){
+						if(typeof k == 'object'){
+							that.equip_params[k] = $.cloneObject(equip_params[k]);
+						}else{
+							that.equip_params[k] =equip_params[k];
+						}
 					}
 				}
 				that.simple_modal_show = false;
@@ -217,6 +237,25 @@ window.onload = function(){
 				}
 				if(!_private_params.params.school_skill_level){
 					_private_params.params.school_skill_num= "";
+				}
+			// 装备
+			}else if(this.public_params.service_id == 3){
+				for (var k in this.equip_params){
+					if(typeof this.equip_params[k] == 'object'){
+					 	_private_params[k] = $.cloneObject(this.equip_params[k]);   // 这里有个坑， 如果值为undefined的话 再stringify时 不会带有这个键值对
+					} else{ 
+						_private_params[k] = this.equip_params[k]
+					}
+				}
+				// 如果等级为60-160 则不需要上传参数
+				// if(_private_params.params.level_min == 60 && _private_params.params.level_max == 160){
+				// 	_private_params.params.level_min = _private_params.params.level_min = ""
+				// }
+				if(_private_params.params.special_effect.length == 0){
+					_private_params.params.special_mode = "";
+				}
+				if(_private_params.params.star == false){
+					_private_params.params.star = "";
 				}
 			}
 		},
@@ -282,10 +321,12 @@ window.onload = function(){
 		},
 	};
 	$.extend(methods ,bb_methods, role_methods);
+	$.extend(methods ,bb_methods, equip_methods);
 	var watch = {};
-	$.extend(watch, bb_watch, role_watch);
+	$.extend(watch, bb_watch, role_watch, equip_watch);
 	var computed = {}
 	$.extend(computed, bb_computed, role_computed)
+	$.extend(computed, bb_computed, role_computed, equip_computed)
 
 
 	

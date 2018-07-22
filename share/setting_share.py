@@ -10,7 +10,12 @@ setting_name = 'localhost' if env == 'localhost' else 'ecs'
 HOST_TEST_SEREVER = '127.0.0.1'
 ALI1_IP = '47.104.193.247'
 ALI2_IP = '47.98.229.132'
+# 召唤兽爬取的url
 BB_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_pet_search&order_by=selling_time+DESC&'
+# 角色爬取的url
+ROLE_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_role_search&order_by=selling_time+DESC&'
+# 装备爬取的url
+EQUIP_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_equip_search&order_by=selling_time+DESC&'
 
 # paypayzhu 第三方支付的认证信息
 PPZ = {
@@ -101,42 +106,3 @@ qiniu = {
 log_error = logging.getLogger('django')
 log_django = log_error
 log_paysapi = logging.getLogger('paysapi')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-XIANG_RUI_LIST = """
-神行小驴,七彩小驴,粉红小驴,天使猪猪,甜蜜猪猪,九尾冰狐,冰晶魅灵,玉瓷葫芦,战火穷奇,铃儿叮当,萌动猪猪,
-甜蜜泡泡,飞天猪猪,猪猪小侠,月影天马,星华飞马,九幽灵虎,如意宝狮,妙缘暖犀,玄火神驹,玄冰灵虎,鹤雪锦犀,
-青霄天麟,莽林猛犸,九霄冰凤,九霄幽凰,暗影战豹,逐日天辇,魔骨战熊,翠灵锦篮,金鳞仙子,碧海云舟,玄霜玉兔,
-翠云宝扇,沉星寒犀,浣碧石犀,璇彩灵仙,浑火魔精,紫霞云麒,瑞彩祥云,琉璃宝象,彩翎羽轿,穿云飞辇,踏雪灵熊,
-炫彩飞篮,叠彩仙蜗,太白仙骑,嬉闹灵狮,开明天兽,腾云仙牛,沙漠驼铃,落英纷飞,沐月灵猫,轻云羊驼,怒雷狂狮,
-赤瞳妖猫,御风灵貂,霓羽锦鹊,雪域圣灵,炫影魔蝎,蝠翼冥骑,灵尾松鼠,机关木鸢,灯笼锦鱼,碧海鳐鱼,玉脂福羊,
-雷霆战豹,烈焰斗猪,幽骨战龙,齐天小轿,竹林熊猫,跃动精灵,七彩祥云,冰晶雪魄,冰晶小雪魄
-"""

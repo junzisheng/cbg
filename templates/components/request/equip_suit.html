@@ -1,0 +1,28 @@
+<div class="fullscreen-fixed" :style="equip_params.suit_display ? {top: 0} : {}" @click.stop="equip_suit_click($event)">
+	<div style="text-align: center;line-height: 40px;height: 40px;" class="border-full">
+		<span class="x" style="float: left" @click.stop="equip_params.suit_display = false;"></span> 
+		套装
+	</div>
+	<tabs-item :tab_object="equip_suit_tab_obj" @handle_click="equip_suit_tab_click" :content_height="equip_suit_content_height">
+		<!-- 附加状态 -->
+			<div slot="panel-0">
+			   <cbtn-item v-for="(id_, show, index) in SuitAddedStatus" :show="show" :pk="id_" :index="index" :class="{'require-active': equip_params.params.suit_effect == id_ }" style="width: 150px;" :title="'附加状态:'">
+	            </cbtn-item>
+			</div>
+			<!-- 追加法术 -->
+			<div slot="panel-1">
+				 <cbtn-item v-for="(id_, show, index) in SuitAppendSkills" :show="show" :pk="id_" :index="index" :class="{'require-active': equip_params.params.suit_effect == id_ }" style="width: 150px;" :title="'追加法术:'">
+	            </cbtn-item>
+			</div>
+			<!--变身术之  -->
+			<div slot="panel-2">
+				 <cbtn-item v-for="(id_, show, index) in SuitTransformSkills" :show="show" :pk="id_" :index="index" :class="{'require-active': equip_params.params.suit_effect == id_ }" style="width: 150px;" :title="'变身术之:'">
+	            </cbtn-item>
+			</div>
+			<!-- 变化咒之 -->
+			<div slot="panel-3">
+				 <cbtn-item v-for="(id_, show, index) in SuitTransformCharms" :show="show" :pk="id_" :index="index" :class="{'require-active': equip_params.params.suit_effect == id_ }" style="width: 150px;" :title="'变化咒之:'">
+	            </cbtn-item>
+			</div>
+	</tabs-item>
+</div>

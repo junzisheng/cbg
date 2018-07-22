@@ -28,9 +28,6 @@
     <link rel="stylesheet" type="text/css" href="/static/public_css/iview.css">
 
 
-    {% block head %}
-    {% endblock %}
-
     {% block cssstyle %}
     {% endblock %}
 
@@ -154,7 +151,12 @@
 
 </script>
 
-<script src="/static/public_js/main.js"></script>
+<!-- main.js依赖于上面的一些变量 -->
+<script src="/static/public_js/main.js"></script> 
+{% block head %}
+{% endblock %}
+
+
 {% block javascript %}
 {% endblock %}
 

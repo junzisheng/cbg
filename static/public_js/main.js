@@ -205,9 +205,19 @@ function login_redirect(){
 function get_timestamp(){
     return new Date().getTime() / 1000
 }
-
-
-
+function get_win_size(){
+    if(g_app_os == 'ios'){
+            return [$(window).width() , window.innerHeight || $(window).height()];
+    }else{
+        return [$(window).width() , $(window).height()];
+    }
+}
+function get_document_size(el){
+    var $el;
+    if(el == undefined) $el = $(document)
+    else $el = $(el);
+    return [$el.width(), $el.height()]
+}
 
 $.extend({
     top_notic: function(text){
@@ -262,7 +272,7 @@ $.extend({
     cloneObject:  function(obj){
         var str, newobj = obj.constructor === Array ? [] : {};
         if(typeof obj !== 'object'){
-            return;
+            return obj;
         } else if(window.JSON){
             str = JSON.stringify(obj), //系列化对象
             newobj = JSON.parse(str); //还原
@@ -551,7 +561,7 @@ var tabs_conmonent = {
                     <ul class="tabs-container">\
                         <li v-for="(v,k, index) in tabs_object" :class="{\'tabs-active\': v.active}" :style="{\'width\': li_width}" @click.stop="tab_click(k)">{{v.title}}</li>\
                     </ul>\
-                    <ul class="panel-contanier">\
+                    <ul class="panel-contanier" :class="{tab_container_fixed: !!content_height}" :style="{height: content_height || \'auto\'}">\
                         <li v-for="(v,k, index) in tabs_object" :index="index" v-show="v.active">\
                         <slot :name="\'panel-\' + index"></slot>\
                         </li>\
@@ -565,7 +575,7 @@ var tabs_conmonent = {
             li_width: 100/Object.keys(this.tab_object).length + '%',
         }
     },
-    props : ['tab_object'],
+    props : ['tab_object', 'content_height'],
     methods: {
         tab_click: function(key){
             for(var item in this.tab_object) this.tab_object[item].active = false;

@@ -76,6 +76,13 @@ html body{
 	top:0;
 	letter-spacing:0.033333rem;
 }
+/*tab栏固定动*/
+.tab_container_fixed{
+    top: 0;
+    position: absolute!important;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 /*tabs上面的内容*/
 .content-container{
     position: fixed;
@@ -171,6 +178,7 @@ body .btn-active{
 .panel-contanier{
     width: 100%;
     height: 100%;
+    position: relative;
 }
 /*loading样式*/
 .load{

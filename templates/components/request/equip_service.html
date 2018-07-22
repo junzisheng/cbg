@@ -1,0 +1,159 @@
+<Collapse>
+    {% include 'components/request/crawl_options.html' %}
+    <Panel name="equip_price" class="collapse-panel">
+    	价格(元)
+    	<div class="require_show">((equip_price_show))</div>
+        <div slot="content">
+        	<div>
+        		<input v-model="equip_params.params.price_min" placeholder="最低" type="number" clearable class="search-input">
+        		&nbsp;-&nbsp;
+        		<input v-model="equip_params.params.price_max"  placeholder="最高" type="number" clearable class="search-input">
+        	</div>
+        	<div @click.stop="equip_price_click($event)">
+            	<cbtn-item v-for="(s, index) in equip_price_list" :show="s" :index="index" :class="{'require-active': equip_price_active == index}">
+            	</cbtn-item>
+        	</div>
+        </div>
+    </Panel>
+    <Panel name="equip_level" class="collapse-panel">
+        等级
+        <div class="require_show">((equip_level_show))</div>
+        <div slot="content" style="height: 50px;position: relative;" >
+            <div class="absolute_center" style="width: 80%">
+                <Slider v-model="equip_price_range" range :min="60" :max="160" :step="10" :show-tip="'always'" ></Slider>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="equip_type" class="collapse-panel">
+        类型
+        <div class="require_show">(( equip_kind_show ))</div>
+        <div slot="content" @click.stop="equip_kind_click($event)">
+            <cbtn-item v-for="(equip_kind_show, equip_kind_id, index) in equip_kind_obj" :show="equip_kind_show" :pk="equip_kind_id" :index="index" :class="{'require-active': equip_params.params.kindid.indexOf(equip_kind_id) !=-1}">
+            </cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="equip_special_skill" class="collapse-panel">
+        特技
+        <div class="require_show">(( equip_special_skill_show ))</div>
+        <div slot="content" @click.stop="equip_special_skill_click($event)">
+            <cbtn-item v-for="(equip_special_skill_show, equip_special_skill_id, index) in equip_special_skill_obj" :show="equip_special_skill_show" :pk="equip_special_skill_id" :index="index" :class="{'require-active': equip_params.params.special_skill.indexOf(equip_special_skill_id) !=-1}">
+            </cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="equip_special_effect" class="collapse-panel">
+        特效
+        <div class="require_show">(( equip_special_effect_show ))</div>
+        <div slot="content">
+            <div>
+                <span style="color:#999">筛选方式：</span><span style="margin-left:10px;color:#ff5b5b" @click="special_effect_filter_click">
+                    (( equip_params.params.special_mode == 'and' ? '满足全部' : '满足一种'))
+                    <Icon type="arrow-swap" style="margin-left:5px"></Icon>
+                </span>
+            </div>
+            <div @click.stop="equip_special_effect_click($event)">
+                <cbtn-item v-for="(equip_special_effect_show, equip_special_effect_id, index) in equip_special_effect_obj" :show="equip_special_effect_show" :pk="equip_special_effect_id" :index="index" :class="{'require-active': equip_params.params.special_effect.indexOf(equip_special_effect_id) !=-1}">
+                </cbtn-item>
+            </div>
+        </div>
+    </Panel>
+     <div class="just-bb">
+        套装
+        <div class="require_show" style="margin-right:35px">(( equip_params.suit_show ))</div>
+        <div style="position: absolute;right: 13px;height: 100%;width: 20px;cursor: pointer;" @click="equip_suit_display">
+            <Icon type="chevron-right"></Icon>
+        </div>
+    </div>
+    <Panel name="equip_attr" class="collapse-panel">
+        属性   
+        <div class="require_show">((equip_attr_show))</div>
+        <div slot="content">
+            <div class="kgtv-contaier" v-for="(k,v,i) in equip_attr_obj" style="width: 100%">
+                <span>((k))</span>
+                <div style="float: right;">((v | gtlt ))
+                    <input v-model="equip_params.params[((v))]" type="number">
+                </div>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="equip_attr_sum" class="collapse-panel">
+        属性计算
+        <div class="require_show">((equip_attr_sum_list_show))((equip_params.params.sum_attr_value ? '总和>=' + equip_params.params.sum_attr_value : "" ))</div>
+        <div slot="content">
+            <div>
+                <div slot="content">
+                    <div @click.stop="equip_attr_sum_click($event)">
+                        <cbtn-item v-for="(show, id, index) in equip_attr_sum_obj" :show="show" :pk="id" :index="index" :class="{'require-active': equip_params.params.sum_attr_type.indexOf(id) !=-1}">
+                        </cbtn-item>
+                    </div>
+                    <div class="kgtv-contaier" style="width: 100%;margin-top: 20px">
+                        <span>属性总和</span>
+                        <div style="float: right;" > &gt;=
+                            <input v-model="equip_params.params.sum_attr_value" type="number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="equip_gem" class="collapse-panel">
+        镶嵌宝石
+        <div class="require_show">(( equip_gem_show ? equip_gem_show + ',' : "" ))((equip_params.params.gem_level ? '宝石锻造等级>=' + equip_params.params.gem_level : ""))</div>
+        <div slot="content">
+            <div  @click.stop="equip_gem_click($event)">
+                <cbtn-item v-for="(show, id, index) in equip_gem_obj" :show="show" :pk="id" :index="index" :class="{'require-active': equip_params.params.gem_value.indexOf(id) !=-1}">
+                </cbtn-item>
+            </div>
+            <div class="kgtv-contaier" style="width: 100%;margin-top: 20px">
+                    <span>宝石锻造等级</span>
+                    <div style="float: right;" > &gt;=
+                        <input v-model="equip_params.params.gem_level" type="number">
+                    </div>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="equip_attr160" class="collapse-panel">
+        160装备特性
+        <div class="require_show">(( equip_params.params['160_attr'] ? equip_attr160_obj[equip_params.params['160_attr']] : "" ))</div>
+        <div slot="content" @click.stop="equip_160attr_click($event)">
+            <cbtn-item v-for="(show, id, index) in equip_attr160_obj" :show="show" :pk="id" :index="index" :class="{'require-active': equip_params.params['160_attr'] == id}">
+            </cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="equip_hole" class="collapse-panel">
+        装备开运
+        <div class="require_show">
+            ((equip_params.params.hole_num ? '装备开孔数目>=' + equip_params.params.hole_num +',' : "" ))
+            ((equip_params.params.star ? '限开启星位' : ""))
+        </div>
+        <div slot="content">
+            <div class="kgtv-contaier" style="width: 100%">
+                <span>装备开孔数目</span>
+                <div style="float: right;" > &gt;=
+                    <input v-model="equip_params.params.hole_num" type="number">
+                </div>
+            </div>
+            <div style="padding:0 12px">
+                限开启星位
+                <div style="float:right">
+                    <i-switch size="small" v-model="equip_params.params.star"></i-switch>
+                </div>
+            </div>
+        </div>
+    </Panel>
+    <Panel name="equip_repair" class="collapse-panel">
+        装备修理失败
+        <div class="require_show">(( equip_repair_ob[equip_params.params.repair_fail] || "" ))</div>
+        <div slot="content" @click.stop="equip_repair_click($event)">
+            <cbtn-item v-for="(show, id, index) in equip_repair_ob" :show="show" :pk="id" :index="index" :class="{'require-active': equip_params.params.repair_fail == id}">
+            </cbtn-item>
+        </div>
+    </Panel>
+    <Panel name="equip_product" class="collapse-panel">
+        装备出处
+        <div class="require_show">(( equip_product_show ))</div>
+        <div slot="content" @click.stop="equip_product_click($event)">
+            <cbtn-item v-for="(show, id, index) in equip_product_obj" :show="show" :pk="id" :index="index" :class="{'require-active': equip_params.params.produce_from.indexOf(id) != -1}">
+            </cbtn-item>
+        </div>
+    </Panel>
+</Collapse>

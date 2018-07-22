@@ -24,7 +24,7 @@ def bb_params_handle(params):
 
 
 def role_params_handel(params):
-    """装备上传数据处理"""
+    """角色上传数据处理"""
     args = {}
     for k, v in params.items():
         if not v:
@@ -36,9 +36,22 @@ def role_params_handel(params):
         elif v:
             args[k] = v
     url_arg = parse.urlencode(args)  # 将参数转为url参数
-    return settings.BB_BASE_URL_SEARCH + url_arg  # 组装爬取的url
-
+    return settings.ROLE_BASE_URL_SEARCH + url_arg  # 组装爬取的url
 
 def equip_params_handel(params):
-    """人物上传数据处理"""
-    return  '角色提醒服务' % service_time, settings.BB_BASE_URL_SEARCH + url_arg  # 组装爬取的url
+    """装备上传数据处理"""
+    args = {}
+    if params.get('level_min') == 60 and params.get('level_max') == 160:
+        params.pop('level_min')
+        params.pop('level_max')
+    for k, v in params.items():
+        if not v:
+            continue
+        elif type(v) == list:
+            args[k] = ','.join(v)
+        elif k in ('price_min', 'price_max'):
+            args[k] = int(float(v) * 100)
+        elif v:
+            args[k] = v
+    url_arg = parse.urlencode(args)  # 将参数转为url参数
+    return settings.EQUIP_BASE_URL_SEARCH + url_arg  # 组装爬取的url
