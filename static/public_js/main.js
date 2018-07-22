@@ -687,7 +687,7 @@ var pay_channel = {
                 this.pay_object[key].active = this.pay_object[key].type == type;
             }
         },
-        submit: function(params){
+        submit: function(url, params){
             if(this.active_obj.type == 3){
                 window.location.href = '/order/currency_pay_page/{0}?coupon_id={1}'.format(params.order_id, params.coupon_id)
                 return false;
@@ -695,7 +695,7 @@ var pay_channel = {
             this.$nextTick(function(){
                 var pay_type = this.active_obj.type;
                 var that = this;
-                normal_ajax('/order/get_pay_token_api/{0}/{1}/'.format(params.order_id, pay_type), 'GET', {'coupon_id': params.coupon_id},
+                normal_ajax(url + pay_type, 'GET', params,
                     function(){that.ajaxing=true},
                     function(ret){
                         if(ret.retcode === 'SUCC'){

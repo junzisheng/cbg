@@ -37,10 +37,11 @@ def pay_page(request, response, render, order_id):
 
 
 @transaction.atomic
-def get_pay_token_api(request, response, render, order_id, pay_type):
+def get_pay_token_api(request, response, render,  pay_type):
     """获取支付的token"""
     notify_url = '%s/order/order_paysapi_notify' % settings.RUN_URL
     return_url = '%s/order/order_pay_success' % settings.RUN_URL
+    order_id = request.GET.get('order_id')
     # url_params = ""
     coupon_id = request.GET.get('coupon_id')
     b, result = prepare_order_pay(request, order_id, coupon_id)
@@ -52,8 +53,8 @@ def get_pay_token_api(request, response, render, order_id, pay_type):
     # 1. 计算价格
     prpcrypt_orderid = Prpcrypt.encrypt(order.id)
     prpcrypt_orderuid = Prpcrypt.encrypt(order.user_id)
-    pay_token = render['payapi_post_params'] = paysapi_signature('%.2f' % (order.real_price / 100), pay_type, prpcrypt_orderid,
-                                                         prpcrypt_orderuid, order.service_name, notify_url, return_url)
+    pay_token =  paysapi_signature('%.2f' % (order.real_price / 100), pay_type, prpcrypt_orderid,
+                                     prpcrypt_orderuid, order.service_name, notify_url, return_url)
     return response_json(retcode='SUCC', msg='GetTokenSucc', token=pay_token)
 
 

@@ -229,10 +229,10 @@ def sign_api(request, response, render):
     # 1. 盒币奖励
     profile = UserProfile.objects.select_for_update().get(user=request.user)
     prize_currency = 100 if sign_log.continue_days < 7 else 200
+    CbgRechargeRecord.objects.create(user=request.user, quantity=prize_currency, give=0, status='已支付',
+             left_quantity=profile.currency, create_time=render['timenow'], pay_time=render['timenow'], alias='签到')
     profile.currency += prize_currency
     profile.save()
-    CbgRechargeRecord.objects.create(user=request.user, quantity=prize_currency, give=0, status='已支付',
-                                     create_time=render['timenow'], pay_time=render['timenow'], alias='签到')
     # 抽奖次数奖励
     lotter = CbgLottery1.objects.select_for_update().filter(user=request.user)
     if not lotter:

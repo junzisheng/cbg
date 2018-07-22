@@ -193,8 +193,9 @@
 					{% if order.status == '初始状态'%}
 					var my_coupon = this.$refs.order.coupon.id;
 					{% endif %}
-					this.$refs.pay_template.submit({'coupon_id': my_coupon, 'order_id': this.order.id});
-
+					var url = "/order/get_pay_token_api/";
+					var params = {'coupon_id': my_coupon, 'order_id': this.order.id}
+					this.$refs.pay_template.submit(url, params);
 				})
 			},
 			// 获取优惠券的信息

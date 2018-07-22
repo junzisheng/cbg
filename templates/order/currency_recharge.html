@@ -84,7 +84,7 @@
 	<div style="height: 50px;padding-left:10px;line-height: 50px;">
 		支付方式
 	</div>
-	<pay-channel :_goods_obj="goods_obj" :that="this" :_signature_obj="signature_obj" ref="pay_template" :support_type="['ali', 'wx']"></pay-channel>
+	<pay-channel  ref="pay_template" :support_type="['ali', 'wx']"></pay-channel>
 </div>
 <div class="fixed-bottom-btn background-active" @click="pay">确认充值</div>
 
@@ -103,19 +103,6 @@
 		data: {
 			// 支付相关
 			is_click: false,
-			goods_obj: {
-				'goodsname': '',
-				'uid': '',
-				'price': '',
-				'notify_url': '',
-				'return_url': '',
-				'orderid': '',
-				'orderuid': '',
-			},
-			signature_obj: {
-				1: '',
-				2: '',
-			},
 			// 按钮选项
 			currency_list: [10, 30, 50, 100, 300, 500,],
 			selected_currency: 50,
@@ -128,22 +115,8 @@
 			pay: function(){
 				if(this.is_click) return false;
 				var that = this;
-				var istype = this.$refs.pay_template.active_obj.type;
-				normal_ajax('/order/build_currency_order_api/{0}/{1}/'.format(istype, this.selected_currency),  'GET', null, function(){
-					that.is_click = true;
-				}, function(ret){
-						if(ret.retcode == 'SUCC'){
-							that.goods_obj = ret.post_params;
-							that.signature_obj[1] = that.signature_obj[2] = ret.post_params.key;
-							that.$refs.pay_template.$nextTick(function(){
-								that.$refs.pay_template.submit();
-							})
-						}else{
-							if(ret.msg="LOGIN"){
-								login_redirect()
-							}
-						}
-				}, null, function(){that.is_click=false})
+				var url = '/order/build_currency_order_api/' + this.selected_currency + '/';
+				this.$refs.pay_template.submit(url)
 			},
 		},
 		computed: {

@@ -16,7 +16,7 @@ def currency_recharge_page(request, response, render):
 
 
 @transaction.atomic
-def build_curency_order_api(request, response, render, istype, currency):
+def build_curency_order_api(request, response, render, currency, istype):
     """生成充值货币订单的api"""
     notify_url = '%s/order/currency_paysapi_notify' % settings.RUN_URL
     return_url = '%s/order/currency_pay_success' % settings.RUN_URL
@@ -52,9 +52,9 @@ def build_curency_order_api(request, response, render, istype, currency):
     prpcrypt_orderid = Prpcrypt.encrypt('currency_%s' % record.id)  # 这里需要加prefix与订单相区别
     prpcrypt_orderuid = Prpcrypt.encrypt(record.user_id)
     # 生成token
-    post_params = paysapi_signature('%.2f' % (int(record.quantity) / 100), istype, prpcrypt_orderid,
+    pay_token = paysapi_signature('%.2f' % (int(record.quantity) / 100), istype, prpcrypt_orderid,
                                     prpcrypt_orderuid, goodsname, notify_url, return_url)
-    return response_json('SUCC', description='生成充值记录成功', msg='BuilSucc', post_params=post_params)
+    return response_json('SUCC', description='生成充值记录成功', msg='BuilSucc', token=pay_token)
 
 
 @transaction.atomic
