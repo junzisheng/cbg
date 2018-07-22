@@ -557,7 +557,7 @@ var Scroll = {
 
 // Tabs组件
 var tabs_conmonent = {
-    template: '<div>\
+    template: '<div style="position: relative">\
                     <ul class="tabs-container">\
                         <li v-for="(v,k, index) in tabs_object" :class="{\'tabs-active\': v.active}" :style="{\'width\': li_width}" @click.stop="tab_click(k)">{{v.title}}</li>\
                     </ul>\

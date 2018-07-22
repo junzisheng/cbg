@@ -78,7 +78,7 @@ html body{
 }
 /*tab栏固定动*/
 .tab_container_fixed{
-    top: 0;
+    top: 46px;
     position: absolute!important;
     overflow-x: hidden;
     overflow-y: auto;
@@ -145,9 +145,6 @@ body .btn-active{
     height: 18px;
     line-height: 18px;
 }
-
-
-
 
 /*组件样式*/
 .clearfix:after,.clearfix:before{ content: "";display: table;}
