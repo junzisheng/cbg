@@ -119,6 +119,7 @@ def currency_log_page(request, response, render):
 
 @ajax_refresh(order_limit=('-id',))
 def currency_recharge_log_api(request, response, render):
+    """货币充值记录"""
     offset, order_by, int_limit, filter_ = render['query_params']
     filter_['status'] = '已支付'
     filter_['user_id'] = request.user.id
@@ -128,6 +129,7 @@ def currency_recharge_log_api(request, response, render):
 
 @ajax_refresh(order_limit=('-id',))
 def currency_consume_log_api(request, response, render):
+    """货币使用记录"""
     offset, order_by, int_limit, filter_ = render['query_params']
     filter_['user_id'] = request.user.id
     queryset = CbgCurrencyConsumeRecord.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_)
@@ -186,6 +188,7 @@ def currency_pay_api(request, response, render, captcha, order_id):
     CbgCurrencyConsumeRecord.objects.create(user_id=request.user.id, quantity=order.real_price, left_quantity=profile.currency,
                                          order_id=order.id, brief=order.service_name + '(%s天)' % order_detail.service_time)
     start_task(order, order_detail)
+    settings.redis3.delete("currency_pay_captcha_%s" % request.user.username)
     return response_json('SUCC', description='付款成功', msg='PaySucc', encrpt_orderid=Prpcrypt.encrypt(str(order.id)))
 
 
