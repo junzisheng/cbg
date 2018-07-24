@@ -146,6 +146,22 @@ class MyConfigParser(configparser.ConfigParser):
         assert item in self.sections()
         return self.options(item)
 
+def date_gap_personal(pre, now=None):
+    """将时间转化格式化： 1小时前， 2天谴  1越前"""
+    now = now or datetime.datetime.now()
+    gap = now - pre
+    if gap.days / 365 >= 1:
+        return '%s年前' % int(gap.days / 365)
+    if gap.days / 30 >= 1:
+        return '%s月前' % int(gap.days / 30)
+    if gap.days >= 1:
+        return '%s天前' % int(gap.days)
+    if gap.seconds / 60 / 60 >= 1:
+        return '%s小时前' % int(gap.seconds / 60 / 60 )
+    if gap.seconds / 60 >= 1:
+        return '%s分钟前' % int(gap.seconds / 60)
+    return '刚刚'
+
 
 class Prpcrypt(object):
     key = ('guwenjia' * 2).encode()
@@ -309,6 +325,10 @@ if __name__ == '__main__':
     # a = MyConfigParser(os.path.join(settings.BASE_DIR, 'cbg_backup', 'limitword.ini'))
     # print(validate_nick_name('你妈B'))
     import hashlib
-    s = Prpcrypt.decrypt('6d3d36e0b874ac16c93eb326969283b8').split('currency_')[1]
+    # s = Prpcrypt.decrypt('6d3d36e0b874ac16c93eb326969283b8').split('currency_')[1]
+    # print(s)
+    now = datetime.datetime(year=2018, month=9, day=26, hour=18, minute=21, second=10)
+    test_time = datetime.datetime(year=2018, month=7, day=23, hour=19, minute=50, second=5)
+    s = date_gap_personal(test_time, now)
     print(s)
 

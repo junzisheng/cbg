@@ -261,7 +261,7 @@ class TaskManager(object):
                 type_task_dict = copy.deepcopy(_type_task_dict)
                 while 1:  # 这里用empty判断是不准确， 因为在不断的Put 可能
                     # task: {'sql_type': 'insert', 'equip_list': [{}, {}], 'crawl_type': 'bb'}
-                    Logger.cls_error.info('sql is alive')
+                    # Logger.cls_error.info('sql is alive')
                     try:
                         task_list.append(queue.get_nowait())
                     except:

@@ -3,13 +3,13 @@ from __future__ import absolute_import
 import sys
 import os
 import multiprocessing
-from .celery_init import app
-from core.functions import get_cbg_path
 # 初始化django环境
-sys.path.insert(0, get_cbg_path())
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cbg_backup.settings")
-import django
-django.setup()
+# from core.functions import get_cbg_path
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cbg_backup.settings")
+# sys.path.insert(0, get_cbg_path())
+from crawl_celery.celery_init import app
+# import django
+# django.setup()
 
 if 'time' in sys.modules.keys():
     del sys.modules['time']
@@ -55,7 +55,9 @@ if __name__ == 'crawl_celery.tasks':
     if 'worker' in sys.argv:
         from multiprocessing import Queue
         crawl_class.Base_Crawl.task_manager = TaskManager
-        TaskManager.init('bb', crawl_class.BBCrawl)
+        TaskManager.init(1, crawl_class.BBCrawl)  # 1：召唤兽
+        TaskManager.init(2, crawl_class.RoleCrawl) # 2 : 角色
+        TaskManager.init(3, crawl_class.EquipCrawl)  # 3: 装备
         # 开启插入数据库的进程
         queue = multiprocessing.Queue(maxsize=500)
         TaskManager.queue = queue

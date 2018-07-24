@@ -158,36 +158,38 @@ function form_ajax(url, data, before_callback,succ_callback, fail_callback, comp
 }
 
 
-
-function sns_convert_time(string_time , now){
-    if (now == undefined)
-        now = Date.now()
-
-    //ts_this = Date.parse(string_time) ios上不支持-的时间转换
-    var ts_this = Date.parse(string_time.replace(/-/g,"/"));
-    var now_delta = now - ts_this;
-
-    if (now_delta < -3600000 * 24 * 3) {
-        return '刚刚';
-    }
-    else if (now_delta > 3600000 * 24 * 3) {
-        var dt_this = new Date(ts_this);
-        var dt_now  = new Date();
-
-        var dt_ret  = dt_now.getFullYear() != dt_this.getFullYear() ? dt_this.getFullYear() + '-' : '';
-        return dt_ret + fmt_integer_low100((dt_this.getMonth() + 1)) + '-' + fmt_integer_low100(dt_this.getDate()) + ' ' + fmt_integer_low100(dt_this.getHours()) + ':' + fmt_integer_low100(dt_this.getMinutes());
-    }
-    else if (now_delta > 3600000 * 24) {
-        return Math.floor(now_delta / 3600000 / 24) + '天前';
-    }
-    else if (now_delta > 3600000) {
-        return Math.floor(now_delta / 3600000) + '小时前';
-    }
-    else if (now_delta > 60000) {
-        return Math.floor(now_delta / 60000) + '分钟前';
-    }
-
-    return '刚刚';
+function sns_time(str_time, now){
+    // 不对的写法
+//     var now =  now || new Date()
+//     var pre = new Date(Date.parse(str_time))
+//     var now_year = now.getFullYear();
+//     var now_month = now.getMonth() + 1;
+//     var now_day = now.getDate();
+//     var now_hour = now.getHours();
+//     var now_minute = now.getMinutes();
+//     var now_seconds = now.getSeconds();
+//     var pre_year = pre.getFullYear();
+//     var pre_month = pre.getMonth() + 1;
+//     var pre_day = pre.getDate();
+//     var pre_hour = pre.getHours();
+//     var pre_minute = pre.getMinutes();
+//     var pre_seconds = pre.getSeconds();
+//     if(now_year - pre_year > 1){
+//         return  now_year - pre_year + '年前';
+//     }
+//     if(now_month - pre_month > 1){
+//         return now_month - pre_month + '月前';
+//     }
+//     if(now_day - pre_day > 1){
+//         return now_day - pre_day + '天前';
+//     }
+//     if(now_hour - pre_hour){
+//         return now_hour - pre_hour + '小时前';
+//     }
+//     if(now_minute - pre_minute > 1){
+//         return now_minute - pre_minute + '分钟前';
+//     }
+//     return '刚刚';
 }
 
 //验证手机号格式

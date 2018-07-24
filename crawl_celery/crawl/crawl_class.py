@@ -4,26 +4,26 @@ import time
 import json
 import random
 import re
-from queue import Queue
 import requests
 from requests.exceptions import *
 
-from .exceptions import *
-from crawl_celery.models import BbCrawlData
-from .Base_Class import Logger, TaskManager, ProxyManager, SqlLock
-from . import config
+
+from  crawl_celery.crawl.exceptions import *
+from crawl_celery.models import CbgCrawlData
+from crawl_celery.crawl.Base_Class import Logger, TaskManager, ProxyManager, SqlLock
+from crawl_celery.crawl import config
 
 
 _hostprog = re.compile('https?://([^/?]*)(.*)', re.DOTALL)
-###############################################################count!!!!!!!!!!!!!!!!!!!!##################
 
 
+# 应该只传一个orderid过来
 class Base_Crawl(object):
     task_manager = TaskManager
     def __init__(self, url, order_info, crawl_interval=1, rounds=1):
         # 初始化日志类
         # 用户设置相关
-        self.base_url = url + '&page={0}&timestamp={1}&*****************'
+        self.base_url = url + '&page={0}&timestamp={1}&'
         self.order_info = order_info
         # 将日期参数恢复
         self.order_info['end_time'] = datetime.datetime.strptime(order_info['end_time'], '%Y-%m-%d %H:%M:%S')
@@ -46,8 +46,7 @@ class Base_Crawl(object):
         self.page_one_time = time.time()  # 爬取第一页的时间
 
         self.set_dict = dict()  # 去重  # 存贮已经爬取到的信息   {eid: {price: , ...}}
-        print(self.push_type, self.order_info['first_round_push'])
-
+        self.use_count_url = True  # 是否使用支持count的url 和不支持count数据处理不同
 
 
     def init(self):
@@ -55,9 +54,6 @@ class Base_Crawl(object):
         初始化
         """
         #self.logger = self.task_manager.Logger('order_id-%s' % self.order_info['order_id'] + self.order_info['memo'])
-        # self.task_manager.proxy_manager.get_proxy_list()
-        # self.get_crawled_eid_list()  # 获取已经爬取过
-
         ProxyManager.get_proxy_list()
         self.get_crawled_eid_list()
 
@@ -75,7 +71,6 @@ class Base_Crawl(object):
     def run(self):
         """ 启动 """
         self.init()
-
         while datetime.datetime.now() <= self.order_info['end_time']:
             if self.next_page == 1:
                 self.page_one_time = time.time()
@@ -91,6 +86,7 @@ class Base_Crawl(object):
 
     def crawl(self, url):
         """ 爬取 """
+        Logger.cls_error.info('第%s页' % (self.next_page))
         restart_times = -1  # 重试次数
         while True:
             restart_times += 1
@@ -103,17 +99,19 @@ class Base_Crawl(object):
             header = self.get_header()
             try:
                 response = requests.get(url, proxies=ProxyManager.create_vaild_proxy(proxy),
-                                        headers=header, timeout=2)
+                                        headers=header, timeout=5)
                 # 解析返回的数据
                 self.public_check(response, url)
                 data = json.loads(response.text)
                 # 每个子类具体的校验函数
                 self.different_check(data, proxy)
-                equip_list = data.get('equip_list', [])
+                equip_list = data.get('equips', []) if self.use_count_url else data.get('equip_list', [])
                 if len(equip_list) == 0:
                     raise Empty
                 out_time_range = self.analysis(equip_list, proxy)
-                if out_time_range or data.get('is_last_page', True) or self.next_page >= 100:
+                # if out_time_range or data.get('is_last_page', True) or self.next_page >= 100:
+                # 判断是否一轮爬取结束了 1: 当前爬取的数据由超过三天时间 2：爬取已经是最后一页了 3. 爬取到了第一百页
+                if out_time_range or self.end_round(data) or self.next_page >= 100:
                     Logger.cls_error.debug('%s第%s轮结束了 耗时:%s 第%s页 ' % (self.order_info['order_id'], self.rounds, time.time() - self.page_one_time, self.next_page))
                     self.rounds += 1
                     self.next_page = 1
@@ -138,15 +136,22 @@ class Base_Crawl(object):
                 # gevent.sleep(60)
                 if proxy != {}:
                     ProxyManager.return_proxy(proxy)
-                    # self.task_manager.proxy_manager.proxy_list.append(proxy)
                 break
             except ParamsError as e:
                 if proxy != {}:
                     ProxyManager.return_proxy(proxy)
-                    # self.task_manager.proxy_manager.proxy_list.append(proxy)
             except:
                 Logger.cls_error.exception('发生未知错误**************>>>%s' % url)
                 exit()
+
+    def end_round(self, data):
+        """判断一轮是否爬取结束了"""
+        if not self.use_count_url:
+            return data.get('is_last_page', True)
+        else:
+            pager = data.get('pager', {})
+            return pager.get('cur_page') == pager.get('total_pages')
+
 
     def handle_with_exception(self, e):
         pass
@@ -187,18 +192,47 @@ class Base_Crawl(object):
                 out_time_range = True
                 continue
             eid = equip.get('eid', '')
-            equip_dict = dict((key, str(equip.get(key, '')) if equip.get(key, '') not in (True, False)
-                              else equip.get(key, '') ) for key in self.template_field)
-            if equip_dict['status_desc'] not in ('公示期', '上架中'):   # 还有未上架  会造成错误
-                continue
+            equip_dict = {}
+            if self.use_count_url:
+                other_info = json.loads(equip['other_info'])
+            for key in self.template_field:
+                # 有些数据是存放在元数据中的other_info中
+                if key == 'selling_time':
+                    equip_dict[key] = datetime.datetime.strptime(equip.get(key) ,'%Y-%m-%d %H:%M:%S')
+                    continue
+                if key == 'highlight' and self.use_count_url:
+                    equip_dict[key] = equip.get('highlights')
+                    continue
+                if key == 'price' and self.use_count_url:  # price_int
+                    equip_dict[key] = equip.get('price_int')
+                    continue
+                if key in self.template_other_field and self.use_count_url:
+                    if key == 'accept_bargain':  # 可能会没有这个值
+                        equip_dict[key] = other_info.get(key, False)
+                    elif key == 'subtitle':
+                        equip_dict[key] = equip['equip_level_desc']
+                    elif key == 'desc_sumup_short':
+                        equip_dict[key] = other_info['summary']
+                else:
+                    val = equip.get(key, '')
+                    if type(val) == bool:
+                        equip_dict[key] = val
+                    else:
+                        equip_dict[key] = str(val)
+            # equip_dict = dict((key, str(equip.get(key, '')) if equip.get(key, '') not in (True, False)
+            #                   else equip.get(key, '') ) for key in self.template_field)
+            # 判断上架情况
+            if self.use_count_url:
+                equip_dict['status_desc'] = '公示期' if equip.get('fair_show_end_time_left') != '5分钟' else '已上架'
+            else:
+                equip_dict['status_desc'] = equip.get('status_desc')
+                if equip_dict['status_desc'] not in ('公示期', '上架中'):   # 还有未上架  会造成错误
+                    continue
             # todo 1. 所有的通知需要的数据在爬取的脚本里面获取(复杂，且不稳定)  2. 只向redis推送order_id, 一切信息从数据库中获取(稳定，准确，消耗性能)
             equip_dict.update({
                 'update_time': datetime.datetime.now(),
                 'order_id': self.order_info['order_id'],
                 'user_id': self.order_info['user_id'],
-                # 'push_type': self.order_info['push_type'],
-                # 'price_down_push': self.order_info['price_down_push'],
-                # 'need_push': self.rounds != 1 or self.order_info['first_round_push'],  # 师傅需要推送
             })
             equip_dict['update_time'] = datetime.datetime.now()
             equip_dict['order_id'] = self.order_info['order_id']
@@ -272,14 +306,13 @@ class Base_Crawl(object):
 
 
 class BBCrawl(Base_Crawl):
-    equip_queue = Queue()
-    data_model = BbCrawlData
+    data_model = CbgCrawlData
     # 定义插入数据库的模板
     template_field= ['subtitle', 'collect_num', 'serverid', 'selling_time', 'eid', 'equip_name', 'icon',
-                     'price', 'status_desc', 'accept_bargain', 'desc_sumup_short',
-                     'area_name', 'server_name', 'highlight']
+                     'price', 'accept_bargain', 'desc_sumup_short', 'area_name', 'server_name', 'highlight']
+    template_other_field = ['accept_bargain', 'subtitle', 'status_desc', 'desc_sumup_short']  # 支持count的url 这些字段需要在other_info中获取
     # 用来判断重复爬取的时候数据有没有更新
-    update_field = ['collect_num', 'selling_time', 'price', 'status_desc', 'accept_bargain']
+    update_field = ['collect_num', 'selling_time', 'price', 'accept_bargain']
     price_down_field = ['collect_num', 'selling_time', 'price', 'status_desc', 'accept_bargain', 'is_display', 'old_price']
     crawl_type = 'bb'
 
@@ -294,7 +327,7 @@ class BBCrawl(Base_Crawl):
         # self.task_manager.lock.acquire()  # 这里加锁防止2014错误 和runtime_error错误  # 现在使用的是myisam 不需要担心这个错误了
         try:
             with SqlLock:
-                query_list = BbCrawlData.objects.filter(order_id=self.order_info['order_id'])\
+                query_list = CbgCrawlData.objects.filter(order_id=self.order_info['order_id'])\
                                                 .values('eid', 'collect_num', 'selling_time', 'price',
                                                         'status_desc', 'accept_bargain')
             for d in query_list:
@@ -323,22 +356,35 @@ class BBCrawl(Base_Crawl):
             # self.task_manager.Logger.cls_error.error('其它的状态码----%s----%s', (data, proxy))
             raise OterStatus
 
+class RoleCrawl(BBCrawl):
+    pass
+
+class EquipCrawl(BBCrawl):
+    pass
+
 
 if __name__ == '__main__':
     import time
-
-    c = BBCrawl('1', '1',  '2', 3, 4)
-    start = time.time()
+    import multiprocessing
+    Base_Crawl.task_manager = TaskManager
+    TaskManager.init(1, BBCrawl)  # 1：召唤兽
+    TaskManager.init(2, RoleCrawl) # 2 : 角色
+    TaskManager.init(3, EquipCrawl)  # 3: 装备
+    # 开启插入数据库的进程
+    queue = multiprocessing.Queue(maxsize=500)
+    TaskManager.queue = queue
+    p = multiprocessing.Process(target=TaskManager.do_sql, args=(queue, TaskManager.crawl_cls_list))
+    p.start()
+    url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_equip_search&order_by=selling_time+DESC&limit_clothes_logic=or'
+    # url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&level_min=175&level_max=175&price_min=10000000'
+    # url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&expt_fangyu=15&bb_expt_kangfa=15&limit_clothes_logic=or&expt_kangfa=15&level_max=175&fang_yu=1300&bb_expt_gongji=15&shang_hai=2000&price_max=100000000&expt_gongji=15&limit_clothes=12512%2C12498%2C12513%2C12514%2C12647%2C12646%2C12648%2C12652%2C12654%2C12653%2C12765%2C12750%2C12850%2C12767%2C13790%2C40013%2C40025%2C40023%2C40108&bb_expt_fangyu=15&skill_dazao=100&bb_expt_fashu=15&level_min=160&pet_type_list=1&xiangrui_list=%E6%98%9F%E5%8D%8E%E9%A3%9E%E9%A9%AC%2C%E7%94%9C%E8%9C%9C%E7%8C%AA%E7%8C%AA%2C%E7%8E%89%E8%84%82%E7%A6%8F%E7%BE%8A%2C%E9%A3%9E%E5%A4%A9%E7%8C%AA%E7%8C%AA%2C%E7%A5%9E%E8%A1%8C%E5%B0%8F%E9%A9%B4&race=2'
+    c = TaskManager.init_crawl_obj(3, url, {'push_type': '', 'order_id': 39, 'price_down_push': False, 'time_range': {'days': 1}, 'umobile': '18221410984',
+     'user_id': 10, 'memo': '', 'end_time': '2018-07-30 15:43:02', 'first_round_push': False})
     try:
         c.run()
     except KeyboardInterrupt:
         pass
 
-
-"""
-更新记录
-1. 2018 4.15  将数据插入由爬取工具连接数据库 转为 数据传入服务器 服务器插入
-"""
 # server_name = equip['server_name']
 # serverid = equip['serverid']
 # area_name = equip['area_name']

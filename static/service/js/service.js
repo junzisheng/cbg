@@ -238,6 +238,9 @@ window.onload = function(){
 				if(!_private_params.params.school_skill_level){
 					_private_params.params.school_skill_num= "";
 				}
+				if(_private_params.params.limit_clothes.length == 0){
+					_private_params.limit_clothes_logic = "";
+				}
 			// 装备
 			}else if(this.public_params.service_id == 3){
 				for (var k in this.equip_params){

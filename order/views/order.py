@@ -147,7 +147,7 @@ def pull_order_data(request, response, render):
     offset, order_by, int_limit, filter_ = render['query_params']
     filter_['user_id'] = request.user.id
     filter_['is_delete'] = 0
-    query_list = CbgOrders.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_)
+    query_list = CbgOrders.json_queryset(order_by=order_by, offset=offset, limit=int_limit, filter_=filter_, exclude={'status': '初始状态'})
     for _query in query_list:
         _info = _query['service_info'].split('|', 4)  # 推送方式|服务时长|是否第一轮推送|是否降价推送|memo
         _query['push_type'] = _info[0]

@@ -10,12 +10,18 @@ setting_name = 'localhost' if env == 'localhost' else 'ecs'
 HOST_TEST_SEREVER = '127.0.0.1'
 ALI1_IP = '47.104.193.247'
 ALI2_IP = '47.98.229.132'
+# app端的接口
 # 召唤兽爬取的url
-BB_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_pet_search&order_by=selling_time+DESC&'
+# BB_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_pet_search&order_by=selling_time+DESC&'
 # 角色爬取的url
-ROLE_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_role_search&order_by=selling_time+DESC&'
+# ROLE_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_role_search&order_by=selling_time+DESC&'
 # 装备爬取的url
-EQUIP_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_equip_search&order_by=selling_time+DESC&'
+# EQUIP_BASE_URL_SEARCH = 'http://xyq-android2.cbg.163.com/app2-cgi-bin/app_search.py?act=super_query&search_type=overall_equip_search&order_by=selling_time+DESC&'
+
+# 网页端的api 支持count 100
+BB_BASE_URL_SEARCH = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_pet_search&order_by=selling_time+DESC&'
+ROLE_BASE_URL_SEARCH = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&'
+EQUIP_BASE_URL_SEARCH = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_equip_search&order_by=selling_time+DESC&'
 
 # paypayzhu 第三方支付的认证信息
 PPZ = {
