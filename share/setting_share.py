@@ -52,12 +52,12 @@ G_MYSQL['ali_2'] = G_MYSQL['ali_1']
 
 G_REDIS = {
 	'localhost': {
-		'host': HOST_TEST_SEREVER,
+		'host': '127.0.0.1',
         'password': 'Xj3.14164',
 	},
 	'ali_1': {
-		'host': ALI1_IP,
-		'password': 'Xj3.14164'
+		'host': '127.0.0.1',
+		'password': 'Xj3.14164',
 	}
 }
 
