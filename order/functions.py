@@ -75,7 +75,7 @@ def prepare_order_pay(request, order_id, coupon_id):
                 return False, '您选择的优惠券无法用于【%s】' % order.service_name
             # 计算优惠价格
             reduction = coupon.get_reduction(order.real_price)
-            order.real_price = order.real_price - reduction if order.real_price > reduction else 0.01
+            order.real_price = order.real_price - reduction if order.real_price > reduction else 1
             # 更新优惠券关系
             my_coupon.status = 1
             my_coupon.order_id = order.id
@@ -102,7 +102,7 @@ def check_reduction_log(order, revise=True):
     """校验优惠是否过期"""
     now = datetime.datetime.now()
     redu_list = CbgOrderReductionLog.objects.filter(order_id=order.id)  # 获取下单时所有的优惠信息
-    if redu_list and redu_list[0].pay_sucess:  # 如果这个订单已经支付了
+    if redu_list and redu_list[0].pay_success:  # 如果这个订单已经支付了
         return [], list(redu_list)
     disable_reduction = [_x for _x in redu_list if _x.deadline < now]
     awalid_reduction = [_x for _x in redu_list if _x.deadline >= now]

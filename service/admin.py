@@ -11,9 +11,10 @@ class CbgBannerAdmin(object):
 
     def save_models(self):
         obj = self.new_obj
-        obj.save()
-        redis_cache = RedisKeyCache(key_prefix='banner')
-        redis_cache.incr_version()
+        if obj:
+            obj.save()
+            redis_cache = RedisKeyCache(key_prefix='banner')
+            redis_cache.incr_version()
 
 
 class CbgServiceAdmin(object):

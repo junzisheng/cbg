@@ -1,0 +1,64 @@
+{% set title = '兑换码' %}
+{% extends 'base_toper.html' %}
+{% block cssstyle %}
+{% endblock %}
+{% block content %}
+<div style="margin-top: 20px">
+	<i-input v-model="code" placeholder="请输入验证码" clearable style="width:100%;"></i-input>
+</div>
+<div style="margin-top: 10px;border-radius: 4px;text-align: center;color: white;height: 30px;line-height: 30px;" :style="{'background-color': code.length==36 ? '#26a426' : '#999'}" @click="do_">
+	((!submiting ? '兑换' : '兑换中'))
+</div>
+
+
+
+
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			code: "",
+			submiting: false,
+			content: false,
+		},
+		methods: {
+			do_: function(){
+				if(this.code.length != 36 || this.submiting)
+					return false
+				var vm = this;
+				normal_ajax('/activity/use_convert_code_api', 'GET', {'code': vm.code},
+					function(){
+						vm.submiting = true;
+					},
+					function(ret){
+						if(ret.retcode == 'SUCC'){
+							vm.$Modal.success({
+								title: '兑换成功',
+								content: ret.content,
+								loading: true,
+								onOk: function(){
+									location.href = '/user/mine';
+								}
+							})
+						}else{
+							vm.$Message.warning(ret.description)
+						}
+					}, null,
+					function(){
+						vm.submiting = false;
+					}
+				)
+
+			},
+			
+
+		}
+
+
+	})
+</script>
+{% endblock %}

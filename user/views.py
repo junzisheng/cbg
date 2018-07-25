@@ -24,11 +24,11 @@ from unit.decoration import ajax_refresh
 
 def login(request, response, render):
     render['redirect'] = request.GET.get('redirect', '/user/mine')
-    return render_to_response(request, response, render, 'auth/login.html')
+    return render_to_response(request, response, render, 'user/templates/login.html')
 
 
 def register(request, response, render):
-    return render_to_response(request, response, render, 'auth/register.html')
+    return render_to_response(request, response, render, 'user/templates/register.html')
 
 
 @csrf_exempt
@@ -140,7 +140,7 @@ def mine(request, response, render):
     # 今日是否签到过
     render['has_signed'] = CbgUserSign.objects.filter(user=request.user, sign_time=render['timenow'].date())
     # 获取今日抽奖剩余次数
-    return render_to_response(request, response, render, 'auth/mine.html')
+    return render_to_response(request, response, render, 'user/templates/mine.html')
 
 
 def qrcode_(request, response, render):

@@ -1,9 +1,11 @@
 import random
 import datetime
 from django.db import transaction
+from user.models import UserProfile
+from order.models import CbgRechargeRecord
 from coupon.models import CbgCoupon
 from unit.utility import render_to_response, response_json, render_to_error_response
-from .models import CbgLottery1
+from .models import CbgLottery1, CbgConvertCode, CbgConvertCodeLog
 from coupon.functions import assigin_coupon
 
 
@@ -61,6 +63,52 @@ def turnplate_begin(request, response, render):
     elif 95 <= rd <= 100:
         code = 7
     return response_json(retcode='SUCC', msg="TurplateSucc", code=code)
+
+
+def use_convert_page(request, response, render):
+    """使用兑换码"""
+    return render_to_response(request, response, render, 'activity/templates/convert_page.html')
+
+
+@transaction.atomic
+def use_convert_api(request, response, render):
+    code = request.GET.get('code', '')
+    if len(code) != 36:
+        return response_json(retcode='FAIL', msg='ErrorConvertCode', description='错误的兑换码！')
+    try:
+        convert = CbgConvertCode.objects.select_for_update().get(convert_code=code)
+    except:
+        return response_json(retcode='FAIL', msg='ErrorConvertCode', description='错误的兑换码！')
+    if convert.receive_total >= convert.total_limit:
+        return response_json(retcode='FAIL', msg='ConvertQuantityLimit', description='该兑换码已被领完！')
+    if CbgConvertCodeLog.objects.filter(user=request.user, convert=convert).count() >= convert.quantity_limit:
+        return response_json(retcode='FAIL', msg='ConvertUserLimig', description='您已兑换过！')
+    if render['timenow'] > convert.end_time:
+        return response_json(retcode='FAIL', msg='ConvertDeadline', description='该兑换码已过期！')
+    if render['timenow'] < convert.start_time:
+        return response_json(retcode='FAIL', msg='ConvertFuture', description='该兑换码未到领取时间！')
+    # 货币奖励
+
+    content =""
+    if convert.obj_type == 2:
+        profile = UserProfile.objects.select_for_update().get(user_id=request.user.id)
+        CbgRechargeRecord.objects.create(user=request.user, quantity=convert.obj_quantity, give=0, status='已支付',
+                                         left_quantity=profile.currency, create_time=render['timenow'],
+                                         pay_time=render['timenow'], alias='兑换码')
+        profile.currency += convert.obj_quantity
+        profile.save()
+        CbgConvertCodeLog.objects.create(user=request.user, convert=convert)
+        content = "恭喜您，成功兑换到了%s个货币" % (convert.obj_quantity / 100.0)
+    # 发放优惠券
+    elif convert.obj_type == 1:
+        b, error = assigin_coupon(request.user, convert.obj_id, '', datetime.timedelta(days=7))
+        if b != 0:
+            return response_json(retcode='FAIL', msg='ConvertCouponFail', description=error)
+        coupon = CbgCoupon.objects.get(id=convert.obj_id)
+        content = "恭喜您，成功兑换到了【%s】" % coupon.coupon_name
+    convert.receive_total += 1
+    convert.save()
+    return response_json(retcode='SUCC', msg='ConvertSucc', content=content)
 
 
 

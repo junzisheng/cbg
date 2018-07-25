@@ -35,7 +35,7 @@
 		</div>
 	</div>
 </div>
-<order-ul-item :order_='{{ order | obj_2_json_str }}' :server_options_='{{ order.resolve_service_info() | json_dumps | safe}}' :operate="false" :reduction_log="{{ awalid_reduction | queryset_to_js | safe}}"></order-ul-item>
+<order-ul-item :order_='{{ order | obj_2_json_str }}' :server_options_='{{ order.resolve_service_info() | json_dumps | safe}}' :operate="false" :reduction_log='{{ awalid_reduction | queryset_to_js | json_dumps | safe}}'></order-ul-item>
 
 
 {% endblock %}
