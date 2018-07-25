@@ -197,6 +197,14 @@ class Base_Crawl(object):
                 other_info = json.loads(equip['other_info'])
             for key in self.template_field:
                 # 有些数据是存放在元数据中的other_info中
+                if key == 'icon':
+                    if self.order_info['service_id'] in (1, 3): # 召唤兽
+                        equip_dict[key] = equip.get('equip_type', "")
+                    elif self.order_info['service_id'] == 2: # 角色
+                        equip_dict[key] = equip.get('icon', "")
+                    continue
+                    # elif self.order_info['service_id'] == 3:
+                    #     equip_dict[key] = equip.get('equip_type')
                 if key == 'selling_time':
                     equip_dict[key] = datetime.datetime.strptime(equip.get(key) ,'%Y-%m-%d %H:%M:%S')
                     continue
@@ -237,6 +245,7 @@ class Base_Crawl(object):
             equip_dict['update_time'] = datetime.datetime.now()
             equip_dict['order_id'] = self.order_info['order_id']
             equip_dict['user_id'] = self.order_info['user_id']
+            equip_dict['service_id'] = self.order_info['service_id']
             # 内存存储爬取过的数据，用来判断重复爬取数据是否更新
             unique_dict = dict((x, equip_dict[x]) for x in self.update_field)
             if eid not in self.set_dict:
@@ -309,7 +318,7 @@ class BBCrawl(Base_Crawl):
     data_model = CbgCrawlData
     # 定义插入数据库的模板
     template_field= ['subtitle', 'collect_num', 'serverid', 'selling_time', 'eid', 'equip_name', 'icon',
-                     'price', 'accept_bargain', 'desc_sumup_short', 'area_name', 'server_name', 'highlight']
+                     'price', 'accept_bargain', 'desc_sumup_short', 'area_name', 'server_name', 'highlight', 'game_ordersn']
     template_other_field = ['accept_bargain', 'subtitle', 'status_desc', 'desc_sumup_short']  # 支持count的url 这些字段需要在other_info中获取
     # 用来判断重复爬取的时候数据有没有更新
     update_field = ['collect_num', 'selling_time', 'price', 'accept_bargain']
@@ -357,10 +366,10 @@ class BBCrawl(Base_Crawl):
             raise OterStatus
 
 class RoleCrawl(BBCrawl):
-    pass
+    crawl_type = 'role'
 
 class EquipCrawl(BBCrawl):
-    pass
+    crawl_type = 'equip'
 
 
 if __name__ == '__main__':
@@ -379,7 +388,7 @@ if __name__ == '__main__':
     # url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&level_min=175&level_max=175&price_min=10000000'
     # url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&expt_fangyu=15&bb_expt_kangfa=15&limit_clothes_logic=or&expt_kangfa=15&level_max=175&fang_yu=1300&bb_expt_gongji=15&shang_hai=2000&price_max=100000000&expt_gongji=15&limit_clothes=12512%2C12498%2C12513%2C12514%2C12647%2C12646%2C12648%2C12652%2C12654%2C12653%2C12765%2C12750%2C12850%2C12767%2C13790%2C40013%2C40025%2C40023%2C40108&bb_expt_fangyu=15&skill_dazao=100&bb_expt_fashu=15&level_min=160&pet_type_list=1&xiangrui_list=%E6%98%9F%E5%8D%8E%E9%A3%9E%E9%A9%AC%2C%E7%94%9C%E8%9C%9C%E7%8C%AA%E7%8C%AA%2C%E7%8E%89%E8%84%82%E7%A6%8F%E7%BE%8A%2C%E9%A3%9E%E5%A4%A9%E7%8C%AA%E7%8C%AA%2C%E7%A5%9E%E8%A1%8C%E5%B0%8F%E9%A9%B4&race=2'
     c = TaskManager.init_crawl_obj(3, url, {'push_type': '', 'order_id': 39, 'price_down_push': False, 'time_range': {'days': 1}, 'umobile': '18221410984',
-     'user_id': 10, 'memo': '', 'end_time': '2018-07-30 15:43:02', 'first_round_push': False})
+     'user_id': 10, 'memo': '', 'end_time': '2018-07-30 15:43:02', 'first_round_push': False, 'service_id': 3})
     try:
         c.run()
     except KeyboardInterrupt:

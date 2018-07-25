@@ -10,20 +10,12 @@ if __name__ == "__main__":
     run_setting = None
     # 载入setting
     from cbg_backup import settings
-    # from share.setting_share import env
-    # run_setting = 'ecs' if env in ('ali_1', 'ali_2') else 'localhost'
-    # setting_module = import_module('setting.%s' % run_setting)
-    # for k in dir(setting_module):
-    #     if k.startswith('__'):
-    #         continue
-    #     v = getattr(setting_module, k)
-    #     if not isinstance(v, types.ModuleType):
-    #         setattr(settings, k, v)
     from django.core.management import execute_from_command_line
     from jinja2 import Environment, FileSystemLoader
     templates_dirs = [os.path.join(settings.BASE_DIR, 'templates')]
     jinja2_env = Environment(loader=FileSystemLoader(templates_dirs) , trim_blocks = True)
     from cbg_backup import filters
+    # 动态绑定filter到jinja中
     for k in dir(filters):
         v = getattr(filters, k)
         if k not in ['contextfilter'] and not k.startswith('_') and isinstance(v, types.FunctionType):

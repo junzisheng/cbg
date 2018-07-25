@@ -57,16 +57,22 @@ window.onload = function(){
 				}
 			},
 			methods: {
-				query_list_handle: function(query_list){
-					for(var i=0;i<query_list.length;i++){
-						var item = query_list[i];
-						item.link  = 'http://xyq.cbg.163.com/equip?s={0}&eid={1}'.format(item['serverid'], item['eid']);
+				query_list_handle: function(old_list, new_list){
+					for(var i=0;i<new_list.length;i++){
+						var item = new_list[i];
+						item.link = 'http://xyq-m.cbg.163.com/cgi/mweb/product/detail/{0}/{1}'.format(item['serverid'], item['game_ordersn'])
+						console.log(item.icon)
+						if(item.service_id == 1 || item.service_id == 3){
+						    item.icon = 'https://cbg-xyq.res.netease.com/images/small/{0}.gif'.format(item.icon)
+						}else if(item.service_id == 2){
+						    item.icon = 'https://cbg-xyq.res.netease.com/images/app/bigface/{0}.png'.format(item.icon)
+						}
 						if(!item.checked){
 							item.checked = false;
 							this.all_choose = false;
 						}
 					};
-					return query_list;
+					return old_list.concat(new_list);
 				},
 				switch_tab: function(){
 					this.$refs.wsitch_tab_menu.show()

@@ -46,28 +46,30 @@ class CbgCrawlData(BaseModel):
     """爬取藏宝阁的信息"""
     user_id = models.IntegerField()
     order_id = models.IntegerField()
-    subtitle = models.CharField(max_length=32)
-    collect_num = models.SmallIntegerField()
-    selling_time = models.DateTimeField()
+    service_id = models.IntegerField()
+    subtitle = models.CharField(max_length=32)  # 等级
+    collect_num = models.SmallIntegerField()  # 收藏数
+    selling_time = models.DateTimeField()  # 出售的时间
     eid = models.CharField(max_length=64)
-    equip_name = models.CharField(max_length=16)
-    icon = models.CharField(max_length=512)
+    equip_name = models.CharField(max_length=16)  # 名称(人物是id 召唤兽和装备就是名称)
+    icon = models.CharField(max_length=512)  # 创建图片链接的参数
+    game_ordersn = models.CharField(max_length=128)  # 组成详情页的url  http://xyq-m.cbg.163.com/cgi/mweb/product/detail/{serverid}/{game_ordersn}??view_loc=link_weixin&equip_refer=326
     old_price = models.IntegerField()
     price = models.IntegerField()
-    status_desc = models.CharField(max_length=8)
-    accept_bargain = models.BooleanField()
-    desc_sumup_short = models.CharField(max_length=128)
+    status_desc = models.CharField(max_length=8)  # 上架 公示期
+    accept_bargain = models.BooleanField()  # 是否接收还价
+    desc_sumup_short = models.CharField(max_length=128)  # 简单的介绍
     area_name = models.CharField(max_length=16)
     serverid = models.CharField(max_length=16)
     server_name = models.CharField(max_length=16)
-    highlight = models.CharField(max_length=128)
+    highlight = models.CharField(max_length=128)  # 亮点
     update_time = models.DateTimeField()
-    is_display = models.BooleanField(default=1)
-    is_delete = models.BooleanField(default=0)
+    is_display = models.BooleanField(default=1)  # 是否显示
+    is_delete = models.BooleanField(default=0)  # 是否被删除
 
     out_params = ['id','user_id', 'order_id', 'subtitle', 'collect_num', 'selling_time', 'eid', 'equip_name',
                   'icon', 'old_price', 'price', 'status_desc', 'accept_bargain', 'desc_sumup_short', 'area_name',
-                  'serverid', 'server_name', 'highlight', 'update_time']
+                  'serverid', 'server_name', 'highlight', 'update_time', 'game_ordersn', 'service_id']
 
     class Meta:
         db_table = 'cbg_crawl_data'

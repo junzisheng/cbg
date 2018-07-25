@@ -127,6 +127,7 @@ def start_task(order, order_detail):
     now = datetime.datetime.now()
     service_deadline = now + datetime.timedelta(days=order_detail.service_time)
     crawl_task.delay(order.service_id, order_detail.crawl_url, {
+        'service_id': order.service_id,
         'order_id': order.id,
         'memo': order_detail.memo,
         'user_id': order.user_id,

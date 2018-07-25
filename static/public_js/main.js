@@ -457,7 +457,7 @@ var scroll_refresh_mixin = {
             normal_ajax(obj.url, 'GET', obj.query_obj, null,function(ret){
                 if(ret.retcode === 'SUCC'){
                     if(that.query_list_handle && typeof that.query_list_handle == 'function'){
-                        obj.query_list = that.query_list_handle(obj.query_list.concat(ret.query_list));
+                        obj.query_list = that.query_list_handle(obj.query_list, ret.query_list);
                     }else{
                         obj.query_list = obj.query_list.concat(ret.query_list);
                     }
