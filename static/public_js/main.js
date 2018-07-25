@@ -1,6 +1,40 @@
 
 
 ////////////////// 公用的方法 //////////////////////////////////////
+// js报错跟踪
+window.onerror = function(msg, url, line, col, error){
+    var col = col || (window.event && window.event.errorCharacter) || 0;
+    var err_msg = "";
+    if(error && error.stack){
+        err_msg = error.stack.toString();
+    }else if(arguments.callee){
+        var ext = [];
+        var fn = arguments.callee.caller;
+        var floor = 3; //这里只拿三层堆栈信息
+        while (fn && (--floor>0)) {
+            ext.push(fn.toString());
+            if (fn === fn.caller) {
+                break;//如果有环
+            }
+            fn = fn.caller;
+        }
+        ext = ext.join(",");
+        err_msg = error.stack.toString();
+    }
+    report_data = {err_js: url, line: line, col: col, err_msg: err_msg};
+    normal_ajax('/others/track_js', 'POST', report_data)
+    if(superuser){
+        var v = new Vue();
+        v.$Modal.error({
+            title: 'js发生错误，请截图给管理员',
+            content: '<div>{0}</div>\
+            <div>第{1}行,{2}列</div>\
+            <div>错误详情</div>\
+            <div style="word-break: break-all;word-wrap: break-word;">{3}</div>'.format(url, line, col, err_msg)
+        })
+
+    }
+}
 $(function(){
     // 控制a标签的点击事件
     $('a').click(function(){

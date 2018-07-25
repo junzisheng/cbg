@@ -1,8 +1,9 @@
 import os
 import emoji
 import datetime
+from django.http import HttpResponse
 from cbg_backup import settings
-from .models import Problems
+from .models import Problems, CbgTrackJsError
 from unit.decoration import accept_token
 from unit.utility import render_to_response, response_json
 
@@ -64,6 +65,27 @@ def submit_problems(request, response, render):
             img_list=img_list,
         )
     return response_json(retcode='SUCC', msg="ProblemsSubmitSucc")
+
+
+def track_js(request, response, render):
+    """跟踪js的报错信息"""
+    err_js = request.POST.get('err_js')
+    line = request.POST.get('line')
+    col = request.POST.get('col')
+    err_msg = request.POST.get('err_msg')
+    user_ip = request.META.get('REMOTE_ADDR', '')
+    user_agent=request.META['HTTP_USER_AGENT'][:256]
+    if user_ip and user_agent:
+        CbgTrackJsError.objects.create(
+            user_id=request.user.id if render['user_login'] else None,
+            js_name=err_js,
+            line=line,
+            col=col,
+            err_stack=err_msg,
+            ip=user_ip,
+            user_agent=user_agent,
+        )
+    return HttpResponse('ok')
 
 
 

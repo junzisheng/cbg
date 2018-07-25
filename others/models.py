@@ -18,3 +18,18 @@ class Problems(models.Model):
     class Meta:
         db_table = "cbg_problems"
         ordering = ['-id']
+
+
+class CbgTrackJsError(models.Model):
+    """跟踪前端js的错误"""
+    user_id = models.IntegerField()
+    js_name = models.CharField(max_length=256, null=True, blank=True)
+    line = models.CharField(max_length=8, null=True, blank=True)
+    col = models.CharField(max_length=8, null=True, blank=True)
+    err_stack = models.TextField(null=True, blank=True)
+    ip = models.CharField(max_length=16, null=True, blank=True)
+    user_agent = models.CharField(max_length=256)
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'cbg_track_js_error'
