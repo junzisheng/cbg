@@ -1,4 +1,5 @@
 Django: 2.0.1
+pip intall feature
 redis_session: pip install django-redis-sessions==0.5.6
 qiniu: pip install qiniu
 emoji: pip install emoji
