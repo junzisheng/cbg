@@ -163,8 +163,12 @@ def delete_order(request, response, render, order_id):
     """删除订单"""
     try:
         order = CbgOrders.objects.get(user_id=request.user.id, id=order_id, is_delete=0)
+        if order.status == '进行中':
+            return response_json(retcode='FAIL', msg="OrderRunning", description='错误的请求！')
+        pre_status = order.status
         order.is_delete = 1
-        order.save()
+        order.status = '已删除'
+        order.save(pre_status=pre_status)
         # 删除记录的优惠记录
         CbgOrderReductionLog.objects.filter(order_id=order.id).delete()
         # 释放使用的优惠券

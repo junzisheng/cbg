@@ -72,6 +72,7 @@ def service_modify_api(request, response, render, order_id):
         return response_json('FAIL', msg="PARAMS_ERROR", description='上传的数据有误！')
     if order.status == '待付款':
         order_detail.service_time = service_time
+        # todo 需要重新计算价格
     if order.status == '进行中':
         order.modify_times -= 1
     push_type = ""

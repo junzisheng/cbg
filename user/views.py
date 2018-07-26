@@ -246,7 +246,7 @@ def sign_api(request, response, render):
             lotter.last_lottery_time = today
         lotter.save()
     return response_json(retcode='SUCC', msg='SignSucc', description='签到成功！', continue_days=sign_log.continue_days,
-                         prize_currency=prize_currency, prize_logger_times=3)
+                         prize_currency=prize_currency / 100.0, prize_logger_times=3)
 
 
 

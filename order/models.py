@@ -4,6 +4,7 @@ from core.models import BaseModel
 from service.models import CbgService
 from coupon.models import CbgCoupon, CbgCouponUserRelation
 from service.models import CbgBanner, CbgServiceActivity
+from cbg_backup import settings
 
 
 class CbgOrders(BaseModel):
@@ -34,6 +35,24 @@ class CbgOrders(BaseModel):
         _info[2] = _info[2] == 'True'
         _info[3] = _info[3] == 'True'
         return _info
+
+    def save(self, *args, pre_status=None,  **kwargs):
+        """这里主要是根据订单状态的转变修改redis中的数据"""
+        super(CbgOrders, self).save(*args, **kwargs)
+        pip3 = settings.redis3.pipeline()
+        if pre_status == '初始状态' and self.status == '待付款':
+            pip3.hincrby('user_order_count', 'wait:%s' % self.user_id)
+            pip3.execute()
+        elif pre_status == '待付款' and self.status == '进行中':
+            pip3.hincrby('user_order_count', 'wait:%s' % self.user_id, -1)
+            pip3.hincrby('user_order_count', 'doing:%s' % self.user_id, 1)
+            pip3.execute()
+        elif pre_status == '进行中' and self.status == '已完成':
+            pip3.hincrby('user_order_count', 'doing:%s' % self.user_id, -1)
+            pip3.execute()
+        elif pre_status == '待付款' and self.status == '已删除':
+            pip3.hincrby('user_order_count', 'wait:%s' % self.user_id, -1)
+            pip3.execute()
 
 
 class CbgOrderDetail(models.Model):

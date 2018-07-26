@@ -102,34 +102,8 @@
 			<span>4.添加图片(添加问题相关图片更容易获得奖励哦)</span>
 		</div>
 
-		<div v-for="img in img_list" class="img-box" style="margin:10px 10px 0 0">
-			<div style="height: 100%;">
-				<Icon type="minus-circled" class="img-cancel" @click.native.stop="removeImg(img)"></Icon>
-				<img :src="img" style="height: 100%;width: 100%">
-			</div>
-		</div>
+		<img-item :domain="'{{qiniu_domain}}'" :max_length="5" :token="'{{qiniu_token}}'" ref="img"></img-item>
 
-		<div class="img-box" v-if="img_list.length < maxImageLength" id="container">
-			<div class="no-img">
-				<Icon type="image"></Icon>
-			</div>
-			<input type="file" class="file-input" @change="img_change($event)" id="pickfiles">
-		</div>
-
-<!-- 		<div v-for="img in img_list" class="img-box" style="margin:10px 10px 0 0">
-			<div style="height: 100%;">
-				<Icon type="minus-circled" class="img-cancel" @click.native.stop="removeImg(img)"></Icon>
-				<img :src="img.url" style="height: 100%;width: 100%" @error="imgError($event, img)">
-			</div>
-			<input type="file" class="file-input" @change="img_change($event, img);">
-		</div>
-		<div class="img-box" v-if="img_list.length < maxImageLength" id="container">
-			<div class="no-img">
-				<Icon type="image"></Icon>
-			</div>
-			<input type="file" class="file-input" @change="img_change($event)" id="pickfiles">
-		</div>
-		!-->
 	</div>
 
 	<page-notic-item :title="'问题提交说明'">
@@ -147,98 +121,6 @@
 
 {% block javascript %}
 <script type="text/javascript">
-	var qiniu_params ={
-      runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-      browse_button: 'pickfiles',         // 上传选择的点选按钮，必需
-      // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
-      // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
-      // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
-      uptoken : '{{ qiniu_token }}',
-      // uptoken_url: '/uptoken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-      // uptoken_func: function(){    // 在需要获取uptoken时，该方法会被调用
-      //    // do something
-      //    return uptoken;
-      // },
-      get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-      // downtoken_url: '/downtoken',
-      // Ajax请求downToken的Url，私有空间时使用，JS-SDK将向该地址POST文件的key和domain，服务端返回的JSON必须包含url字段，url值为该文件的下载地址
-      // unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
-      // save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
-      domain: '{{qiniu_domain}}',     // bucket域名，下载资源时用到，必需
-      container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
-      max_file_size: '2mb',             // 最大文件体积限制
-      flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
-      max_retries: 3,                     // 上传失败最大重试次数
-      // dragdrop: true,                     // 开启可拖曳上传
-      // drop_element: 'input',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-      // chunk_size: '4mb',                  // 分块上传时，每块的体积
-      auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-      //x_vars : {
-      //    查看自定义变量
-      //    'time' : function(up,file) {
-      //        var time = (new Date()).getTime();
-                // do something with 'time'
-      //        return time;
-      //    },
-      //    'size' : function(up,file) {
-      //        var size = file.size;
-                // do something with 'size'
-      //        return size;
-      //    }
-      //},
-      filters : {
-            max_file_size : '2mb',
-            prevent_duplicates: true,
-            //Specify what files to browse for
-             mime_types: [
-            	{title : "Image files", extensions : "jpg,gif,png"}, //限定jpg,gif,png后缀上传
-            ]
-       },
-      init: {
-          'FilesAdded': function(up, files) {
-              plupload.each(files, function(file) {
-                  // 文件添加进队列后，处理相关的事情
-              });
-          },
-          'BeforeUpload': function(up, file) {
-          },
-          'UploadProgress': function(up, file) {
-                 // 每个文件上传时，处理相关的事情
-
-          },
-          'Error': function(up, err, errTip) {
-          		up.vue.$Message.warning(errTip);
-          		var progress = new FileProgress(err.file, 'fsUploadProgress');
-                progress.setError();
-                progress.setStatus(errTip);
-          },
-          'FileUploaded': function(up, file, info) {
-          	    up.vue.FileUploaded(up, file, info);
-           },
-          'UploadComplete': function() {
-                 //队列文件处理完毕后，处理相关的事情
-          },
-          'Key': function(up, file) {
-              // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-              // 该配置必须要在unique_names: false，save_key: false时才生效
-              var date = new Date();
-              // year = date.getFullYear();
-              // month = date.getMoth();
-              // day = date.getDate();
-              hour = date.getHours();
-              minute = date.getMinutes();
-              seconds = date.getSeconds();
-              miseconds = date.getMilliseconds();
-              return '/bugs/img/{{request.user.id}}/{0}:{1}:{2}:{3}:{4}'.format(date.toLocaleDateString(), hour, minute, seconds, miseconds);
-          }
-      }
-  }
-	
-	
-  // domain为七牛空间对应的域名，选择某个空间后，可通过 空间设置->基本设置->域名设置 查看获取
-  // uploader为一个plupload对象，继承了所有plupload的方法
-	
-
 	var v = new Vue({
 		el: '#body',
 		delimiters : ["((", "))"],
@@ -248,13 +130,6 @@
 			title: '',
 			content:"",
 			submiting: false,
-
-
-
-			img_list: [],
-			format: ['jpg', 'png', 'gif'],
-			maxImageSize: 2048,
-			maxImageLength: 5,
 			choice_list: [{'text': '网页打不开'}, {'text': '网页加载太慢'}, {'text': '网页渲染有问题'}, {'text': '数据有问题'}, {'text': '操作提示错误'},  {'text': '其它'}, {'text':'我有好的创意'}]
 		},
 		mounted: function(){
@@ -268,8 +143,6 @@
 				})
 			}
 			// 初始化七牛对象
-			var uploader = Qiniu.uploader(qiniu_params);
-			uploader.vue = this;
 		},
 		methods: {
 			showProblems: function(){
@@ -278,39 +151,6 @@
 			problemChoose: function(problem){
 				this.type = problem;
 			},
-			removeImg: function(img){
-				var index = this.img_list.indexOf(img);
-		        this.img_list.splice(index, 1);
-			},
-			checkFormatError:function(file) {
-            	if(this.format.length) {
-                	var format = file.name.split(".").pop().toLocaleLowerCase();
-                	if(this.format.indexOf(format) === -1){
-                		this.$Message.warning('错误的图片格式！');
-                		return true;
-                	}
-                }
-            },
-            FileUploaded: function(up, file, info) {
-            	 console.log(up, file, info)
-            	 this.img_list.push('http://{{qiniu_domain}}/' + JSON.parse(info.response).key);
-                 // 每个文件上传成功后，处理相关的事情
-                 // 其中info.response是文件上传成功后，服务端返回的json，形式如：
-                 // {
-                 //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-                 //    "key": "gogopher.jpg"
-                 //  }
-                 // 查看简单反馈
-                 // var domain = up.getOption('domain');
-                 // var res = parseJSON(info.response);
-                 // var sourceLink = domain +"/"+ res.key; 获取上传成功后的文件的Url
-         	},
-            checkMaxSize:function(file) {
-                if(this.maxImageSize && file.size > 1024 * this.maxImageSize){
-            		this.$Message.warning('图片太大！');
-            		return true;
-            	}
-            },
             submit: function(){
             	if(this.submiting){
             		this.$Message.warning('正在提交中。。');
@@ -331,19 +171,23 @@
             	submit_data['type'] = this.type;
             	submit_data['title'] = this.title;;
             	submit_data['content'] = this.content;
-            	submit_data['img_list'] = this.img_list.join('@');
+            	submit_data['img_list'] = this.$refs.img.getImgList().join('@');
         		var that = this;
         		normal_ajax("/others/submit_problems", 'POST', submit_data, function(){
         				that.submiting = true;
         			}, function(ret){
-        				that.$Modal.success({
-							title: '提交成功',
-							content: '您的反馈已经提交成功，一旦被采纳会立刻为您充值盒币！感谢您的反馈。',
-							okText:'确认',
-							onOk: function(){
-								history.back();
-							},
-						})
+        				if(ret.retcode == 'SUCC'){
+	        				that.$Modal.success({
+								title: '提交成功',
+								content: '您的反馈已经提交成功，一旦被采纳会立刻为您充值盒币！感谢您的反馈。',
+								okText:'确认',
+								onOk: function(){
+									history.back();
+								},
+							})
+        				}else{
+        					that.$Message.warning(ret.description);
+        				}
 	        		},function(ret){
 	        			that.$Message.warning(ret.description)
 	        		},function(){

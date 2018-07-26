@@ -19,6 +19,12 @@ class Problems(models.Model):
         db_table = "cbg_problems"
         ordering = ['-id']
 
+    def save(self, *args, **kwargs):
+        pass
+
+    def create(self):
+        pass
+
 
 class CbgTrackJsError(models.Model):
     """跟踪前端js的错误"""

@@ -65,3 +65,22 @@ def json_dumps(obj):
 def queryset_to_js(queryset):
     return queryset_to_list_of_dict(queryset, support_json=True)
 
+
+def get_mine_redis_data(request):
+    """获取mine页面所有redis中的数据"""
+    user_id = request.user.id
+    pip = settings.redis3.pipeline()
+    # 消息
+    pip.hget('user_message', 'notic:%s' % user_id)
+    pip.hget('user_message', 'offer:%s' % user_id)
+    # 订单
+    pip.hget('user_order_count', 'wait:%s' % user_id)
+    pip.hget('user_order_count', 'doing:%s' % user_id)
+    result = pip.execute()
+    notic = int(result.pop(0) or 0)
+    offer = int(result.pop(0) or 0)
+    wait = int(result.pop(0) or 0)
+    doing = int(result.pop(0) or 0)
+    return [notic + offer, wait, doing]
+
+

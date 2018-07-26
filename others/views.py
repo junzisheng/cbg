@@ -48,7 +48,7 @@ def submit_problems(request, response, render):
     title = request.POST.get('title', '')
     content = request.POST.get('content', '')
     img_list = request.POST.get('img_list', '')
-    if all([submit_type, type, title, content]):
+    if not all([submit_type, type, title, content]):
         return response_json(retcode='FAIL', msg="ErrorParams", description='错误的提交数据！')
     # if request.FILES:
     #     bol, res = upload_files(request)
@@ -56,14 +56,14 @@ def submit_problems(request, response, render):
     #         return response_json(retcode='FAIL', msg="ImageUploadFail", description=res)
     #     img_url = ';'.join(res)
     if submit_type == 'Bug':
-        Problems.objects.create(
+        Problems(
             user_id=request.user.id,
             type=submit_type,
             subtype=type,
             title=title,
             detail=content,
             img_list=img_list,
-        )
+        ).save()
     return response_json(retcode='SUCC', msg="ProblemsSubmitSucc")
 
 

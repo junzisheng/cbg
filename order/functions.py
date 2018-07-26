@@ -50,6 +50,7 @@ def prepare_order_pay(request, order_id, coupon_id):
     try:
         my_coupon = None
         order = CbgOrders.objects.select_for_update().get(id=order_id, user_id=request.user.id)
+        pre_status = order.status
         if order.status not in ('待付款', '初始状态'):
             return False, '错误的订单号！'
         if order.status == '待付款':
@@ -92,7 +93,7 @@ def prepare_order_pay(request, order_id, coupon_id):
                 create_time=now,
                 pay_success= False,
             )
-        order.save()
+        order.save(pre_status=pre_status)
         return True, (order, my_coupon)
     except Exception as e:
         return False, '错误的请求'
@@ -143,13 +144,14 @@ def start_task(order, order_detail):
 def order_bill(order, order_detail, pay_channel, pay_tradeno):
     """订单结算"""
     now = datetime.datetime.now()
+    pre_status = order.status
     order.pay_status = '已支付'
     order.status = '进行中'
     order.pay_channel = pay_channel
     order.pay_time = now
     order.pay_tradeno = pay_tradeno
     order.start_time = now
-    order.save()
+    order.save(pre_status=pre_status)
     # 记录服务的销售情况
     order.service.count_buy += order_detail.service_time
     order.service.count_price += order.real_price

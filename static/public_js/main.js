@@ -1281,6 +1281,158 @@ var order_ul = {
     }
 
 }
+
+// 七牛图片上传组件
+var img_item = {
+    template: '\
+    <div>\
+        <div v-for="img in img_list" class="img-box" style="margin:10px 10px 0 0">\
+            <div style="height: 100%;">\
+                <Icon type="minus-circled" class="img-cancel" @click.native.stop="removeImg(img)"></Icon>\
+                <img :src="img" style="height: 100%;width: 100%">\
+            </div>\
+        </div>\
+        <div class="img-box" v-if="img_list.length < maxImageLength" id="container">\
+            <div class="no-img">\
+                <Icon type="image"></Icon>\
+            </div>\
+            <input type="file" class="file-input" id="pickfiles">\
+        </div>\
+    </div>',
+    props: ['domain', 'token', 'max_length', 'maxSize'],
+    data: function(){
+        return {
+            img_list: [],
+            maxImageLength: this.max_length || 1,
+            maxImageSize: this.maxSize || 1204,
+            format: ['jpg', 'png', 'gif'],
+        }
+    },
+    mounted: function(){
+
+        var qiniu_params ={
+          // domain为七牛空间对应的域名，选择某个空间后，可通过 空间设置->基本设置->域名设置 查看获取
+          // uploader为一个plupload对象，继承了所有plupload的方法
+            runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+            browse_button: 'pickfiles',         // 上传选择的点选按钮，必需
+            // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
+            // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
+            // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
+            uptoken : null,
+            // uptoken_url: '/uptoken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+            // uptoken_func: function(){    // 在需要获取uptoken时，该方法会被调用
+            //    // do something
+            //    return uptoken;
+            // },
+            get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+            // downtoken_url: '/downtoken',
+            // Ajax请求downToken的Url，私有空间时使用，JS-SDK将向该地址POST文件的key和domain，服务端返回的JSON必须包含url字段，url值为该文件的下载地址
+            // unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+            // save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+            domain: null,     // bucket域名，下载资源时用到，必需
+            container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
+            max_file_size: '2mb',             // 最大文件体积限制
+            flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
+            max_retries: 3,                     // 上传失败最大重试次数
+            // dragdrop: true,                     // 开启可拖曳上传
+            // drop_element: 'input',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+            // chunk_size: '4mb',                  // 分块上传时，每块的体积
+            auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+            //x_vars : {
+            //    查看自定义变量
+            //    'time' : function(up,file) {
+            //        var time = (new Date()).getTime();
+                    // do something with 'time'
+            //        return time;
+            //    },
+            //    'size' : function(up,file) {
+            //        var size = file.size;
+                    // do something with 'size'
+            //        return size;
+            //    }
+            //},
+            filters : {
+                max_file_size : '2mb',
+                prevent_duplicates: true,
+                //Specify what files to browse for
+                 mime_types: [
+                    {title : "Image files", extensions : "jpg,gif,png"}, //限定jpg,gif,png后缀上传
+                ]
+            },
+            init: {
+                'FilesAdded': function(up, files) {
+                    plupload.each(files, function(file) {
+                // 文件添加进队列后，处理相关的事情
+                });
+                },
+                'BeforeUpload': function(up, file) {
+                },
+                'UploadProgress': function(up, file) {
+                // 每个文件上传时，处理相关的事情
+                },
+                'Error': function(up, err, errTip) {
+                    up.vue.$Message.warning(errTip);
+                    // var progress = new FileProgress(err.file, 'fsUploadProgress');
+                    //     progress.setError();
+                    //     progress.setStatus(errTip);
+                    //     return false;
+                },
+                'FileUploaded': function(up, file, info) {
+                    up.vue.FileUploaded(up, file, info);
+                },
+                'UploadComplete': function() {
+                //队列文件处理完毕后，处理相关的事情
+                },
+                'Key': function(up, file) {
+                    // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                    // 该配置必须要在unique_names: false，save_key: false时才生效
+                    var date = new Date();
+                    // year = date.getFullYear();
+                    // month = date.getMoth();
+                    // day = date.getDate();
+                    hour = date.getHours();
+                    minute = date.getMinutes();
+                    seconds = date.getSeconds();
+                    miseconds = date.getMilliseconds();
+                    return '/bugs/img/{{request.user.id}}/{0}:{1}:{2}:{3}:{4}'.format(date.toLocaleDateString(), hour, minute, seconds, miseconds);
+                }
+            }
+        }
+        qiniu_params.uptoken = this.token;
+        qiniu_params.domain = this.domain;
+        var uploader = Qiniu.uploader(qiniu_params);
+        uploader.vue = this;
+    },
+    methods: {
+        removeImg: function(img){
+            var index = this.img_list.indexOf(img);
+            this.img_list.splice(index, 1);
+        },
+        FileUploaded: function(up, file, info) {
+             this.img_list.push('http://{0}/'.format(this.domain)+ JSON.parse(info.response).key);
+             // 每个文件上传成功后，处理相关的事情
+             // 其中info.response是文件上传成功后，服务端返回的json，形式如：
+             // {
+             //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+             //    "key": "gogopher.jpg"
+             //  }
+             // 查看简单反馈
+             // var domain = up.getOption('domain');
+             // var res = parseJSON(info.response);
+             // var sourceLink = domain +"/"+ res.key; 获取上传成功后的文件的Url
+        },
+        checkMaxSize:function(file) {
+            if(this.maxImageSize && file.size > 1024 * this.maxImageSize){
+                this.$Message.warning('图片太大！');
+                return true;
+            }
+        },
+        getImgList: function(){
+            return this.img_list;
+        }
+    },
+}
+Vue.component('img-item', img_item);
 Vue.component('coupon-item', coupon);
 Vue.component('edit-div', edit_div);
 Vue.component('fullScreen', fullscreen);
