@@ -56,7 +56,7 @@ G_REDIS = {
         'password': 'Xj3.14164',
 	},
 	'ali_1': {
-		'host': '127.0.0.1',
+		'host': ALI1_IP,
 		'password': 'Xj3.14164',
 	}
 }
