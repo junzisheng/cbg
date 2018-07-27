@@ -68,7 +68,7 @@ def userreg(request, response, render):
     # 创建用户
     user = User.objects.create_user(username=username, email='', password=password)
     user.save()
-    UserProfile.objects.create(nickname=username, user_id=user.id)
+    UserProfile.objects.create(user_id=user.id)
     # 删除验证码
     settings.redis3.delete("register_captcha_%s" % username)
     return response_json(retcode='SUCC', msg='SUCCESS', description='注册成功！')

@@ -1,15 +1,14 @@
 #encoding=utf-8
 from __future__ import absolute_import
 import sys
-import os
+import datetime
+from django.db import transaction
+
+from order.models import CbgOrders, CbgOrderDetail
+from user.models import CbgSysInfo
 import multiprocessing
-# 初始化django环境
-# from core.functions import get_cbg_path
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cbg_backup.settings")
-# sys.path.insert(0, get_cbg_path())
 from crawl_celery.celery_init import app
-# import django
-# django.setup()
+from cbg_backup import settings
 
 if 'time' in sys.modules.keys():
     del sys.modules['time']
@@ -24,9 +23,29 @@ from .crawl.Base_Class import TaskManager, Logger
 from .crawl import crawl_class
 
 
+
 class MyTask(Task):
     def on_success(self, retval, task_id, args, kwargs):
         # print('task done: {0}'.format(retval)
+        # 任务完成后的操作
+        # 1. 修改订单状态
+        with transaction.atomic():
+            try:
+                now = datetime.datetime.now()
+                order_info = args[2]
+                order = CbgOrders.objects.get(id=order_info['order_id'])
+                order.status = '已完成'
+                order.closing_time = now
+                order.save(pre_status='进行中')
+                service = CbgOrderDetail.objects.get(order_id=order.id)
+                service.closing_time = now
+                service.save()
+                CbgSysInfo.objects.create(user_id=order_info['user_id'], content="您的订单已经完成", href="/order/main?status=已完成",
+                                          create_time=now, type="notic", display_time=now)
+                settings.redis3.hincrby('user_message', '%s:%s' % ('notic', order_info['user_id']))
+            except:
+                Logger.cls_error.exception('任务完成时发生错误')
+        # 2. 给用户通知
         return super(MyTask, self).on_success(retval, task_id, args, kwargs)
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):

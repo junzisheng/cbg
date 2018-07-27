@@ -104,6 +104,7 @@ def currency_paysapi_notify(request, response, render):
     profile.give_currency += int(record.give)
     profile.save()
     record.status = '已支付'
+    record.alias = '充值'
     record.pay_time = render['timenow']
     record.pay_tradeno = need_param_dict['paysapi_id']
     record.pay_channel = istype

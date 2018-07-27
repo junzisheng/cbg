@@ -129,7 +129,8 @@ def check_reduction_log(order, revise=True):
 def start_task(order, order_detail):
     """开启订单任务"""
     now = datetime.datetime.now()
-    service_deadline = now + datetime.timedelta(days=order_detail.service_time)
+    # for test todo relpate to days
+    service_deadline = now + datetime.timedelta(minutes=order_detail.service_time)
     crawl_task.delay(order.service_id, order_detail.crawl_url, {
         'service_id': order.service_id,
         'order_id': order.id,
