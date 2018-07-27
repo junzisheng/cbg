@@ -9,6 +9,8 @@ urlpatterns = [
     url('^userlogin/?$', userlogin, {'ajax': True, 'check_active': False}),
     url('^userlogout/?$', userlogout, {'need_login': True}),
     url('^settings/?$', settings_page, {'need_login': True}),
+    url('^info/?$', info, {'need_login': True}),
+    url('^info_save/?$', info_save, {'need_login': True}),
     url('^modify_pwd/?$', modify_pwd_page, {'need_login': True}),
     url('^modify_pwd_api/?$', modify_pwd_api, {'need_login': True}),
     url('^qrcode/?$', qrcode_),  # 二维码

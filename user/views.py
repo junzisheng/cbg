@@ -3,15 +3,14 @@ from io import BytesIO
 import qrcode
 
 from django.contrib import auth
-from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 
-from cbg_backup.filters import get_wait_message
-from unit.utility import render_to_response, response_json, del_session_key
+from unit.utility import render_to_response, response_json, del_session_key, _validate_nick_name_len, _validate_nick_name_limit_word
 from unit.functions import *
+from unit.decoration import accept_token
 from .functions import send_ali_sms
 from .models import UserProfile, CbgSysInfo, CbgUserSign
 from order.models import CbgRechargeRecord
@@ -247,6 +246,37 @@ def sign_api(request, response, render):
         lotter.save()
     return response_json(retcode='SUCC', msg='SignSucc', description='签到成功！', continue_days=sign_log.continue_days,
                          prize_currency=prize_currency / 100.0, prize_logger_times=3)
+
+
+@accept_token(['qiniu'])
+def info(request, response, render):
+    """用户的信息"""
+    return render_to_response(request, response, render, 'user/templates/info.html')
+
+
+def info_save(request, response, render):
+    """保存用户信息的接口"""
+    head_img = request.GET.get('head_img', "")[:256]
+    nickname = request.GET.get('nickname', "")
+    sex = request.GET.get('sex')
+    if not head_img:
+        return response_json(retcode='FAIL', msg='MissImg', description='请上传头像！')
+    elif sex not in ('男', '女', ''):
+        return response_json(retcode='FAIL', msg='ErrorData', description='错误的数据！')
+    b, er = _validate_nick_name_len(nickname)
+    if not b:
+        return response_json(retcode='FAIL', msg='ErrorData', description=er)
+    b, er = _validate_nick_name_limit_word(nickname)
+    if not b:
+        return response_json(retcode='FAIL', msg='ErrorData', description=er)
+    profile = request.user.userprofile
+    profile.head_image = head_img
+    profile.sex = sex
+    profile.nickname = nickname
+    profile.save(update_fields=['head_image', 'sex', 'nickname'])
+    return response_json(retcode='SUCC', msg='SaveSucc')
+
+
 
 
 

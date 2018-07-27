@@ -191,6 +191,12 @@ function form_ajax(url, data, before_callback,succ_callback, fail_callback, comp
     $.ajax(arg_ajax);
 }
 
+function guid() {
+    function S4() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
 
 function sns_time(str_time, now){
     // 不对的写法
@@ -595,25 +601,70 @@ var Scroll = {
 var tabs_conmonent = {
     template: '<div style="position: relative">\
                     <ul class="tabs-container">\
-                        <li v-for="(v,k, index) in tabs_object" :class="{\'tabs-active\': v.active}" :style="{\'width\': li_width}" @click.stop="tab_click(k)">{{v.title}}</li>\
+                        <li v-for="(v,k, index) in tabs_object" :class="{\'tabs-active\': v.active}" :style="{\'width\': li_width}" @click.stop="tab_click(k, 1)">{{v.title}}</li>\
                     </ul>\
-                    <ul class="panel-contanier" :class="{tab_container_fixed: !!content_height}" :style="{height: content_height || \'auto\'}">\
-                        <li v-for="(v,k, index) in tabs_object" :index="index" v-show="v.active">\
-                        <slot :name="\'panel-\' + index"></slot>\
-                        </li>\
+                    <ul class="panel-contanier swiper-container" :class="cls" :style="{height: content_height || \'auto\'}">\
+                        <div class="swiper-wrapper">\
+                            <li class="swiper-slide" v-for="(v,k, index) in tabs_object" :index="index">\
+                                <slot :name="\'panel-\' + index"></slot>\
+                            </li>\
+                        </div>\
                         <slot :name=" \'bottom_loading\' "></slot>\
                     </ul>\
                 </div>\
              ',
+    props : ['tab_object', 'content_height'],
     data: function(){
+        var swiper_key = 'swpier_' + parseInt(Math.random()*10000 + 1)
+        var cls = [];
+        if(!!this.content_height){
+            cls.push(tab_container_fixed);
+        }
+        cls.push(swiper_key)
         return {
             tabs_object: this.tab_object,
             li_width: 100/Object.keys(this.tab_object).length + '%',
+            swiper_key: swiper_key,
+            object_list: [],
+            swiper: null,
+            cls: cls,
         }
     },
-    props : ['tab_object', 'content_height'],
+    mounted: function(){
+        var n = 0;
+        var initialSlide = 0;
+        for(var item in this.tab_object){
+            var ob = this.tab_object[item];
+            ob.key = item;
+            this.object_list.push(ob)
+            if(ob.active == true){
+                initialSlide = n;
+            }
+            n++;
+        }
+        var vm = this;
+        this.swiper = new Swiper ('.' + vm.swiper_key, {
+            initialSlide :initialSlide,
+            on: {
+                slideChangeTransitionEnd: function(){
+                    var key = vm.object_list[this.activeIndex].key;
+                    vm.tab_click(key);
+                }
+            },
+        })
+    },
     methods: {
-        tab_click: function(key){
+        tab_click: function(key, c){
+            if(c){
+                //获取key对应得swiper_list索引
+                for(var i=0;i<this.object_list.length;i++){
+                    var item = this.object_list[i];
+                    if(item.key == key){
+                        this.swiper.slideTo(i, 0, false)
+                    }
+                }
+
+            }
             for(var item in this.tab_object) this.tab_object[item].active = false;
             this.tab_object[key].active = true;
             this.$emit('handle_click', key);
@@ -935,6 +986,11 @@ var swiper = {
               el: that.page_class,
               clickable :true,
             },
+            // on: {
+            //     slideChangeTransitionEnd: function(){
+            //         alert(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+            //     }
+            // },
         })
     },
     props: ['swiper_key', 'banner_list'],
@@ -1072,7 +1128,7 @@ var simple_choice = {
         choice: function(choose){
             if(choose.disable === false) return false;
             this.$refs.fullscreen.show = false;
-            this.callback(choose.text, choose.extra);
+            this.callback(choose.text, choose.extra, choose);
         },
     },
 }
@@ -1286,20 +1342,20 @@ var order_ul = {
 var img_item = {
     template: '\
     <div>\
-        <div v-for="img in img_list" class="img-box" style="margin:10px 10px 0 0">\
+        <div v-for="img in img_list" class="img-box">\
             <div style="height: 100%;">\
-                <Icon type="minus-circled" class="img-cancel" @click.native.stop="removeImg(img)"></Icon>\
-                <img :src="img" style="height: 100%;width: 100%">\
+                <Icon type="minus-circled" class="img-cancel" @click.native.stop="removeImg(img)" v-if="maxImageLength != 1"></Icon>\
+                <img :src="img" style="height: 100%;width: 100%" @click="changeImg">\
             </div>\
         </div>\
-        <div class="img-box" v-if="img_list.length < maxImageLength" id="container">\
+        <div class="img-box" v-show="img_list.length < maxImageLength" id="container">\
             <div class="no-img">\
                 <Icon type="image"></Icon>\
             </div>\
-            <input type="file" class="file-input" id="pickfiles">\
+            <input type="file" class="file-input" id="pickfiles" ref="add_img">\
         </div>\
     </div>',
-    props: ['domain', 'token', 'max_length', 'maxSize'],
+    props: ['domain', 'token', 'max_length', 'maxSize', 'supportCancel', 'imgs'],
     data: function(){
         return {
             img_list: [],
@@ -1309,7 +1365,6 @@ var img_item = {
         }
     },
     mounted: function(){
-
         var qiniu_params ={
           // domain为七牛空间对应的域名，选择某个空间后，可通过 空间设置->基本设置->域名设置 查看获取
           // uploader为一个plupload对象，继承了所有plupload的方法
@@ -1402,6 +1457,7 @@ var img_item = {
         qiniu_params.domain = this.domain;
         var uploader = Qiniu.uploader(qiniu_params);
         uploader.vue = this;
+        this.img_list = this.imgs || [];
     },
     methods: {
         removeImg: function(img){
@@ -1409,6 +1465,9 @@ var img_item = {
             this.img_list.splice(index, 1);
         },
         FileUploaded: function(up, file, info) {
+            if(this.max_length == 1){
+                this.img_list = [];
+            }
              this.img_list.push('http://{0}/'.format(this.domain)+ JSON.parse(info.response).key);
              // 每个文件上传成功后，处理相关的事情
              // 其中info.response是文件上传成功后，服务端返回的json，形式如：
@@ -1426,6 +1485,11 @@ var img_item = {
                 this.$Message.warning('图片太大！');
                 return true;
             }
+        },
+        changeImg: function(){
+            if(this.max_length > 1)
+                return false;
+            this.$refs.add_img.click();
         },
         getImgList: function(){
             return this.img_list;

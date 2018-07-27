@@ -1,0 +1,165 @@
+{% set title = '个人信息' %}
+{% set profile = request.user.userprofile%}
+{% block head%}
+<script type="text/javascript" src="/static/public_js/qiniu.min.js"></script>
+{% endblock %}
+{% extends 'base_toper.html' %}
+
+
+{% block cssstyle %}
+<style type="text/css">
+	.img-box{
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		border-radius: 25px;
+		border-radius: 2px;
+		position: relative;
+	}
+	.img-box img{
+		border-radius: 25px;
+
+	}
+	.no-img{
+		position: absolute;
+		transform: translate(-50%, -50%);
+		top: 50%;
+		left: 50%;
+		font-size: 35px;
+		z-index: 10;
+	}
+	.file-input{
+		position: absolute;
+		top:0;
+		height: 100%;
+		width: 100%;
+		opacity: 0;
+		z-index: 20
+	}
+	.box{
+		background-color: #fff;
+	}
+	.right-span{
+		float: right;
+	}
+	.box .li{
+		padding: 0 12px;
+		height: 40px;
+		line-height: 40px;
+	}
+	.head-img-box{
+		height: 60px!important;
+		padding-top: 5px!important;
+		line-height: 50px;
+	}
+	input{
+		height: 100%;
+		outline: none;
+		border: none;
+		text-align: right;
+	}
+	.focus{
+		text-align: left!important;
+	}
+	.do{
+		background-color: #00b9ff;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		width: 90%;
+		color: #fff;
+		letter-spacing: 2px;
+		border-radius: 4px;
+		cursor: pointer;
+		margin: 20px auto;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="box">
+	<div class="head-img-box border-full li">
+		<span>头像</span>
+		<span class="right-span">
+			<img-item :imgs="imgs" :domain="'{{qiniu_domain}}'" :max_length="1" :token="'{{qiniu_token}}'" ref="img"></img-item>
+		</span>
+	</div>
+	<div class="border-full li">
+		<span>昵称</span>
+		<span class="right-span">
+			<input :placeholder="'填写'" maxlength="6"  name="" @focus.stop="nickname_focus = true" @blur.stop="nickname_focus = false" :class="{focus: nickname_focus}" v-model="nickname">
+		</span>
+	</div>
+	<div class="border-full li">
+		<span>性别</span>
+		<span class="right-span">
+			<span @click.stop="$refs.sex.show()">((sex || '保密'))</span>
+		</span>
+	</div>
+	
+</div>
+<div class="do" @click.stop="save">((!submiting ? '保存' : '保存中。。。'))</div>
+<simple-choice-item :callback="sex_choose" ref="sex"  :choice_list="[{text: '女', disable: sex!='女', extra: 0},
+																	 {text: '男', disable: sex!='男', extra: 1}, 
+																	 {text: '保密', disable: sex!='保密', extra: 2}]" ></simple-choice-item>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+{{super()}}sad
+<script type="text/javascript">
+	var v = new Vue({
+		el: '#body',
+		delimiters : ["((", "))"],
+		data: {
+			nickname_placeholder: '{{profile.nickname or ""}}',
+			nickname_focus: false,
+			sex_focus: false,
+			nickname: '{{profile.nickname or ""}}',
+			sex: "{{profile.sex or ''}}",
+			submiting: false,
+			imgs: {% if profile.head_image %} ['{{profile.head_image}}'] {%else%} null {% endif %},
+		},
+		methods: {
+			sex_choose:	function(_,_, choose){
+				this.sex = choose.text;
+			},
+			save: function(){
+				if(this.submiting)
+					return false;
+				// 获取图片头像
+				var imgs = this.$refs.img.getImgList();
+				if(imgs.length == 0){
+					this.$Message.warning('请选择头像')
+					return false;
+				}
+				if(this.nickname.length < 2 || this.nickname.length > 6){
+					this.$Message.warning('昵称需要在2-6位之间')
+					return false;
+				}
+				var vm = this;
+				normal_ajax('/user/info_save', 'GET', {head_img: imgs[0], nickname: vm.nickname, sex: vm.sex},
+					function(){
+						vm.submiting = true
+					},
+					function(ret){
+						if(ret.retcode == 'SUCC'){
+							vm.$Message.success('个人信息保存成功');
+						}else{
+							vm.$Message.warning(ret.description);
+						}
+					},
+					null,
+					function(){
+						vm.submiting = false;
+					}
+				)
+			}
+
+		}
+	})
+</script>
+{% endblock %}

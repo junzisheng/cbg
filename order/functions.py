@@ -47,56 +47,59 @@ def prepare_order_pay(request, order_id, coupon_id):
     """订单支付前的处理"""
     now = datetime.datetime.now()
     today = now.date()
+    my_coupon = None
     try:
-        my_coupon = None
         order = CbgOrders.objects.select_for_update().get(id=order_id, user_id=request.user.id)
-        pre_status = order.status
-        if order.status not in ('待付款', '初始状态'):
-            return False, '错误的订单号！'
-        if order.status == '待付款':
-            check_reduction_log(order,  revise=True)
-            return True, (order, None)
-        order.status = '待付款'
-        order.real_price = order.price  # 价格以基本价格为准, 优惠可能随时在变
-        if coupon_id:
+    except:
+        return False, '错误的订单号！'
+    pre_status = order.status
+    if order.status not in ('待付款', '初始状态'):
+        return False, '错误的订单号！'
+    if order.status == '待付款':
+        check_reduction_log(order,  revise=True)
+        return True, (order, None)
+    order.status = '待付款'
+    order.real_price = order.price  # 价格以基本价格为准, 优惠可能随时在变
+    if coupon_id:
+        try:
             my_coupon = CbgCouponUserRelation.objects.select_for_update().get(id=coupon_id, user_id=request.user.id)
-            coupon = my_coupon.coupon
-            if my_coupon.status == 1:
-                return False, '您选择的已被其它订单占用，请删除该订单释放优惠券！'
-            if my_coupon.status == 2:
-                return False, '您选择优惠券已被使用！'
-            if my_coupon.expire_time < today:
-                return False, '您选择的优惠券已过期！'
-            if my_coupon.acquire_time > today:
-                return False, '您选择的优惠券尚未到使用时间！'
-            if coupon.fill > order.price:
-                return False, '您选择的优惠券需要满%s元才能使用！' % coupon.fill / 100
-            # 校验该优惠券的服务类型
-            if str(order.service_id) not in my_coupon.service_ids.split(','):
-                return False, '您选择的优惠券无法用于【%s】' % order.service_name
-            # 计算优惠价格
-            reduction = coupon.get_reduction(order.real_price)
-            order.real_price = order.real_price - reduction if order.real_price > reduction else 1
-            # 更新优惠券关系
-            my_coupon.status = 1
-            my_coupon.order_id = order.id
-            my_coupon.save()
-            # 记录优惠信息  一种优惠只能有一条记录
-            CbgOrderReductionLog.objects.create(
-                order_id=order.id,
-                style=1,
-                alias=coupon.coupon_name,
-                user_id=request.user.id,
-                coupon_rel_id=my_coupon.id,
-                reduction=reduction,
-                deadline=my_coupon.expire_time + datetime.timedelta(days=1),
-                create_time=now,
-                pay_success= False,
-            )
-        order.save(pre_status=pre_status)
-        return True, (order, my_coupon)
-    except Exception as e:
-        return False, '错误的请求'
+        except:
+            return False, '您没有该优惠券，请不要调皮哦！'
+        coupon = my_coupon.coupon
+        if my_coupon.status == 1:
+            return False, '您选择的优惠券已被其它订单占用，请删除该订单释放优惠券！'
+        if my_coupon.status == 2:
+            return False, '您选择优惠券已被使用！'
+        if my_coupon.expire_time < today:
+            return False, '您选择的优惠券已过期！'
+        if my_coupon.acquire_time > today:
+            return False, '您选择的优惠券尚未到使用时间！'
+        if coupon.fill > order.price:
+            return False, '您选择的优惠券需要满%s元才能使用！' % coupon.fill / 100
+        # 校验该优惠券的服务类型
+        if str(order.service_id) not in my_coupon.service_ids.split(','):
+            return False, '您选择的优惠券无法用于【%s】' % order.service_name
+        # 计算优惠价格
+        reduction = coupon.get_reduction(order.real_price)
+        order.real_price = order.real_price - reduction if order.real_price > reduction else 1
+        # 更新优惠券关系
+        my_coupon.status = 1
+        my_coupon.order_id = order.id
+        my_coupon.save()
+        # 记录优惠信息  一种优惠只能有一条记录
+        CbgOrderReductionLog.objects.create(
+            order_id=order.id,
+            style=1,
+            alias=coupon.coupon_name,
+            user_id=request.user.id,
+            coupon_rel_id=my_coupon.id,
+            reduction=reduction,
+            deadline=my_coupon.expire_time + datetime.timedelta(days=1),
+            create_time=now,
+            pay_success= False,
+        )
+    order.save(pre_status=pre_status)
+    return True, (order, my_coupon)
 
 
 def check_reduction_log(order, revise=True):

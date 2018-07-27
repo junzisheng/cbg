@@ -97,31 +97,34 @@ def _validate_nick_name_limit_word(nick_name, config_limit_word=None):
     config_limit_word = MyConfigParser(os.path.join(settings.BASE_DIR, 'cbg_backup', 'limitword.ini'))
     if not config_limit_word:
         return True, ""
-    for section in [u'MINGANCI', u'ZANGHUA', u'YUNYING']:
-        regx_str = u"|".join(config_limit_word[section])
+    for section in ['MINGANCI', 'ZANGHUA', 'YUNYING']:
+        regx_str = "|".join(config_limit_word[section])
         limit_word = ",".join(re.findall(regx_str, nick_name, re.IGNORECASE))
         if limit_word:
-            return False, u"包含不合法词:%s" % limit_word
-    return True, u""
+            return False, "包含不合法词:%s" % limit_word
+    return True, ""
 
 
 def _validate_nick_name_len(nick_name):
     # 只保留中英文数字
-    t_nick_name = "".join(re.findall(u"[\u4e00-\u9fa5a-zA-Z0-9]", nick_name))
+    t_nick_name = "".join(re.findall("[\u4e00-\u9fa5a-zA-Z0-9]", nick_name))
     if not t_nick_name:
-        return False, u"昵称应该包含中英文和数字"
-    min = 4
-    if re.search(u"[\u4e00-\u9fa5]", t_nick_name):
-        min = 2
-    if len(t_nick_name) < min:
-        return False, u"中文至少要2位或英文至少4位"
-    # 分成中文字符 和其他字符串
-    chinese_str = "".join(re.findall(u"[\u4e00-\u9fa5]", nick_name))
-    other_str = "".join(re.findall(u"[^\u4e00-\u9fa5]", nick_name))
-    nick_name_len = len(chinese_str) * 2 + len(other_str)
-    if nick_name_len > 16:
-        return False, u"长度超过限制,中文最多8个字，字母和数字最多16位"
+        return False, "昵称格式错误！(必须要包含中文或者数字或英文)"
+    if not (2 <= len(nick_name) <= 6):
+        return False, '昵称长度不符合规则！2-6位'
     return True, ""
+    # min = 4
+    # if re.search("[\u4e00-\u9fa5]", t_nick_name):
+    #     min = 2
+    # if len(t_nick_name) < min:
+    #     return False, "中文至少要2位或英文至少4位"
+    # 分成中文字符 和其他字符串
+    # chinese_str = "".join(re.findall(r"[\u4e00-\u9fa5]", nick_name))
+    # other_str = "".join(re.findall(r"[^\u4e00-\u9fa5]", nick_name))
+    # nick_name_len = len(chinese_str) * 2 + len(other_str)
+    # if nick_name_len > 6:
+    #     return False, "长度超过限制,中文最多6个字，字母和数字最多12位"
+    # return True, ""
 
 
 class MyConfigParser(configparser.ConfigParser):
@@ -327,8 +330,9 @@ if __name__ == '__main__':
     import hashlib
     # s = Prpcrypt.decrypt('6d3d36e0b874ac16c93eb326969283b8').split('currency_')[1]
     # print(s)
-    now = datetime.datetime(year=2018, month=9, day=26, hour=18, minute=21, second=10)
-    test_time = datetime.datetime(year=2018, month=7, day=23, hour=19, minute=50, second=5)
-    s = date_gap_personal(test_time, now)
-    print(s)
+    # now = datetime.datetime(year=2018, month=9, day=26, hour=18, minute=21, second=10)
+    # test_time = datetime.datetime(year=2018, month=7, day=23, hour=19, minute=50, second=5)
+    # s = date_gap_personal(test_time, now)
+    # print(s)
+    print(_validate_nick_name_len('123你好***@!@'))
 

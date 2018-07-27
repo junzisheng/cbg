@@ -43,27 +43,34 @@
 <div class="mine-header-container">
 	<div class="mine-header-wrap">
 		<div class="mine-header-content">
-			<div class="mine-header-img">
-				<img src="https://img11.360buyimg.com/jdphoto/s120x122_jfs/t5683/191/7076936752/5123/834e5571/596dd62bN7a8affc5.png">
-			</div>
+			<a href="/user/info">
+				<div class="mine-header-img">
+					<img src="{{profile.head_image or 'https://img11.360buyimg.com/jdphoto/s120x122_jfs/t5683/191/7076936752/5123/834e5571/596dd62bN7a8affc5.png'}}">
+				</div>
+			</a>
 
 			<div class="mine-header-msg">
 				<div class="mine-header-name">
 					<span class="mine-header-name-text">
-						顾文江
+						{% if profile.nickname %}
+							{{profile.nickname}}
+						{% else %}
+							{{ request.user.username | hide_phone_number }}
+						{% endif %}
 					</span>
-					<i class="mine-header-name-edit">
-					</i>
+					<a href="/user/info">
+						<i class="mine-header-name-edit"> </i>
+					</a>
 				</div>
 				<div class="mine-header-account">
-					用户名：mynameisgwj
+					用户名：{{request.user.username | hide_phone_number}}
 				</div>
-				<div class="mine-header-info">
+<!-- 				<div class="mine-header-info">
 					<a href="" class="mine-header-points">
 						积分{{ profile.points }}
 					</a>
 				</div>
-			</div> 
+ -->			</div> 
 
 			<div class="mine-header-right-options"> 
 				<a href="/user/settings" style="color:white">
