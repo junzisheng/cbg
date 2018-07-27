@@ -7,7 +7,7 @@ CELERY_IMPORTS = ("service.tasks")
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_RESULT_EXPIRES = 60 * 60 * 24
-CELERY_ACCEPT_CONTENT = ["pickle", "json"]            # ָ��������ܵ���������.
+CELERY_ACCEPT_CONTENT = ["json"]            # ָ��������ܵ���������.
 CELERY_TIMEZONE = 'Asia/Shanghai'
 # ĳ�������г��ֵĶ��У���broker�в����ڣ������̴�����
 CELERY_CREATE_MISSING_QUEUES = True

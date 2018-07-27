@@ -118,9 +118,10 @@ window.onload = function(){
 					that.warn_modal_footer = '删除中';
 					var del_id_list = [];
 					for(var i=0;i<del_list.length;i++){
-						var item = del_list;
+						var item = del_list[i];
 						del_id_list.push(item.id);
 					}
+					console.log(del_id_list);
 					normal_ajax('/order/delete_crawl_data_api', 'GET', {'del_id_list': JSON.stringify(del_id_list), order_id: that.order_id},null,function(ret){
 						if(ret.retcode == 'SUCC'){
 							for(var i=0;i<del_list.length;i++){

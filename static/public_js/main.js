@@ -618,7 +618,7 @@ var tabs_conmonent = {
         var swiper_key = 'swpier_' + parseInt(Math.random()*10000 + 1)
         var cls = [];
         if(!!this.content_height){
-            cls.push(tab_container_fixed);
+            cls.push('tab_container_fixed');
         }
         cls.push(swiper_key)
         return {
@@ -631,6 +631,11 @@ var tabs_conmonent = {
         }
     },
     mounted: function(){
+        try{
+            Swiper
+        }catch{
+            return false;
+        }
         var n = 0;
         var initialSlide = 0;
         for(var item in this.tab_object){

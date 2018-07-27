@@ -145,11 +145,11 @@ window.onload = function(){
 						for(var i=0;i<tab_object_keys.length;i++){
 							var item = tab_object_keys[i];
 							var query_list = that[item].query_list
-							for(var i;i<query_list.length;i++){
-								var temp= query_list[i];
+							for(var j=0;j<query_list.length;j++){
+								var temp= query_list[j];
 								if(temp.id == order_id){
-									var i = that[item].query_list.indexOf(temp);
-									that[item].query_list.splice(i, 1);
+									var index = query_list.indexOf(temp);
+									query_list.splice(index, 1);
 								}
 							}
 						}
