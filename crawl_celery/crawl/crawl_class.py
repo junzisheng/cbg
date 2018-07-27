@@ -77,7 +77,7 @@ class Base_Crawl(object):
             self.crawl(self.base_url.format(self.next_page, time.time()))
             # gevent.sleep(self.crawl_interval)
         # 任务结束的逻辑在这里写或者on_sucess函数中写
-        Logger.cls_error.warning('爬取任务全部完成>>>>订单:%s, 耗时%s, 共爬取到了%s条数据, 历时%s轮'
+        Logger.cls_error.info('爬取任务全部完成>>>>订单:%s, 耗时%s, 共爬取到了%s条数据, 历时%s轮'
             % (self.order_info['order_id'], datetime.datetime.now() - self.start_date, len(self.set_dict), self.rounds))
         if self in self.task_manager.crawl_obj_list:
             self.task_manager.crawl_obj_list.remove(self)
