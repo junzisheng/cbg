@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'cbg_backup.wsgi.application'
 CACHES = {
     "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://:Xj3.14164@127.0.0.1:6379/5",
+            "LOCATION": "redis://:Xj3.14164@47.104.193.247:6379/5",
             "KEY_FUNCTION": "unit.cache.key_func",
             "KEY_PREFIX": "cache",
             'OPTIONS': {
