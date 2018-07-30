@@ -387,8 +387,8 @@ if __name__ == '__main__':
     url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_equip_search&order_by=selling_time+DESC&limit_clothes_logic=or'
     # url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&level_min=175&level_max=175&price_min=10000000'
     # url = 'http://recommd.xyq-android2.cbg.163.com/cgi-bin/recommend.py?act=recommd_by_role&count=100&search_type=overall_role_search&order_by=selling_time+DESC&expt_fangyu=15&bb_expt_kangfa=15&limit_clothes_logic=or&expt_kangfa=15&level_max=175&fang_yu=1300&bb_expt_gongji=15&shang_hai=2000&price_max=100000000&expt_gongji=15&limit_clothes=12512%2C12498%2C12513%2C12514%2C12647%2C12646%2C12648%2C12652%2C12654%2C12653%2C12765%2C12750%2C12850%2C12767%2C13790%2C40013%2C40025%2C40023%2C40108&bb_expt_fangyu=15&skill_dazao=100&bb_expt_fashu=15&level_min=160&pet_type_list=1&xiangrui_list=%E6%98%9F%E5%8D%8E%E9%A3%9E%E9%A9%AC%2C%E7%94%9C%E8%9C%9C%E7%8C%AA%E7%8C%AA%2C%E7%8E%89%E8%84%82%E7%A6%8F%E7%BE%8A%2C%E9%A3%9E%E5%A4%A9%E7%8C%AA%E7%8C%AA%2C%E7%A5%9E%E8%A1%8C%E5%B0%8F%E9%A9%B4&race=2'
-    c = TaskManager.init_crawl_obj(3, url, {'push_type': '', 'order_id': 39, 'price_down_push': False, 'time_range': {'days': 1}, 'umobile': '18221410984',
-     'user_id': 10, 'memo': '', 'end_time': '2018-07-30 15:43:02', 'first_round_push': False, 'service_id': 3})
+    c = TaskManager.init_crawl_obj(3, url, {'push_type': '', 'order_id': 39, 'price_down_push': True, 'time_range': {'days': 1}, 'umobile': '18221410984',
+     'user_id': 10, 'memo': '', 'end_time': '2018-07-31 15:43:02', 'first_round_push': True, 'service_id': 3})
     try:
         c.run()
     except KeyboardInterrupt:

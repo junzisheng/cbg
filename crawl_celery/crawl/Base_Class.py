@@ -1,5 +1,4 @@
 import sys
-import datetime
 import json
 import time
 import logging
@@ -7,7 +6,6 @@ from gevent.lock import BoundedSemaphore
 from multiprocessing import Queue
 import gevent
 import copy
-from user.models import AliSmsQueue
 from crawl_celery.models import Proxy
 from share.setting_share import ALI_SMS
 from cbg_backup import settings
@@ -274,6 +272,7 @@ class TaskManager(object):
                     continue
                 # 清理数据
                 sms_push_dict = {}  # {order_id: {}}
+                weixin_dict = {'insert': [], 'down': []}
                 timestamp = time.time()
                 for task in task_list:
                     sql_type = task['sql_type']
@@ -303,7 +302,11 @@ class TaskManager(object):
                     price_down_list = _task['price_down']
                     # 批量插入
                     if insert_list:
-                        bulk_list = [_Model(**data) for data in insert_list]
+                        bulk_list = []
+                        for data in insert_list:
+                            bulk_list.append(_Model(**data))
+                            weixin_dict['insert'].append( (data['game_ordersn'], data['serverid']) )
+                        # bulk_list = [_Model(**data) for data in insert_list]
                         _Model.objects.bulk_create(bulk_list)
                         Logger.cls_error.info('插入了%s条数据' % len(insert_list))
                     # 更新
@@ -313,13 +316,19 @@ class TaskManager(object):
                                       .update(**update_field)
                     # 价格刷新
                     for data in price_down_list:
+                        weixin_dict['down'].append( (data['game_ordersn'], data['serverid']) )
                         price_down_field = dict((_k, data[_k]) for _k in _task['price_down_field'])
                         _Model.objects.filter(user_id=data['user_id'], order_id=data['order_id'], eid=data['eid']) \
                             .update(**price_down_field)
                         Logger.cls_error.info('降价了%s条数据' % len(insert_list))
-                if sms_push_dict:
-                    sms_push_list = [_x for _x in sms_push_dict.values()]
-                    settings.redis3.publish('sms_notify', json.dumps(sms_push_list))
+                # if sms_push_dict:
+                #     sms_push_list = [_x for _x in sms_push_dict.values()]
+                #     settings.redis2.publish('sms_notify', json.dumps(sms_push_list))
+                    # 微信通知
+
+                if weixin_dict['insert'] or weixin_dict['down']:
+                    settings.redis2.publish('weixin_notic', json.dumps(weixin_dict))  #{'insert': [(),()], price: [(),()]}
+
         except:
             Logger.cls_error.exception('数据库操作发生了错误')
             exit()
