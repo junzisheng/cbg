@@ -117,6 +117,10 @@ SESSION_REDIS_PREFIX = 'session'
 #                              'PORT'      :   '3306',
 #                          },
 #               }
+DATABASE_ROUTERS = ['share.db_router.DB_Router']  # 数据库路由
+MAP_LOGICAL_DB_BY_APP = {
+    'proxy': 'proxy',
+}
 
 
 # Internationalization

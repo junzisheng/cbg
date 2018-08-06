@@ -38,7 +38,15 @@ G_MYSQL = {
                                      'HOST'      :   HOST_TEST_SEREVER,
                                      'PORT'      :   '3306',
                                 },
-					},
+
+				   'proxy':    {    'ENGINE'    :    'django.db.backends.mysql',
+                                     'NAME'      :   'sql_test',
+                                     'USER'      :   'root',
+                                     'PASSWORD'  :   'guwenjiang',
+                                     'HOST'      :   ALI1_IP,
+                                     'PORT'      :   '3306',
+                    		  },
+				 },
 	'ali_1': { 'default':   {       'ENGINE'    :   'django.db.backends.mysql',
 									'NAME'      :   'cbg',
 									'USER'      :   'root',
@@ -46,7 +54,16 @@ G_MYSQL = {
 									'HOST'      :   'gz-cdb-ff2fjjs1.sql.tencentcdb.com',
 									'PORT'      :   '62332',
 									},
-				   },
+			   'proxy':    {    'ENGINE'    :    'django.db.backends.mysql',
+								'NAME'      :   'sql_test',
+								'USER'      :   'root',
+								'PASSWORD'  :   'guwenjiang',
+								'HOST'      :   ALI1_IP,
+								'PORT'      :   '3306',
+								},
+
+
+            },
 }
 G_MYSQL['ali_2'] = G_MYSQL['ali_1']
 

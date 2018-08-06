@@ -15,6 +15,7 @@ def crawl_data_page(request, response, render, order_id):
 @ajax_refresh(order_limit=('-id',), filter_limit={'old_price__isnull': 'False|True', 'order_id_1': '\d+'})
 def crawl_data_api(request, response, render):
     """获取爬取的数据"""
+    # todo 记录用户最近一次查看的时间， 超过这个时间的都是最新的
     offset, order_by, int_limit, filter_ = render['query_params']
     filter_['is_display'] = 1
     filter_['user_id'] = request.user.id

@@ -87,13 +87,7 @@ class Proxy(models.Model):
 
     class Meta:
         db_table = 'proxys'
-
-
-
-
-
-
-
+        app_label = 'proxy'
 
 
 if __name__ == '__main__':

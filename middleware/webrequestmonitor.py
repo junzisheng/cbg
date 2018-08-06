@@ -55,7 +55,7 @@ class WebRequestMonitor(MiddlewareMixin):
         return None
 
     def process_response(self, request, response):
-        if request.path in through_path_list:
+        if request.path in through_path_list or response.status_code != 200:
             return response
         cpu_usage = request.__track__['cpusage'].usage()
         awr = Webrequest()
